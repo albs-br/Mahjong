@@ -78,7 +78,8 @@ public class GameStart : MonoBehaviour
 
         // 3. Load Sprite from Assets/Resources/name.png / bmp
         // (Do not include "Resources" or file extension in path)
-        Sprite loadedSprite = Resources.Load<Sprite>("1");
+        Sprite loadedSprite = Resources.Load<Sprite>("mahjong-raw/tile/00/02");
+        //Sprite loadedSprite = Resources.Load<Sprite>("mahjong-raw/character/01");
 
         if (loadedSprite != null)
         {
