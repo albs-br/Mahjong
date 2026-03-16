@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 
-public class GameStart : MonoBehaviour
+public class Game : MonoBehaviour
 {
     float cameraHeight;
     float cameraWidth;
@@ -13,6 +13,8 @@ public class GameStart : MonoBehaviour
     float minY;
     float maxY;
 
+
+    TileLine tileLine;
 
     // Awake is called when the script instance is being loaded
     void Awake()
@@ -37,8 +39,10 @@ public class GameStart : MonoBehaviour
     {
         Debug.Log("Start method");
 
-        CreateSprite("Sprite 1", 0f, 0f);
-        CreateSprite("Sprite 2", minX, maxY);
+        tileLine = new TileLine();
+
+        CreateTile("Sprite 1", 0f, 0f);
+        CreateTile("Sprite 2", minX, maxY);
     }
 
     // Update is called once per frame
@@ -47,24 +51,28 @@ public class GameStart : MonoBehaviour
         //Debug.Log("Update method");
     }
 
-    void CreateSprite(string name, float x, float y)
+    void CreateTile(string name, float x, float y)
     {
-        // 1. Create a new GameObject
-        GameObject spriteObject = new GameObject(name);
+        GameObject gameObject = new GameObject(name);
 
-        // 2. Add SpriteRenderer component
-        SpriteRenderer renderer = spriteObject.AddComponent<SpriteRenderer>();
+        var tile = gameObject.AddComponent<Tile>();
 
-        // 3. Load Sprite from Assets/Resources/name.png / bmp
+        tileLine.Tiles.Add(tile);
+        tile.TileLine = tileLine;
+
+        SpriteRenderer renderer = gameObject.AddComponent<SpriteRenderer>();
+
+        // Load Sprite from Assets/Resources/name.png / bmp
         // (Do not include "Resources" or file extension in path)
-        Sprite loadedSprite = Resources.Load<Sprite>("fulltiles/bamboo1");
+        const string BASE_PATH = "fulltiles/";
+        Sprite loadedSprite = Resources.Load<Sprite>(BASE_PATH + "bamboo1");
 
         if (loadedSprite != null)
         {
             renderer.sprite = loadedSprite;
             
             // Set position
-            spriteObject.transform.position = new Vector2(x, y);
+            gameObject.transform.position = new Vector2(x, y);
 
             // Set scale
             float desiredWidth = cameraWidth / 4.0f; // tile width = 1/4 of screen
@@ -72,12 +80,12 @@ public class GameStart : MonoBehaviour
 
             // Apply the new scale to the sprite's transform
             // If you want to maintain the sprite's original aspect ratio, apply the same scale to Y
-            spriteObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);            
+            gameObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);            
 
 
 
             // Add a BoxCollider2D component to this GameObject
-            BoxCollider2D boxCollider = spriteObject.AddComponent<BoxCollider2D>();
+            BoxCollider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
 
             // Set the size of the box collider to match the size of the sprite bounds
             boxCollider.size = renderer.sprite.bounds.size;
@@ -86,15 +94,11 @@ public class GameStart : MonoBehaviour
             boxCollider.offset = renderer.sprite.bounds.center;
 
 
-            // You can also adjust its properties, like size or offset
-            //boxCollider.size = spriteObject.transform.size; //new Vector2(2f, 2f);
-            // boxCollider.offset = new Vector2(0f, 0.5f);
 
 
 
-            // Add Sprite Touch Handler Script
-            // spriteObject.AddComponent<SpriteTouchHandler>();
-            spriteObject.AddComponent<TouchDetector>();
+            // Add Touch Handler Script
+            gameObject.AddComponent<TouchDetector>();
         }
         else
         {

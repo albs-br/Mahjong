@@ -7,7 +7,13 @@ public class TouchDetector : MonoBehaviour
         // This code runs when the sprite is touched or clicked
         Debug.Log("Sprite Touched: " + gameObject.name);
 
+        var tile = gameObject.GetComponent<Tile>();
 
+        if(tile.IsBlocked)
+        {
+            Debug.Log("IsBlocked");
+            return;
+        }
 
         // Add your specific action here, e.g., load a level or change a state
 
@@ -15,6 +21,17 @@ public class TouchDetector : MonoBehaviour
         // this.gameObject.SetActive(false);             
 
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-        renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+
+        // Set sprite gray (selected)
+        if(!tile.IsSelected)
+        {
+            renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+            tile.IsSelected = true;
+        }
+        else
+        {
+            renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            tile.IsSelected = false;
+        }
     }
 }
