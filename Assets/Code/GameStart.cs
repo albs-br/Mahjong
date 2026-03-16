@@ -5,6 +5,15 @@ using UnityEngine.InputSystem.EnhancedTouch;
 
 public class GameStart : MonoBehaviour
 {
+    float cameraHeight;
+    float cameraWidth;
+
+    float minX;
+    float maxX;
+    float minY;
+    float maxY;
+
+
     // Awake is called when the script instance is being loaded
     void Awake()
     {
@@ -28,38 +37,8 @@ public class GameStart : MonoBehaviour
     {
         Debug.Log("Start method");
 
-        // Load an image named "myTextureFile" from Assets/Resources/
-        // Texture2D texture = Resources.Load<Texture2D>("1");
-        // if (texture != null)
-        // {
-        //     // // Assign the loaded sprite to a SpriteRenderer
-        //     // GetComponent<SpriteRenderer>().sprite = loadedSprite;
-        // }
-        // else
-        // {
-        //     Debug.LogError("Texture not found!");
-        // }        
-        
-        
-        
-        
-        // // Load a single sprite named "my_sprite_name" from a Resources folder
-        // // Do not include the file extension
-        // Sprite loadedSprite = Resources.Load<Sprite>("1");
-        // if (loadedSprite != null)
-        // {
-        //     // Assign the loaded sprite to a SpriteRenderer
-        //     GetComponent<SpriteRenderer>().sprite = loadedSprite;
-            
-        //     transform.position = new Vector3(0f, 0f, 0f);
-        // }
-        // else
-        // {
-        //     Debug.LogError("Sprite not found!");
-        // }        
-
         CreateSprite("Sprite 1", 0f, 0f);
-        CreateSprite("Sprite 2", -2.3f, 5f);
+        CreateSprite("Sprite 2", minX, maxY);
     }
 
     // Update is called once per frame
@@ -78,8 +57,7 @@ public class GameStart : MonoBehaviour
 
         // 3. Load Sprite from Assets/Resources/name.png / bmp
         // (Do not include "Resources" or file extension in path)
-        Sprite loadedSprite = Resources.Load<Sprite>("mahjong-raw/tile/00/02");
-        //Sprite loadedSprite = Resources.Load<Sprite>("mahjong-raw/character/01");
+        Sprite loadedSprite = Resources.Load<Sprite>("fulltiles/bamboo1");
 
         if (loadedSprite != null)
         {
@@ -87,6 +65,15 @@ public class GameStart : MonoBehaviour
             
             // Set position
             spriteObject.transform.position = new Vector2(x, y);
+
+            // Set scale
+            float desiredWidth = cameraWidth / 4.0f; // tile width = 1/4 of screen
+            float scaleFactor = desiredWidth / renderer.bounds.size.x;
+
+            // Apply the new scale to the sprite's transform
+            // If you want to maintain the sprite's original aspect ratio, apply the same scale to Y
+            spriteObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);            
+
 
 
             // Add a BoxCollider2D component to this GameObject
@@ -118,17 +105,20 @@ public class GameStart : MonoBehaviour
     void GetScreenBoundaries()
     {
         Camera cam = Camera.main;
+        
         // orthographicSize is half the vertical size (height) of the camera's view.
-        float cameraHeight = cam.orthographicSize;
+        cameraHeight = cam.orthographicSize * 2;
+        
         // Calculate half the horizontal size (width) based on the aspect ratio.
-        float cameraWidth = cameraHeight * cam.aspect;
+        cameraWidth = cameraHeight * cam.aspect;
 
         // Calculate min and max bounds in world space
-        float minX = cam.transform.position.x - cameraWidth;
-        float maxX = cam.transform.position.x + cameraWidth;
-        float minY = cam.transform.position.y - cameraHeight;
-        float maxY = cam.transform.position.y + cameraHeight;
+        minX = cam.transform.position.x - (cameraWidth/2);
+        maxX = cam.transform.position.x + (cameraWidth/2);
+        minY = cam.transform.position.y - (cameraHeight/2);
+        maxY = cam.transform.position.y + (cameraHeight/2);
         
         Debug.Log("Bounds: Left=" + minX + ", Right=" + maxX + ", Bottom=" + minY + ", Top=" + maxY);
+        Debug.Log($"Camera width: {cameraWidth}, Camera height: {cameraHeight}");
     }        
 }

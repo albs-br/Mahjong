@@ -1,3 +1,0 @@
-Get-ChildItem -Recurse -Filter *.svg | ForEach-Object {
-    C:\Users\Public\utils\ImageMagick-7.1.2-13-portable-Q16-x64\magick $_.FullName -density 300 -background none ($_.FullName -replace '\.svg$', '.png')
-}
