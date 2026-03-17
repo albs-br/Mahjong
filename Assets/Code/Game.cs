@@ -46,6 +46,24 @@ public class Game : MonoBehaviour
         CreateTile("Tile 2", "bamboo2");
         CreateTile("Tile 3", "bamboo3");
         CreateTile("Tile 4", "bamboo4");
+
+        UpdateTilesStatus();
+    }
+
+    void UpdateTilesStatus()
+    {
+        // Update IsBlocked of All tiles
+        for(int i=0; i < tileLine.Tiles.Count; i++)
+        {
+            if(i == 0 || i == tileLine.Tiles.Count - 1)
+            {
+                tileLine.Tiles[i].IsBlocked = false;
+            }
+            else
+            {
+                tileLine.Tiles[i].IsBlocked = true;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -64,18 +82,18 @@ public class Game : MonoBehaviour
 
         // Add tile to tileLine, update tile properties
         tile.TileLine = tileLine;
-        if(tileLine.Tiles.Count > 0)
-        {
-            var previousTile = tileLine.Tiles.Last();
-            tile.TileAtLeft = previousTile;
-            tile.TileAtRight = null;
-            previousTile.TileAtRight = tile;
-        }
-        else
-        {
-            tile.TileAtLeft = null;
-            tile.TileAtRight = null;
-        }
+        // if(tileLine.Tiles.Count > 0)
+        // {
+        //     var previousTile = tileLine.Tiles.Last();
+        //     tile.TileAtLeft = previousTile;
+        //     tile.TileAtRight = null;
+        //     previousTile.TileAtRight = tile;
+        // }
+        // else
+        // {
+        //     tile.TileAtLeft = null;
+        //     tile.TileAtRight = null;
+        // }
         tileLine.Tiles.Add(tile);
 
 
@@ -90,11 +108,13 @@ public class Game : MonoBehaviour
         {
             renderer.sprite = loadedSprite;
             
-            
+            //renderer.sortingOrder = 5; //// Renders on top of other sprites in the same layer with order < 5
             
             // Set scale
             float desiredWidth = cameraWidth / 4.0f; // tile width = 1/4 of screen
             float scaleFactor = desiredWidth / renderer.bounds.size.x;
+
+            // scaleFactor = scaleFactor * (Tile.TotalWidth / Tile.Width_2D);
 
             // Apply the new scale to the sprite's transform
             // If you want to maintain the sprite's original aspect ratio, apply the same scale to Y

@@ -6,19 +6,20 @@ public class Tile : MonoBehaviour
 {
     public string TileType { get; set; }
 
-    public bool IsBlocked 
-    { 
-        get
-        {
-            return (TileAtLeft != null && TileAtRight != null);
-        }
-    }
+    public bool IsBlocked  { get; set; }
+    // public bool IsBlocked 
+    // { 
+    //     get
+    //     {
+    //         return (TileAtLeft != null && TileAtRight != null);
+    //     }
+    // }
     
     public bool IsSelected { get; set; }
     
     public TileLine TileLine { get; set; }
-    public Tile TileAtLeft { get; set; }
-    public Tile TileAtRight { get; set; }
+    // public Tile TileAtLeft { get; set; }
+    // public Tile TileAtRight { get; set; }
 
 
 
