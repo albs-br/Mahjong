@@ -42,9 +42,10 @@ public class Game : MonoBehaviour
 
         tileLine = new TileLine();
 
-        CreateTile("Tile 1");
-        CreateTile("Tile 2");
-        CreateTile("Tile 3");
+        CreateTile("Tile 1", "bamboo1");
+        CreateTile("Tile 2", "bamboo2");
+        CreateTile("Tile 3", "bamboo3");
+        CreateTile("Tile 4", "bamboo4");
     }
 
     // Update is called once per frame
@@ -53,11 +54,13 @@ public class Game : MonoBehaviour
         //Debug.Log("Update method");
     }
 
-    void CreateTile(string name)
+    void CreateTile(string name, string tileType)
     {
         GameObject gameObject = new GameObject(name);
 
         var tile = gameObject.AddComponent<Tile>();
+
+        tile.TileType = tileType;
 
         // Add tile to tileLine, update tile properties
         tile.TileLine = tileLine;
@@ -81,7 +84,7 @@ public class Game : MonoBehaviour
         // Load Sprite from Assets/Resources/name.png / bmp
         // (Do not include "Resources" or file extension in path)
         const string BASE_PATH = "fulltiles/";
-        Sprite loadedSprite = Resources.Load<Sprite>(BASE_PATH + "bamboo1");
+        Sprite loadedSprite = Resources.Load<Sprite>(BASE_PATH + tileType);
 
         if (loadedSprite != null)
         {
