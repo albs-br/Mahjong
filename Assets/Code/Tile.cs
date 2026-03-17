@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    public int Index { get; set; }
     public string TileType { get; set; }
 
     public bool IsBlocked  { get; set; }

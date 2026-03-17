@@ -14,8 +14,10 @@ public class Game : MonoBehaviour
     float minY;
     float maxY;
 
+    int numberOfColumns, numberOfLines;
 
-    TileLine tileLine;
+    TileFloor tileFloor;
+    //TileLine tileLine;
 
     Vector3 tileScaleFactor;
 
@@ -44,20 +46,31 @@ public class Game : MonoBehaviour
     {
         Debug.Log("Start method");
 
-        tileLine = new TileLine();
+        this.numberOfColumns = 4;
+        this.numberOfLines = 2;
+        SetTileScaleFactor(this.numberOfColumns); // tile width = 1/4 of screen
 
-        SetTileScaleFactor(4.0f); // tile width = 1/4 of screen
+        this.tileFloor = new TileFloor();
 
-        CreateTile("Tile 1", "bamboo1");
-        CreateTile("Tile 2", "bamboo2");
-        CreateTile("Tile 3", "bamboo3");
-        CreateTile("Tile 4", "bamboo4");
+        this.tileFloor.TileLines.Add(new TileLine(0));
+        CreateTile(this.tileFloor.TileLines[0], "bamboo1");
+        CreateTile(this.tileFloor.TileLines[0], "bamboo2");
+        CreateTile(this.tileFloor.TileLines[0], "bamboo3");
+        CreateTile(this.tileFloor.TileLines[0], "bamboo4");
+
+        this.tileFloor.TileLines.Add(new TileLine(1));
+        CreateTile(this.tileFloor.TileLines[1], "circle1");
+        CreateTile(this.tileFloor.TileLines[1], "circle2");
+        CreateTile(this.tileFloor.TileLines[1], "circle3");
+        CreateTile(this.tileFloor.TileLines[1], "circle4");
 
         UpdateTilesStatus();
     }
 
-    void SetTileScaleFactor(float numberOfColumns)
+    void SetTileScaleFactor(int numberOfColumns)
     {
+        this.numberOfColumns = numberOfColumns;
+
         string sampleTile = "bamboo1";
         Sprite loadedSprite = Resources.Load<Sprite>(TILE_IMGS_BASE_PATH + sampleTile);
 
@@ -66,25 +79,26 @@ public class Game : MonoBehaviour
             SpriteRenderer renderer = gameObject.AddComponent<SpriteRenderer>();
             renderer.sprite = loadedSprite;
             
-            //renderer.sortingOrder = 5; //// Renders on top of other sprites in the same layer with order < 5
             
             float totalWidth_px = (Tile.TotalWidth_px - Tile.Width_2D_px) + (numberOfColumns * Tile.Width_2D_px); // in pixels
-            Debug.Log($"totalWidth_px: {totalWidth_px}");
+            //Debug.Log($"totalWidth_px: {totalWidth_px}");
 
             float temp = 1 + (((Tile.TotalWidth_px - Tile.Width_2D_px) / totalWidth_px) / numberOfColumns); // factor to take into account one 3d border
-            Debug.Log($"temp: {temp}");
+            //Debug.Log($"temp: {temp}");
 
 
             // Set scale
-            float desiredWidth = this.cameraWidth / (numberOfColumns);
+            float desiredWidth = this.cameraWidth / (numberOfColumns / temp);
+            //Debug.Log($"desiredWidth: {desiredWidth}");
             float scaleFactor = desiredWidth / renderer.bounds.size.x;
 
-            float f = this.cameraWidth / totalWidth_px;
+            float f = this.cameraWidth / totalWidth_px; // in screen units/pixel
             Tile.TotalWidth = Tile.TotalWidth_px * f;
             Tile.Width_2D = Tile.Width_2D_px * f;
-            Debug.Log($"Tile.TotalWidth: {Tile.TotalWidth}");
-            Debug.Log($"Tile.Width_2D: {Tile.Width_2D}");
-            // TODO: do the same for height
+            // Debug.Log($"Tile.TotalWidth: {Tile.TotalWidth}");
+            // Debug.Log($"Tile.Width_2D: {Tile.Width_2D}");
+            Tile.TotalHeight = Tile.TotalHeight_px * f;
+            Tile.Height_2D = Tile.Height_2D_px * f;
 
             // scaleFactor = scaleFactor * (Tile.TotalWidth / Tile.Width_2D);
 
@@ -99,15 +113,18 @@ public class Game : MonoBehaviour
     void UpdateTilesStatus()
     {
         // Update IsBlocked of All tiles
-        for(int i=0; i < tileLine.Tiles.Count; i++)
+        for(int j=0; j < this.tileFloor.TileLines.Count; j++)
         {
-            if(i == 0 || i == tileLine.Tiles.Count - 1)
+            for(int i=0; i < this.tileFloor.TileLines[j].Tiles.Count; i++)
             {
-                tileLine.Tiles[i].IsBlocked = false;
-            }
-            else
-            {
-                tileLine.Tiles[i].IsBlocked = true;
+                if(i == 0 || i == this.tileFloor.TileLines[j].Tiles.Count - 1)
+                {
+                    this.tileFloor.TileLines[j].Tiles[i].IsBlocked = false;
+                }
+                else
+                {
+                    this.tileFloor.TileLines[j].Tiles[i].IsBlocked = true;
+                }
             }
         }
     }
@@ -118,11 +135,14 @@ public class Game : MonoBehaviour
         //Debug.Log("Update method");
     }
 
-    void CreateTile(string name, string tileType)
+    void CreateTile(TileLine tileLine, string tileType)
     {
+        string name = $"Tile {tileLine.Tiles.Count + 1}";
         GameObject gameObject = new GameObject(name);
 
         var tile = gameObject.AddComponent<Tile>();
+
+        tile.Index = tileLine.Tiles.Count;
 
         tile.TileType = tileType;
 
@@ -153,7 +173,7 @@ public class Game : MonoBehaviour
         {
             renderer.sprite = loadedSprite;
             
-            //renderer.sortingOrder = 5; //// Renders on top of other sprites in the same layer with order < 5
+            renderer.sortingOrder = numberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
             
             // // Set scale
             // float desiredWidth = cameraWidth / 4.0f; // tile width = 1/4 of screen
@@ -168,11 +188,11 @@ public class Game : MonoBehaviour
 
 
 
-            float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
-            //float x = this.minX + (Tile.TotalWidth/2) + ((tile.TileLine.Tiles.Count - 1) * Tile.Width_2D);
-            Debug.Log($"x: {x}");
+            // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
+            float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
 
-            float y = 0f;
+            float y = 0f + (Tile.TotalHeight * (this.numberOfLines/2)) - (tileLine.Index * Tile.TotalHeight);
+            //Debug.Log($"tileLine.Index: {tileLine.Index}");
 
             // Set position
             gameObject.transform.position = new Vector2(x, y);

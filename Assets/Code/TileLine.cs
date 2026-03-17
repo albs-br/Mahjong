@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class TileLine
 {
+    public int Index { get; set; }
+
+    public TileFloor TileFloor { get; set; }
+
     public IList<Tile> Tiles { get; set; }
 
-    public TileLine()
+    public TileLine(int index)
     {
-        Tiles = new List<Tile>();
+        this.Index = index;
+        this.Tiles = new List<Tile>();
     }
 }
