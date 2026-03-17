@@ -27,13 +27,18 @@ public class Tile : MonoBehaviour
     618 - 70 = 
     859 - 73 = 
     */
-    public static float TotalWidth = 618; // in pixels
-    public static float TotalHeight = 859; // in pixels
+    public static float TotalWidth_px = 618; // in pixels
+    public static float TotalHeight_px = 859; // in pixels
     
     // Size of the tile top, discarding the 3D effect
-    public static float Width_2D = TotalWidth - 70; // in pixels
-    public static float Height_2D = TotalHeight - 73; // in pixels
+    public static float Width_2D_px = TotalWidth_px - 70; // in pixels
+    public static float Height_2D_px = TotalHeight_px - 73; // in pixels
 
+    public static float TotalWidth; // in screen units
+    public static float TotalHeight; // in screen units
+
+    public static float Width_2D; // in screen units
+    public static float Height_2D; // in screen units
 
 
     public Tile()
