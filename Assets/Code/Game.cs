@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 
@@ -41,8 +42,9 @@ public class Game : MonoBehaviour
 
         tileLine = new TileLine();
 
-        CreateTile("Sprite 1", 0f, 0f);
-        CreateTile("Sprite 2", minX, maxY);
+        CreateTile("Tile 1");
+        CreateTile("Tile 2");
+        CreateTile("Tile 3");
     }
 
     // Update is called once per frame
@@ -51,14 +53,28 @@ public class Game : MonoBehaviour
         //Debug.Log("Update method");
     }
 
-    void CreateTile(string name, float x, float y)
+    void CreateTile(string name)
     {
         GameObject gameObject = new GameObject(name);
 
         var tile = gameObject.AddComponent<Tile>();
 
-        tileLine.Tiles.Add(tile);
+        // Add tile to tileLine, update tile properties
         tile.TileLine = tileLine;
+        if(tileLine.Tiles.Count > 0)
+        {
+            var previousTile = tileLine.Tiles.Last();
+            tile.TileAtLeft = previousTile;
+            tile.TileAtRight = null;
+            previousTile.TileAtRight = tile;
+        }
+        else
+        {
+            tile.TileAtLeft = null;
+            tile.TileAtRight = null;
+        }
+        tileLine.Tiles.Add(tile);
+
 
         SpriteRenderer renderer = gameObject.AddComponent<SpriteRenderer>();
 
@@ -71,9 +87,8 @@ public class Game : MonoBehaviour
         {
             renderer.sprite = loadedSprite;
             
-            // Set position
-            gameObject.transform.position = new Vector2(x, y);
-
+            
+            
             // Set scale
             float desiredWidth = cameraWidth / 4.0f; // tile width = 1/4 of screen
             float scaleFactor = desiredWidth / renderer.bounds.size.x;
@@ -81,6 +96,18 @@ public class Game : MonoBehaviour
             // Apply the new scale to the sprite's transform
             // If you want to maintain the sprite's original aspect ratio, apply the same scale to Y
             gameObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);            
+
+
+
+
+            float x = minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
+            Debug.Log($"x: {x}");
+
+            float y = 0f;
+
+            // Set position
+            gameObject.transform.position = new Vector2(x, y);
+
 
 
 
