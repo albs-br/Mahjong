@@ -22,16 +22,33 @@ public class TouchDetector : MonoBehaviour
 
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
-        // Set sprite gray (selected)
+        var game = tile.TileLine.TileFloor.Game;
+
         if(!tile.IsSelected)
         {
-            renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
-            tile.IsSelected = true;
+            if(game.TileSelected == null)
+            {
+                // Set sprite gray (selected)
+                renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+                tile.IsSelected = true;
+                game.TileSelected = tile;
+            }
+            else
+            {
+                if(game.TileSelected.TileType == tile.TileType)
+                {
+                    // Remove both tiles
+                    Debug.Log("Remove both tiles");
+                    //game.TileSelected
+                }
+            }
         }
         else
         {
+            // Remove gray (unselected)
             renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             tile.IsSelected = false;
+            game.TileSelected = null;
         }
     }
 }

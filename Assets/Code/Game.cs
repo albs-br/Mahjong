@@ -19,6 +19,8 @@ public class Game : MonoBehaviour
     TileFloor tileFloor;
     //TileLine tileLine;
 
+    public Tile TileSelected;
+
     Vector3 tileScaleFactor;
 
     const string TILE_IMGS_BASE_PATH = "fulltiles/";
@@ -51,31 +53,36 @@ public class Game : MonoBehaviour
         SetTileScaleFactor(this.numberOfColumns); // tile width = 1/4 of screen
 
         this.tileFloor = new TileFloor();
+        this.tileFloor.Game = this;
 
         this.tileFloor.TileLines.Add(new TileLine(0));
+        this.tileFloor.TileLines[0].TileFloor = this.tileFloor; //TODO: method to add a ne TileLine to a TileFloor
         CreateTile(this.tileFloor.TileLines[0], "bamboo1");
         CreateTile(this.tileFloor.TileLines[0], "bamboo2");
         CreateTile(this.tileFloor.TileLines[0], "bamboo3");
         CreateTile(this.tileFloor.TileLines[0], "bamboo4");
 
         this.tileFloor.TileLines.Add(new TileLine(1));
+        this.tileFloor.TileLines[1].TileFloor = this.tileFloor;
         this.tileFloor.TileLines[1].TileOffsetLeft = 1;
         CreateTile(this.tileFloor.TileLines[1], "circle1");
-        CreateTile(this.tileFloor.TileLines[1], "circle2");
+        CreateTile(this.tileFloor.TileLines[1], "pinyin1");
         // CreateTile(this.tileFloor.TileLines[1], "circle3");
         // CreateTile(this.tileFloor.TileLines[1], "circle4");
 
         this.tileFloor.TileLines.Add(new TileLine(2));
+        this.tileFloor.TileLines[2].TileFloor = this.tileFloor;
         CreateTile(this.tileFloor.TileLines[2], "pinyin1");
         CreateTile(this.tileFloor.TileLines[2], "pinyin2");
         CreateTile(this.tileFloor.TileLines[2], "pinyin3");
         CreateTile(this.tileFloor.TileLines[2], "pinyin4");
 
         this.tileFloor.TileLines.Add(new TileLine(3));
-        CreateTile(this.tileFloor.TileLines[3], "pinyin5");
+        this.tileFloor.TileLines[3].TileFloor = this.tileFloor;
+        CreateTile(this.tileFloor.TileLines[3], "bamboo4");
         CreateTile(this.tileFloor.TileLines[3], "pinyin6");
         CreateTile(this.tileFloor.TileLines[3], "pinyin7");
-        CreateTile(this.tileFloor.TileLines[3], "pinyin8");
+        CreateTile(this.tileFloor.TileLines[3], "bamboo1");
 
         UpdateTilesStatus();
     }
