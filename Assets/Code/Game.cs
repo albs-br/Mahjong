@@ -25,6 +25,53 @@ public class Game : MonoBehaviour
 
     const string TILE_IMGS_BASE_PATH = "fulltiles/";
 
+    /*
+    const string[] = {
+        "bamboo1",
+        "bamboo2",
+        "bamboo3",
+        "bamboo4",
+        "bamboo5",
+        "bamboo6",
+        "bamboo7",
+        "bamboo8",
+        "bamboo9",
+        "chrysanthemum",
+        "circle1",
+        "circle2",
+        "circle3",
+        "circle4",
+        "circle5",
+        "circle6",
+        "circle7",
+        "circle8",
+        "circle9",
+        "fall",
+        "lotus",
+        "orchid",
+        "peony",
+        "pinyin1",
+        "pinyin10",
+        "pinyin11",
+        "pinyin12",
+        "pinyin13",
+        "pinyin14",
+        "pinyin15",
+        "pinyin2",
+        "pinyin3",
+        "pinyin4",
+        "pinyin5",
+        "pinyin6",
+        "pinyin7",
+        "pinyin8",
+        "pinyin9",
+        "spring",
+        "summer",
+        "winter"
+    };
+    */
+
+
     // Awake is called when the script instance is being loaded
     void Awake()
     {
@@ -211,7 +258,7 @@ public class Game : MonoBehaviour
 
         SpriteRenderer renderer = gameObject.AddComponent<SpriteRenderer>();
 
-        // Load Sprite from Assets/Resources/name.png / bmp
+        // Load Sprite from Assets/Resources/name / bmp
         // (Do not include "Resources" or file extension in path)
         Sprite loadedSprite = Resources.Load<Sprite>(TILE_IMGS_BASE_PATH + tileType);
 
