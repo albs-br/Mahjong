@@ -48,8 +48,8 @@ public class Game : MonoBehaviour
     {
         Debug.Log("Start method");
 
-        this.numberOfColumns = 4;
-        this.numberOfLines = 3;
+        this.numberOfColumns = 6;
+        this.numberOfLines = 5;
         SetTileScaleFactor(this.numberOfColumns); // tile width = 1/4 of screen
 
         this.tileFloor = new TileFloor();
@@ -60,25 +60,39 @@ public class Game : MonoBehaviour
         CreateTile(tileLine_0, "bamboo2");
         CreateTile(tileLine_0, "bamboo3");
         CreateTile(tileLine_0, "bamboo4");
+        CreateTile(tileLine_0, "bamboo5");
+        CreateTile(tileLine_0, "bamboo6");
 
         var tileLine_1 = this.tileFloor.AddTileLine();
-        tileLine_1.TileOffsetLeft = 1;
+        tileLine_1.TileOffsetLeft = 2;
         CreateTile(tileLine_1, "circle1");
         CreateTile(tileLine_1, "pinyin1");
-        // CreateTile(tileLine_1, "circle3");
-        // CreateTile(tileLine_1, "circle4");
+        CreateTile(tileLine_1, "circle3");
+        CreateTile(tileLine_1, "circle4");
 
         var tileLine_2 = this.tileFloor.AddTileLine();
+        tileLine_2.TileOffsetLeft = 1;
         CreateTile(tileLine_2, "pinyin1");
         CreateTile(tileLine_2, "pinyin2");
         CreateTile(tileLine_2, "pinyin3");
         CreateTile(tileLine_2, "pinyin4");
 
         var tileLine_3 = this.tileFloor.AddTileLine();
+        CreateTile(tileLine_3, "bamboo6");
+        CreateTile(tileLine_3, "bamboo5");
         CreateTile(tileLine_3, "bamboo4");
         CreateTile(tileLine_3, "pinyin6");
         CreateTile(tileLine_3, "pinyin7");
         CreateTile(tileLine_3, "bamboo1");
+
+        var tileLine_4 = this.tileFloor.AddTileLine();
+        tileLine_4.TileOffsetLeft = 1;
+        CreateTile(tileLine_4, "pinyin5");
+        CreateTile(tileLine_4, "pinyin6");
+        CreateTile(tileLine_4, "pinyin7");
+        CreateTile(tileLine_4, "pinyin8");
+        CreateTile(tileLine_4, "pinyin9");
+        CreateTile(tileLine_4, "pinyin10");
 
         UpdateTilesStatus();
     }
