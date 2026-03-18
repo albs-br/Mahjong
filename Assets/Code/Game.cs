@@ -83,7 +83,7 @@ public class Game : MonoBehaviour
         UpdateTilesStatus();
     }
 
-    void SetTileScaleFactor(int numberOfColumns)
+    private void SetTileScaleFactor(int numberOfColumns)
     {
         this.numberOfColumns = numberOfColumns;
 
@@ -126,21 +126,50 @@ public class Game : MonoBehaviour
         }
     }
 
-    void UpdateTilesStatus()
+    public void UpdateTilesStatus()
     {
         // Update IsBlocked of All tiles
         for(int j=0; j < this.tileFloor.TileLines.Count; j++)
         {
+            // var listTilesActive = 
+            //     this.tileFloor.TileLines[j].Tiles
+            //         .Where(x => x.IsActive);
+
             for(int i=0; i < this.tileFloor.TileLines[j].Tiles.Count; i++)
             {
-                if(i == 0 || i == this.tileFloor.TileLines[j].Tiles.Count - 1)
+                var currentTile = this.tileFloor.TileLines[j].Tiles[i];
+                if(currentTile.IsActive)
                 {
-                    this.tileFloor.TileLines[j].Tiles[i].IsBlocked = false;
+                    bool hasActiveTileAtLeft = false;
+                    if(i > 0) 
+                    {
+                        hasActiveTileAtLeft = this.tileFloor.TileLines[j].Tiles[i - 1].IsActive;
+                    }
+                    
+                    bool hasActiveTileAtRight = false;
+                    if(i < this.tileFloor.TileLines[j].Tiles.Count - 1)
+                    {
+                        hasActiveTileAtRight = this.tileFloor.TileLines[j].Tiles[i + 1].IsActive;
+                    }
+
+                    if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
+                    {
+                        currentTile.IsBlocked = false;
+                    }
+                    else
+                    {
+                        currentTile.IsBlocked = true;
+                    }
                 }
-                else
-                {
-                    this.tileFloor.TileLines[j].Tiles[i].IsBlocked = true;
-                }
+
+                // if(i == 0 || i == this.tileFloor.TileLines[j].Tiles.Count - 1)
+                // {
+                //     this.tileFloor.TileLines[j].Tiles[i].IsBlocked = false;
+                // }
+                // else
+                // {
+                //     this.tileFloor.TileLines[j].Tiles[i].IsBlocked = true;
+                // }
             }
         }
     }
@@ -151,7 +180,7 @@ public class Game : MonoBehaviour
         //Debug.Log("Update method");
     }
 
-    void CreateTile(TileLine tileLine, string tileType)
+    private void CreateTile(TileLine tileLine, string tileType)
     {
         string name = $"Tile {tileLine.Tiles.Count + 1}";
         GameObject gameObject = new GameObject(name);
@@ -162,20 +191,7 @@ public class Game : MonoBehaviour
 
         tile.TileType = tileType;
 
-        // Add tile to tileLine, update tile properties
         tile.TileLine = tileLine;
-        // if(tileLine.Tiles.Count > 0)
-        // {
-        //     var previousTile = tileLine.Tiles.Last();
-        //     tile.TileAtLeft = previousTile;
-        //     tile.TileAtRight = null;
-        //     previousTile.TileAtRight = tile;
-        // }
-        // else
-        // {
-        //     tile.TileAtLeft = null;
-        //     tile.TileAtRight = null;
-        // }
         tileLine.Tiles.Add(tile);
 
 
@@ -191,14 +207,8 @@ public class Game : MonoBehaviour
             
             renderer.sortingOrder = numberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
             
-            // // Set scale
-            // float desiredWidth = cameraWidth / 4.0f; // tile width = 1/4 of screen
-            // float scaleFactor = desiredWidth / renderer.bounds.size.x;
-
-            // // scaleFactor = scaleFactor * (Tile.TotalWidth / Tile.Width_2D);
-
-            // Apply the new scale to the sprite's transform
-            // If you want to maintain the sprite's original aspect ratio, apply the same scale to Y
+            // Set scale
+            // Apply the previously calculated scale to the sprite's transform
             gameObject.transform.localScale = tileScaleFactor;
 
 
@@ -240,7 +250,7 @@ public class Game : MonoBehaviour
         }        
     }
 
-    void GetScreenBoundaries()
+    private void GetScreenBoundaries()
     {
         Camera cam = Camera.main;
         

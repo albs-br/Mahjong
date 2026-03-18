@@ -7,22 +7,21 @@ public class Tile : MonoBehaviour
     public int Index { get; set; }
     public string TileType { get; set; }
 
+    public bool IsActive  { get; set; }
+    
     public bool IsBlocked  { get; set; }
-    // public bool IsBlocked 
-    // { 
-    //     get
-    //     {
-    //         return (TileAtLeft != null && TileAtRight != null);
-    //     }
-    // }
     
     public bool IsSelected { get; set; }
     
     public TileLine TileLine { get; set; }
-    // public Tile TileAtLeft { get; set; }
-    // public Tile TileAtRight { get; set; }
 
-
+    public Game Game
+    {
+        get
+        {
+            return this.TileLine.TileFloor.Game;
+        }
+    }
 
     /*
     618 - 70 = 
@@ -44,6 +43,17 @@ public class Tile : MonoBehaviour
 
     public Tile()
     {
+        IsActive = true;
         IsSelected = false;
+    }
+
+    public void Remove()
+    {
+        // Call this method to hide/deactivate the GameObject
+        this.gameObject.SetActive(false);
+        
+        this.IsActive = false;
+        
+        this.Game.UpdateTilesStatus();
     }
 }

@@ -15,14 +15,10 @@ public class TouchDetector : MonoBehaviour
             return;
         }
 
-        // Add your specific action here, e.g., load a level or change a state
-
-        // // Call this method to hide/deactivate the GameObject
-        // this.gameObject.SetActive(false);             
 
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
-        var game = tile.TileLine.TileFloor.Game;
+        var game = tile.Game; //tile.TileLine.TileFloor.Game;
 
         if(!tile.IsSelected)
         {
@@ -40,6 +36,14 @@ public class TouchDetector : MonoBehaviour
                     // Remove both tiles
                     Debug.Log("Remove both tiles");
                     //game.TileSelected
+                    // // Call this method to hide/deactivate the GameObject
+                    // this.gameObject.SetActive(false);
+
+                    //Debug.Log("Removing tile " + this.gameObject.GetComponent<Tile>().Index);
+                    this.gameObject.GetComponent<Tile>().Remove();
+
+                    game.TileSelected.Remove();
+                    game.TileSelected = null;
                 }
             }
         }
