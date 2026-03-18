@@ -12,9 +12,8 @@ public class TileLine
 
     public int TileOffsetLeft { get; set; }
 
-    public TileLine(int index)
+    public TileLine()
     {
-        this.Index = index;
         this.TileOffsetLeft = 0;
         this.Tiles = new List<Tile>();
     }

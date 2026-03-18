@@ -55,34 +55,30 @@ public class Game : MonoBehaviour
         this.tileFloor = new TileFloor();
         this.tileFloor.Game = this;
 
-        this.tileFloor.TileLines.Add(new TileLine(0));
-        this.tileFloor.TileLines[0].TileFloor = this.tileFloor; //TODO: method to add a ne TileLine to a TileFloor
-        CreateTile(this.tileFloor.TileLines[0], "bamboo1");
-        CreateTile(this.tileFloor.TileLines[0], "bamboo2");
-        CreateTile(this.tileFloor.TileLines[0], "bamboo3");
-        CreateTile(this.tileFloor.TileLines[0], "bamboo4");
+        var tileLine_0 = this.tileFloor.AddTileLine();
+        CreateTile(tileLine_0, "bamboo1");
+        CreateTile(tileLine_0, "bamboo2");
+        CreateTile(tileLine_0, "bamboo3");
+        CreateTile(tileLine_0, "bamboo4");
 
-        this.tileFloor.TileLines.Add(new TileLine(1));
-        this.tileFloor.TileLines[1].TileFloor = this.tileFloor;
-        this.tileFloor.TileLines[1].TileOffsetLeft = 1;
-        CreateTile(this.tileFloor.TileLines[1], "circle1");
-        CreateTile(this.tileFloor.TileLines[1], "pinyin1");
-        // CreateTile(this.tileFloor.TileLines[1], "circle3");
-        // CreateTile(this.tileFloor.TileLines[1], "circle4");
+        var tileLine_1 = this.tileFloor.AddTileLine();
+        tileLine_1.TileOffsetLeft = 1;
+        CreateTile(tileLine_1, "circle1");
+        CreateTile(tileLine_1, "pinyin1");
+        // CreateTile(tileLine_1, "circle3");
+        // CreateTile(tileLine_1, "circle4");
 
-        this.tileFloor.TileLines.Add(new TileLine(2));
-        this.tileFloor.TileLines[2].TileFloor = this.tileFloor;
-        CreateTile(this.tileFloor.TileLines[2], "pinyin1");
-        CreateTile(this.tileFloor.TileLines[2], "pinyin2");
-        CreateTile(this.tileFloor.TileLines[2], "pinyin3");
-        CreateTile(this.tileFloor.TileLines[2], "pinyin4");
+        var tileLine_2 = this.tileFloor.AddTileLine();
+        CreateTile(tileLine_2, "pinyin1");
+        CreateTile(tileLine_2, "pinyin2");
+        CreateTile(tileLine_2, "pinyin3");
+        CreateTile(tileLine_2, "pinyin4");
 
-        this.tileFloor.TileLines.Add(new TileLine(3));
-        this.tileFloor.TileLines[3].TileFloor = this.tileFloor;
-        CreateTile(this.tileFloor.TileLines[3], "bamboo4");
-        CreateTile(this.tileFloor.TileLines[3], "pinyin6");
-        CreateTile(this.tileFloor.TileLines[3], "pinyin7");
-        CreateTile(this.tileFloor.TileLines[3], "bamboo1");
+        var tileLine_3 = this.tileFloor.AddTileLine();
+        CreateTile(tileLine_3, "bamboo4");
+        CreateTile(tileLine_3, "pinyin6");
+        CreateTile(tileLine_3, "pinyin7");
+        CreateTile(tileLine_3, "bamboo1");
 
         UpdateTilesStatus();
     }
