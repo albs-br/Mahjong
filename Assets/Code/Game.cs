@@ -47,7 +47,7 @@ public class Game : MonoBehaviour
         Debug.Log("Start method");
 
         this.numberOfColumns = 4;
-        this.numberOfLines = 2;
+        this.numberOfLines = 3;
         SetTileScaleFactor(this.numberOfColumns); // tile width = 1/4 of screen
 
         this.tileFloor = new TileFloor();
@@ -64,6 +64,18 @@ public class Game : MonoBehaviour
         CreateTile(this.tileFloor.TileLines[1], "circle2");
         // CreateTile(this.tileFloor.TileLines[1], "circle3");
         // CreateTile(this.tileFloor.TileLines[1], "circle4");
+
+        this.tileFloor.TileLines.Add(new TileLine(2));
+        CreateTile(this.tileFloor.TileLines[2], "pinyin1");
+        CreateTile(this.tileFloor.TileLines[2], "pinyin2");
+        CreateTile(this.tileFloor.TileLines[2], "pinyin3");
+        CreateTile(this.tileFloor.TileLines[2], "pinyin4");
+
+        this.tileFloor.TileLines.Add(new TileLine(3));
+        CreateTile(this.tileFloor.TileLines[3], "pinyin5");
+        CreateTile(this.tileFloor.TileLines[3], "pinyin6");
+        CreateTile(this.tileFloor.TileLines[3], "pinyin7");
+        CreateTile(this.tileFloor.TileLines[3], "pinyin8");
 
         UpdateTilesStatus();
     }
@@ -192,10 +204,10 @@ public class Game : MonoBehaviour
             // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
             float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
 
-            x += tile.TileLine.TileOffsetLeft * Tile.TotalWidth;
+            x += tile.TileLine.TileOffsetLeft * Tile.Width_2D;
 
-            float y = 0f + (Tile.TotalHeight * (this.numberOfLines/2)) - (tileLine.Index * Tile.TotalHeight);
-            //Debug.Log($"tileLine.Index: {tileLine.Index}");
+            float y = 0f + (Tile.Height_2D * (this.numberOfLines/2)) - (tileLine.Index * Tile.Height_2D);
+            Debug.Log($"y: {y}");
 
             // Set position
             gameObject.transform.position = new Vector2(x, y);
