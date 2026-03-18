@@ -59,10 +59,11 @@ public class Game : MonoBehaviour
         CreateTile(this.tileFloor.TileLines[0], "bamboo4");
 
         this.tileFloor.TileLines.Add(new TileLine(1));
+        this.tileFloor.TileLines[1].TileOffsetLeft = 1;
         CreateTile(this.tileFloor.TileLines[1], "circle1");
         CreateTile(this.tileFloor.TileLines[1], "circle2");
-        CreateTile(this.tileFloor.TileLines[1], "circle3");
-        CreateTile(this.tileFloor.TileLines[1], "circle4");
+        // CreateTile(this.tileFloor.TileLines[1], "circle3");
+        // CreateTile(this.tileFloor.TileLines[1], "circle4");
 
         UpdateTilesStatus();
     }
@@ -190,6 +191,8 @@ public class Game : MonoBehaviour
 
             // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
             float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
+
+            x += tile.TileLine.TileOffsetLeft * Tile.TotalWidth;
 
             float y = 0f + (Tile.TotalHeight * (this.numberOfLines/2)) - (tileLine.Index * Tile.TotalHeight);
             //Debug.Log($"tileLine.Index: {tileLine.Index}");

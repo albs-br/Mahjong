@@ -10,9 +10,12 @@ public class TileLine
 
     public IList<Tile> Tiles { get; set; }
 
+    public int TileOffsetLeft { get; set; }
+
     public TileLine(int index)
     {
         this.Index = index;
+        this.TileOffsetLeft = 0;
         this.Tiles = new List<Tile>();
     }
 }
