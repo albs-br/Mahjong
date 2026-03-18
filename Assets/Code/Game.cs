@@ -213,7 +213,7 @@ public class Game : MonoBehaviour
 
             x += tile.TileLine.TileOffsetLeft * Tile.Width_2D;
 
-            float y = 0f + (Tile.Height_2D * (this.numberOfLines/2)) - (tileLine.Index * Tile.Height_2D);
+            float y = 0f + (Tile.Height_2D * ((float)this.numberOfLines/2)) - (tileLine.Index * Tile.Height_2D);
             Debug.Log($"y: {y}");
 
             // Set position
