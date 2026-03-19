@@ -14,10 +14,10 @@ public class Game : MonoBehaviour
     float minY;
     float maxY;
 
-    int numberOfColumns, numberOfLines;
+    //int numberOfColumns, numberOfLines;
+    Table table;
 
     TileFloor tileFloor;
-    //TileLine tileLine;
 
     public Tile TileSelected;
 
@@ -25,8 +25,7 @@ public class Game : MonoBehaviour
 
     const string TILE_IMGS_BASE_PATH = "fulltiles/";
 
-    /*
-    const string[] = {
+    string[] tileTypes_Regular = {
         "bamboo1",
         "bamboo2",
         "bamboo3",
@@ -36,7 +35,6 @@ public class Game : MonoBehaviour
         "bamboo7",
         "bamboo8",
         "bamboo9",
-        "chrysanthemum",
         "circle1",
         "circle2",
         "circle3",
@@ -46,10 +44,6 @@ public class Game : MonoBehaviour
         "circle7",
         "circle8",
         "circle9",
-        "fall",
-        "lotus",
-        "orchid",
-        "peony",
         "pinyin1",
         "pinyin10",
         "pinyin11",
@@ -65,12 +59,21 @@ public class Game : MonoBehaviour
         "pinyin7",
         "pinyin8",
         "pinyin9",
+    };
+
+    string[] tileTypes_Flowers = {
+        "lotus",
+        "orchid",
+        "peony",
+        "chrysanthemum",
+    };
+
+    string[] tileTypes_Seasons = {
         "spring",
         "summer",
-        "winter"
+        "winter",
+        "fall",
     };
-    */
-
 
     // Awake is called when the script instance is being loaded
     void Awake()
@@ -95,9 +98,15 @@ public class Game : MonoBehaviour
     {
         Debug.Log("Start method");
 
-        this.numberOfColumns = 6;
-        this.numberOfLines = 5;
-        SetTileScaleFactor(this.numberOfColumns); // tile width = 1/4 of screen
+        // this.numberOfColumns = 6;
+        // this.numberOfLines = 5;
+
+        this.table = new Table(
+            numberOfColumns: 6, // tile width = 1/6 of screen
+            numberOfLines: 5
+        );
+
+        SetTileScaleFactor(this.table.NumberOfColumns);
 
         this.tileFloor = new TileFloor();
         this.tileFloor.Game = this;
@@ -139,14 +148,14 @@ public class Game : MonoBehaviour
         CreateTile(tileLine_4, "pinyin7");
         CreateTile(tileLine_4, "pinyin8");
         CreateTile(tileLine_4, "pinyin9");
-        CreateTile(tileLine_4, "pinyin10");
+        //CreateTile(tileLine_4, "pinyin10");
 
         UpdateTilesStatus();
     }
 
     private void SetTileScaleFactor(int numberOfColumns)
     {
-        this.numberOfColumns = numberOfColumns;
+        //this.numberOfColumns = numberOfColumns;
 
         string sampleTile = "bamboo1";
         Sprite loadedSprite = Resources.Load<Sprite>(TILE_IMGS_BASE_PATH + sampleTile);
@@ -266,7 +275,7 @@ public class Game : MonoBehaviour
         {
             renderer.sprite = loadedSprite;
             
-            renderer.sortingOrder = numberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
+            renderer.sortingOrder = this.table.NumberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
             
             // Set scale
             // Apply the previously calculated scale to the sprite's transform
@@ -280,7 +289,7 @@ public class Game : MonoBehaviour
 
             x += tile.TileLine.TileOffsetLeft * Tile.Width_2D;
 
-            float y = 0f + (Tile.Height_2D * ((float)this.numberOfLines/2)) - (tileLine.Index * Tile.Height_2D);
+            float y = 0f + (Tile.Height_2D * ((float)this.table.NumberOfLines/2)) - (tileLine.Index * Tile.Height_2D);
             Debug.Log($"y: {y}");
 
             // Set position
