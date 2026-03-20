@@ -60,7 +60,7 @@ public class Game : MonoBehaviour
         this.table.Lines.Add("111110");
         this.table.Lines.Add("001111");
         this.table.Lines.Add("011110");
-        this.table.Lines.Add("111111");
+        this.table.Lines.Add("111111"); // TODO make CreateTile be prepared to 110011
         this.table.Lines.Add("011111");
 
 
