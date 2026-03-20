@@ -78,7 +78,7 @@ public class Game : MonoBehaviour
     // Awake is called when the script instance is being loaded
     void Awake()
     {
-        Debug.Log("Awake: Code is running at game start (before Start)!");
+        //Debug.Log("Awake: Code is running at game start (before Start)!");
         
         
         // Add your initialization code here
@@ -96,7 +96,7 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Start method");
+        //Debug.Log("Start method");
 
         // this.numberOfColumns = 6;
         // this.numberOfLines = 5;
@@ -333,9 +333,9 @@ public class Game : MonoBehaviour
             x += tile.TileLine.TileOffsetLeft * Tile.Width_2D;
 
             float y = 0f + (Tile.Height_2D * ((float)this.table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
-            Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
-            Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
-            Debug.Log($"y: {y}");
+            //Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
+            //Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
+            //Debug.Log($"y: {y}");
 
             // Set position
             gameObject.transform.position = new Vector2(x, y);
@@ -381,7 +381,7 @@ public class Game : MonoBehaviour
         minY = cam.transform.position.y - (cameraHeight/2);
         maxY = cam.transform.position.y + (cameraHeight/2);
         
-        Debug.Log("Bounds: Left=" + minX + ", Right=" + maxX + ", Bottom=" + minY + ", Top=" + maxY);
-        Debug.Log($"Camera width: {cameraWidth}, Camera height: {cameraHeight}");
+        //Debug.Log("Bounds: Left=" + minX + ", Right=" + maxX + ", Bottom=" + minY + ", Top=" + maxY);
+        //Debug.Log($"Camera width: {cameraWidth}, Camera height: {cameraHeight}");
     }        
 }
