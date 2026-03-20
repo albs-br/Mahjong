@@ -94,7 +94,7 @@ public class Table
         this.TempLines = this.Lines.ToList();
 
         this.GetFreeTiles();
-        this.GetFreeTiles();
+        // this.GetFreeTiles();
     }
 
     // get free tiles for one iteration
@@ -105,7 +105,6 @@ public class Table
 
         Debug.Log("-----------");
 
-        //TODO
         IList<string> outputLines = new List<string>();
 
         for(int i=0; i < this.TempLines.Count; i++)
@@ -186,48 +185,54 @@ public class Table
 
 
 
-        // TODO, do while here until Free tiles list is empty
-
-        // sort 2 free tiles
-        int freeTile_1, freeTile_2;
+        // do while here until Free tiles list is empty
         do
         {
-            freeTile_1 = random.Next(this.FreeTiles.Count);
-            freeTile_2 = random.Next(this.FreeTiles.Count);
-        } while (freeTile_1 == freeTile_2);
-        
-        // sort tile type
-        int tileTypeIndex = random.Next(this.tileTypes_Regular.Length);
-        
-        this.Pairs.Add(new Pair
-        {
-            Tile_1 = this.FreeTiles[freeTile_1],
-            Tile_2 = this.FreeTiles[freeTile_2],
-            TileType = this.tileTypes_Regular[tileTypeIndex]
-        });
-
-        Debug.Log($"Pair {freeTile_1} {freeTile_2} {this.tileTypes_Regular[tileTypeIndex]}");
-        
-        // --- remove these 2 free tiles from list
-        
-        // first, set them to null
-        this.FreeTiles[freeTile_1] = null;
-        this.FreeTiles[freeTile_2] = null;
-
-        // loop all list removing nulls
-        int k=0;
-        do
-        {
-            if(this.FreeTiles[k] == null)
+            // sort 2 free tiles
+            int freeTile_1, freeTile_2;
+            do
             {
-                this.FreeTiles.RemoveAt(k);
-            }
-            else
+                freeTile_1 = random.Next(this.FreeTiles.Count);
+                freeTile_2 = random.Next(this.FreeTiles.Count);
+            } while (freeTile_1 == freeTile_2);
+            
+            // sort tile type
+            int tileTypeIndex = random.Next(this.tileTypes_Regular.Length);
+            // TODO: must be different from previous types
+            
+            var newPair = new Pair
             {
-                k++;
-            }
-        } while (k >= this.FreeTiles.Count - 1);
-        
+                Tile_1 = this.FreeTiles[freeTile_1],
+                Tile_2 = this.FreeTiles[freeTile_2],
+                TileType = this.tileTypes_Regular[tileTypeIndex]
+            };
+            this.Pairs.Add(newPair);
+
+            Debug.Log($"{newPair}");
+            
+            // --- remove these 2 free tiles from list
+            
+            // first, set them to null
+            this.FreeTiles[freeTile_1] = null;
+            this.FreeTiles[freeTile_2] = null;
+
+            // loop all list removing nulls
+            int k=0;
+            do
+            {
+                if(this.FreeTiles[k] == null)
+                {
+                    this.FreeTiles.RemoveAt(k);
+                }
+                else
+                {
+                    k++;
+                }
+            } while (k <= this.FreeTiles.Count - 1);
+
+            // Debug.Log($"this.FreeTiles.Count: {this.FreeTiles.Count}");
+
+        } while (this.FreeTiles.Count > 0);
          
         
 
@@ -239,6 +244,11 @@ public class TilePosition
     public int Floor { get; set; }
     public int Line { get; set; }
     public int Tile { get; set; }
+
+    public override string ToString()
+    {
+        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}";
+    }
 }
 
 public class Pair
@@ -246,4 +256,9 @@ public class Pair
     public TilePosition Tile_1 { get; set; }
     public TilePosition Tile_2 { get; set; }
     public string TileType { get; set; }
+
+    public override string ToString()
+    {
+        return $"Pair, Tile_1: {this.Tile_1}, Tile_2: {this.Tile_2}, TileType: {this.TileType}";
+    }
 }
