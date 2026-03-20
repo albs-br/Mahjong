@@ -106,84 +106,92 @@ public class Game : MonoBehaviour
             numberOfLines: 5
         );
         // 0 = empty, 1 = tile
-        this.table.Lines.Add("111111");
+        // Must have an even number of tiles
+        this.table.Lines.Add("111110");
         this.table.Lines.Add("001111");
         this.table.Lines.Add("011110");
         this.table.Lines.Add("111111");
         this.table.Lines.Add("011111");
 
+
+        this.table.SortTable();
+
+
+
         SetTileScaleFactor(this.table.NumberOfColumns);
 
 
-        // TODO: loop through Table randomly adding tiles
-        this.tileFloor = new TileFloor();
-        this.tileFloor.Game = this;
-        for(int i=0; i<this.table.Lines.Count; i++)
-        {
-            var line = this.table.Lines[i];
-
-            var tileLine = this.tileFloor.AddTileLine();
-            
-            // Counts characters from the start of the string as long as they are '\0'
-            int n = line.TakeWhile(c => c == '0').Count();            
-            tileLine.TileOffsetLeft = n;
-
-            for(int j=0; j<line.Length; j++)
-            {
-                var chr = line[j];
-                if(chr == '1')
-                {
-                    //Add tile
-                    CreateTile(tileLine, "bamboo1");
-                }
-
-            }
-        }
 
 
-
-
+        // // TODO: loop through Table randomly adding tiles
         // this.tileFloor = new TileFloor();
         // this.tileFloor.Game = this;
+        // for(int i=0; i<this.table.Lines.Count; i++)
+        // {
+        //     var line = this.table.Lines[i];
 
-        // var tileLine_0 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_0, "bamboo1");
-        // CreateTile(tileLine_0, "bamboo2");
-        // CreateTile(tileLine_0, "bamboo3");
-        // CreateTile(tileLine_0, "bamboo4");
-        // CreateTile(tileLine_0, "bamboo5");
-        // CreateTile(tileLine_0, "bamboo6");
+        //     var tileLine = this.tileFloor.AddTileLine();
+            
+        //     // Counts characters from the start of the string as long as they are '\0'
+        //     int n = line.TakeWhile(c => c == '0').Count();            
+        //     tileLine.TileOffsetLeft = n;
 
-        // var tileLine_1 = this.tileFloor.AddTileLine();
-        // tileLine_1.TileOffsetLeft = 2;
-        // CreateTile(tileLine_1, "circle1");
-        // CreateTile(tileLine_1, "pinyin1");
-        // CreateTile(tileLine_1, "circle3");
-        // CreateTile(tileLine_1, "circle4");
+        //     for(int j=0; j<line.Length; j++)
+        //     {
+        //         var chr = line[j];
+        //         if(chr == '1')
+        //         {
+        //             //Add tile
+        //             CreateTile(tileLine, "bamboo1");
+        //         }
 
-        // var tileLine_2 = this.tileFloor.AddTileLine();
-        // tileLine_2.TileOffsetLeft = 1;
-        // CreateTile(tileLine_2, "pinyin1");
-        // CreateTile(tileLine_2, "pinyin2");
-        // CreateTile(tileLine_2, "pinyin3");
-        // CreateTile(tileLine_2, "pinyin4");
+        //     }
+        // }
 
-        // var tileLine_3 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_3, "bamboo6");
-        // CreateTile(tileLine_3, "bamboo5");
-        // CreateTile(tileLine_3, "bamboo4");
-        // CreateTile(tileLine_3, "pinyin6");
-        // CreateTile(tileLine_3, "pinyin7");
-        // CreateTile(tileLine_3, "bamboo1");
 
-        // var tileLine_4 = this.tileFloor.AddTileLine();
-        // tileLine_4.TileOffsetLeft = 1;
-        // CreateTile(tileLine_4, "pinyin5");
-        // CreateTile(tileLine_4, "pinyin6");
-        // CreateTile(tileLine_4, "pinyin7");
-        // CreateTile(tileLine_4, "pinyin8");
-        // CreateTile(tileLine_4, "pinyin9");
-        // //CreateTile(tileLine_4, "pinyin10");
+
+
+        this.tileFloor = new TileFloor();
+        this.tileFloor.Game = this;
+
+        var tileLine_0 = this.tileFloor.AddTileLine();
+        CreateTile(tileLine_0, "bamboo1");
+        CreateTile(tileLine_0, "bamboo2");
+        CreateTile(tileLine_0, "bamboo3");
+        CreateTile(tileLine_0, "bamboo4");
+        CreateTile(tileLine_0, "bamboo5");
+        CreateTile(tileLine_0, "bamboo6");
+
+        var tileLine_1 = this.tileFloor.AddTileLine();
+        tileLine_1.TileOffsetLeft = 2;
+        CreateTile(tileLine_1, "circle1");
+        CreateTile(tileLine_1, "pinyin1");
+        CreateTile(tileLine_1, "circle3");
+        CreateTile(tileLine_1, "circle4");
+
+        var tileLine_2 = this.tileFloor.AddTileLine();
+        tileLine_2.TileOffsetLeft = 1;
+        CreateTile(tileLine_2, "pinyin1");
+        CreateTile(tileLine_2, "pinyin2");
+        CreateTile(tileLine_2, "pinyin3");
+        CreateTile(tileLine_2, "pinyin4");
+
+        var tileLine_3 = this.tileFloor.AddTileLine();
+        CreateTile(tileLine_3, "bamboo6");
+        CreateTile(tileLine_3, "bamboo5");
+        CreateTile(tileLine_3, "bamboo4");
+        CreateTile(tileLine_3, "pinyin6");
+        CreateTile(tileLine_3, "pinyin7");
+        CreateTile(tileLine_3, "bamboo1");
+
+        var tileLine_4 = this.tileFloor.AddTileLine();
+        tileLine_4.TileOffsetLeft = 1;
+        CreateTile(tileLine_4, "pinyin5");
+        CreateTile(tileLine_4, "pinyin6");
+        CreateTile(tileLine_4, "pinyin7");
+        CreateTile(tileLine_4, "pinyin8");
+        CreateTile(tileLine_4, "pinyin9");
+        //CreateTile(tileLine_4, "pinyin10");
 
         UpdateTilesStatus();
     }
@@ -324,7 +332,9 @@ public class Game : MonoBehaviour
 
             x += tile.TileLine.TileOffsetLeft * Tile.Width_2D;
 
-            float y = 0f + (Tile.Height_2D * ((float)this.table.NumberOfLines/2)) - (tileLine.Index * Tile.Height_2D);
+            float y = 0f + (Tile.Height_2D * ((float)this.table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
+            Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
+            Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
             Debug.Log($"y: {y}");
 
             // Set position
