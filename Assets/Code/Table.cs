@@ -12,7 +12,6 @@ public class Table
     public IList<string> Lines { get; set; }
     
     private IList<string> TempLines { get; set; }
-    private IList<TilePosition> FreeTiles { get; set; }
     
     private IList<Pair> Pairs { get; set; }
 
@@ -76,7 +75,6 @@ public class Table
         this.NumberOfLines = numberOfLines;
         this.Lines = new List<string>();
         this.TempLines = new List<string>();
-        this.FreeTiles = new List<TilePosition>(); //TODO maybe it should be a local var in GetFreeTiles
         this.Pairs = new List<Pair>();
     }
 
@@ -118,6 +116,8 @@ public class Table
     // get free tiles for one iteration
     private void GetFreeTiles()
     {
+        IList<TilePosition> freeTiles = new List<TilePosition>();
+        
         System.Random random = new System.Random();
 
 
@@ -155,7 +155,7 @@ public class Table
                         
 
                         // add to free tiles list
-                        this.FreeTiles.Add(
+                        freeTiles.Add(
                             new TilePosition
                             {
                                 Floor = 0, // TODO
@@ -189,8 +189,8 @@ public class Table
             this.TempLines[i] = outputLines[i];
         }
 
-        // this.FreeTiles.Count must be even (?)
-        if(this.FreeTiles.Count % 2 != 0)
+        // freeTiles.Count must be even (?)
+        if(freeTiles.Count % 2 != 0)
         {
             throw new Exception($"Free tiles not even.");
         }
@@ -206,8 +206,8 @@ public class Table
             int freeTile_1, freeTile_2;
             do
             {
-                freeTile_1 = random.Next(this.FreeTiles.Count);
-                freeTile_2 = random.Next(this.FreeTiles.Count);
+                freeTile_1 = random.Next(freeTiles.Count);
+                freeTile_2 = random.Next(freeTiles.Count);
             } while (freeTile_1 == freeTile_2);
             
             // sort tile type
@@ -216,8 +216,8 @@ public class Table
             
             var newPair = new Pair
             {
-                Tile_1 = this.FreeTiles[freeTile_1],
-                Tile_2 = this.FreeTiles[freeTile_2],
+                Tile_1 = freeTiles[freeTile_1],
+                Tile_2 = freeTiles[freeTile_2],
                 TileType = this.tileTypes_Regular[tileTypeIndex]
             };
             this.Pairs.Add(newPair);
@@ -227,26 +227,26 @@ public class Table
             // --- remove these 2 free tiles from list
             
             // first, set them to null
-            this.FreeTiles[freeTile_1] = null;
-            this.FreeTiles[freeTile_2] = null;
+            freeTiles[freeTile_1] = null;
+            freeTiles[freeTile_2] = null;
 
             // loop all list removing nulls
             int k=0;
             do
             {
-                if(this.FreeTiles[k] == null)
+                if(freeTiles[k] == null)
                 {
-                    this.FreeTiles.RemoveAt(k);
+                    freeTiles.RemoveAt(k);
                 }
                 else
                 {
                     k++;
                 }
-            } while (k <= this.FreeTiles.Count - 1);
+            } while (k <= freeTiles.Count - 1);
 
-            // Debug.Log($"this.FreeTiles.Count: {this.FreeTiles.Count}");
+            // Debug.Log($"freeTiles.Count: {freeTiles.Count}");
 
-        } while (this.FreeTiles.Count > 0);
+        } while (freeTiles.Count > 0);
          
         
 
