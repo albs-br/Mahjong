@@ -9,6 +9,8 @@ public class Table
     public int NumberOfColumns { get; set; }
     public int NumberOfLines { get; set; }
 
+    // TODO: make properties public and fields private
+
     public IList<string> Lines { get; set; }
     
     private IList<string> TempLines { get; set; }
@@ -68,6 +70,7 @@ public class Table
     };
 
 
+    private IList<string> tileTypes_Regular_Temp;
 
     public Table(int numberOfColumns, int numberOfLines)
     {
@@ -84,6 +87,8 @@ public class Table
         // step 1: solve puzzle, storing pairs of free unmarked tiles (number of floor, line, and tile position)
 
         // step 2: loop through pairs, creating the Game object classes with TileFloors, TileLines and Tiles
+
+        this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
 
         this.TempLines.Clear();
         this.TempLines = this.Lines.ToList();
@@ -211,16 +216,21 @@ public class Table
             } while (freeTile_1 == freeTile_2);
             
             // sort tile type
-            int tileTypeIndex = random.Next(this.tileTypes_Regular.Length);
-            // TODO: must be different from previous types
+            int tileTypeIndex = random.Next(this.tileTypes_Regular_Temp.Count);
+
             
             var newPair = new Pair
             {
                 Tile_1 = freeTiles[freeTile_1],
                 Tile_2 = freeTiles[freeTile_2],
-                TileType = this.tileTypes_Regular[tileTypeIndex]
+                TileType = this.tileTypes_Regular_Temp[tileTypeIndex]
             };
             this.Pairs.Add(newPair);
+
+
+            // remove tile type from list
+            this.tileTypes_Regular_Temp.RemoveAt(tileTypeIndex);
+
 
             Debug.Log($"{newPair}");
             
