@@ -64,7 +64,7 @@ public class Game : MonoBehaviour
         this.Table.Lines.Add("011111");
 
 
-        this.Table.SortTable();
+        var pairs = this.Table.SortTable();
 
 
 
@@ -75,6 +75,9 @@ public class Game : MonoBehaviour
 
         this.tileFloor = new TileFloor();
         this.tileFloor.Game = this;
+        
+        int floor = 0; // TODO
+        
         for(int i=0; i<this.Table.Lines.Count; i++)
         {
             var line = this.Table.Lines[i];
@@ -86,8 +89,22 @@ public class Game : MonoBehaviour
                 var chr = line[j];
                 if(chr == '1')
                 {
+                    // get tile type from Pairs list previously sorted
+                    string tileType = pairs.Where(x => 
+                        (
+                            x.Tile_1.Floor == floor &&
+                            x.Tile_1.Line == i &&
+                            x.Tile_1.Tile == j
+                        ) ||
+                        (
+                            x.Tile_2.Floor == floor &&
+                            x.Tile_2.Line == i &&
+                            x.Tile_2.Tile == j
+                        )
+                    ).First().TileType;
+
                     //Add tile
-                    CreateTile(tileLine, j, "bamboo1");
+                    CreateTile(tileLine, j, tileType);
                 }
 
             }

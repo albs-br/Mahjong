@@ -14,7 +14,7 @@ public class Table
     private IList<string> TempLines { get; set; }
     private IList<TilePosition> FreeTiles { get; set; }
     
-    public IList<Pair> Pairs { get; set; }
+    private IList<Pair> Pairs { get; set; }
 
 
 
@@ -80,12 +80,9 @@ public class Table
         this.Pairs = new List<Pair>();
     }
 
-    public void SortTable()
+    /// Sort tiles for this table
+    public IList<Pair> SortTable()
     {
-
-
-        // sort tiles for this table
-
         // step 1: solve puzzle, storing pairs of free unmarked tiles (number of floor, line, and tile position)
 
         // step 2: loop through pairs, creating the Game object classes with TileFloors, TileLines and Tiles
@@ -93,8 +90,29 @@ public class Table
         this.TempLines.Clear();
         this.TempLines = this.Lines.ToList();
 
-        this.GetFreeTiles();
-        // this.GetFreeTiles();
+        do
+        {
+            this.GetFreeTiles();
+        } while (!this.IsEmpty());
+
+        Debug.Log($"this.Pairs.Count: {this.Pairs.Count}");
+
+        return this.Pairs;
+    }
+
+    /// Return true if the table is all sorted
+    private bool IsEmpty()
+    {
+        bool isEmpty = true;
+        for(int i=0; i < this.TempLines.Count; i++)
+        {
+            if(this.TempLines[i].Contains("1"))
+            {
+                isEmpty = false;
+                break;
+            }
+        }
+        return isEmpty;
     }
 
     // get free tiles for one iteration
