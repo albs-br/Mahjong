@@ -9,13 +9,11 @@ public class Table
     public int NumberOfColumns { get; set; }
     public int NumberOfLines { get; set; }
 
-    // TODO: make properties public and fields private
-
     public IList<string> Lines { get; set; }
     
-    private IList<string> TempLines { get; set; }
-    
-    private IList<Pair> Pairs { get; set; }
+    private IList<string> tempLines;
+    private IList<Pair> pairs;
+    private IList<string> tileTypes_Regular_Temp;
 
 
 
@@ -70,15 +68,14 @@ public class Table
     };
 
 
-    private IList<string> tileTypes_Regular_Temp;
 
     public Table(int numberOfColumns, int numberOfLines)
     {
         this.NumberOfColumns = numberOfColumns;
         this.NumberOfLines = numberOfLines;
         this.Lines = new List<string>();
-        this.TempLines = new List<string>();
-        this.Pairs = new List<Pair>();
+        this.tempLines = new List<string>();
+        this.pairs = new List<Pair>();
     }
 
     /// Sort tiles for this table
@@ -90,26 +87,26 @@ public class Table
 
         this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
 
-        this.TempLines.Clear();
-        this.TempLines = this.Lines.ToList();
+        this.tempLines.Clear();
+        this.tempLines = this.Lines.ToList();
 
         do
         {
             this.GetFreeTiles();
         } while (!this.IsEmpty());
 
-        Debug.Log($"this.Pairs.Count: {this.Pairs.Count}");
+        Debug.Log($"this.pairs.Count: {this.pairs.Count}");
 
-        return this.Pairs;
+        return this.pairs;
     }
 
     /// Return true if the table is all sorted
     private bool IsEmpty()
     {
         bool isEmpty = true;
-        for(int i=0; i < this.TempLines.Count; i++)
+        for(int i=0; i < this.tempLines.Count; i++)
         {
-            if(this.TempLines[i].Contains("1"))
+            if(this.tempLines[i].Contains("1"))
             {
                 isEmpty = false;
                 break;
@@ -130,26 +127,26 @@ public class Table
 
         IList<string> outputLines = new List<string>();
 
-        for(int i=0; i < this.TempLines.Count; i++)
+        for(int i=0; i < this.tempLines.Count; i++)
         {
             var newLine = "";
 
-            Debug.Log("Line before: " + this.TempLines[i]);
+            Debug.Log("Line before: " + this.tempLines[i]);
 
-            for(int j=0; j<this.TempLines[i].Length; j++)
+            for(int j=0; j<this.tempLines[i].Length; j++)
             {
-                var newChar = this.TempLines[i][j];
+                var newChar = this.tempLines[i][j];
 
-                if(this.TempLines[i][j] == '1')
+                if(this.tempLines[i][j] == '1')
                 {
                     bool hasActiveTileAtLeft = false;
-                    if(j > 0 && this.TempLines[i][j-1] == '1')
+                    if(j > 0 && this.tempLines[i][j-1] == '1')
                     {
                         hasActiveTileAtLeft = true;
                     }
                     
                     bool hasActiveTileAtRight = false;
-                    if((j < this.TempLines[i].Length - 1) && this.TempLines[i][j+1] == '1')
+                    if((j < this.tempLines[i].Length - 1) && this.tempLines[i][j+1] == '1')
                     {
                         hasActiveTileAtRight = true;
                     }
@@ -170,13 +167,13 @@ public class Table
                         );
 
                         // remove tile from list
-                        // char[] chars = this.TempLines[i].ToCharArray();
+                        // char[] chars = this.tempLines[i].ToCharArray();
                         // chars[j] = '0';
-                        // this.TempLines[i] = new string(chars);
+                        // this.tempLines[i] = new string(chars);
 
                         newChar = '0';
 
-                        //Debug.Log("Line after: " + this.TempLines[i]);
+                        //Debug.Log("Line after: " + this.tempLines[i]);
                     }
                 }
 
@@ -189,9 +186,9 @@ public class Table
         }
 
         // copy outputLines to tempLines
-        for(int i=0; i < this.TempLines.Count; i++)
+        for(int i=0; i < this.tempLines.Count; i++)
         {
-            this.TempLines[i] = outputLines[i];
+            this.tempLines[i] = outputLines[i];
         }
 
         // freeTiles.Count must be even (?)
@@ -225,7 +222,7 @@ public class Table
                 Tile_2 = freeTiles[freeTile_2],
                 TileType = this.tileTypes_Regular_Temp[tileTypeIndex]
             };
-            this.Pairs.Add(newPair);
+            this.pairs.Add(newPair);
 
 
             // remove tile type from list
