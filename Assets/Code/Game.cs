@@ -15,7 +15,7 @@ public class Game : MonoBehaviour
     float maxY;
 
     //int numberOfColumns, numberOfLines;
-    Table table;
+    public Table Table;
 
     TileFloor tileFloor;
 
@@ -51,48 +51,43 @@ public class Game : MonoBehaviour
         // this.numberOfColumns = 6;
         // this.numberOfLines = 5;
 
-        this.table = new Table(
+        this.Table = new Table(
             numberOfColumns: 6, // tile width = 1/6 of screen
             numberOfLines: 5
         );
         // 0 = empty, 1 = tile
         // Must have an even number of tiles
-        this.table.Lines.Add("111110");
-        this.table.Lines.Add("001111");
-        this.table.Lines.Add("011110");
-        this.table.Lines.Add("111111"); // TODO make CreateTile be prepared to 110011
-        this.table.Lines.Add("011111");
+        this.Table.Lines.Add("111110");
+        this.Table.Lines.Add("001111");
+        this.Table.Lines.Add("011110");
+        this.Table.Lines.Add("110011"); // TODO make CreateTile be prepared to 110011
+        this.Table.Lines.Add("011111");
 
 
-        this.table.SortTable();
-
-
-
-        SetTileScaleFactor(this.table.NumberOfColumns);
+        this.Table.SortTable();
 
 
 
+        SetTileScaleFactor(this.Table.NumberOfColumns);
 
-        // TODO: loop through Table randomly adding tiles
+
+
+
         this.tileFloor = new TileFloor();
         this.tileFloor.Game = this;
-        for(int i=0; i<this.table.Lines.Count; i++)
+        for(int i=0; i<this.Table.Lines.Count; i++)
         {
-            var line = this.table.Lines[i];
+            var line = this.Table.Lines[i];
 
             var tileLine = this.tileFloor.AddTileLine();
             
-            // Counts characters from the start of the string as long as they are '\0'
-            int n = line.TakeWhile(c => c == '0').Count();            
-            tileLine.TileOffsetLeft = n;
-
             for(int j=0; j<line.Length; j++)
             {
                 var chr = line[j];
                 if(chr == '1')
                 {
                     //Add tile
-                    CreateTile(tileLine, "bamboo1");
+                    CreateTile(tileLine, j, "bamboo1");
                 }
 
             }
@@ -113,14 +108,12 @@ public class Game : MonoBehaviour
         // CreateTile(tileLine_0, "bamboo6");
 
         // var tileLine_1 = this.tileFloor.AddTileLine();
-        // tileLine_1.TileOffsetLeft = 2;
         // CreateTile(tileLine_1, "circle1");
         // CreateTile(tileLine_1, "pinyin1");
         // CreateTile(tileLine_1, "circle3");
         // CreateTile(tileLine_1, "circle4");
 
         // var tileLine_2 = this.tileFloor.AddTileLine();
-        // tileLine_2.TileOffsetLeft = 1;
         // CreateTile(tileLine_2, "pinyin1");
         // CreateTile(tileLine_2, "pinyin2");
         // CreateTile(tileLine_2, "pinyin3");
@@ -135,7 +128,6 @@ public class Game : MonoBehaviour
         // CreateTile(tileLine_3, "bamboo1");
 
         // var tileLine_4 = this.tileFloor.AddTileLine();
-        // tileLine_4.TileOffsetLeft = 1;
         // CreateTile(tileLine_4, "pinyin5");
         // CreateTile(tileLine_4, "pinyin6");
         // CreateTile(tileLine_4, "pinyin7");
@@ -201,16 +193,16 @@ public class Game : MonoBehaviour
             for(int i=0; i < this.tileFloor.TileLines[j].Tiles.Count; i++)
             {
                 var currentTile = this.tileFloor.TileLines[j].Tiles[i];
-                if(currentTile.IsActive)
+                if(currentTile != null && currentTile.IsActive)
                 {
                     bool hasActiveTileAtLeft = false;
-                    if(i > 0) 
+                    if(i > 0 && this.tileFloor.TileLines[j].Tiles[i - 1] != null)
                     {
                         hasActiveTileAtLeft = this.tileFloor.TileLines[j].Tiles[i - 1].IsActive;
                     }
                     
                     bool hasActiveTileAtRight = false;
-                    if(i < this.tileFloor.TileLines[j].Tiles.Count - 1)
+                    if(i < this.tileFloor.TileLines[j].Tiles.Count - 1 && this.tileFloor.TileLines[j].Tiles[i + 1] != null)
                     {
                         hasActiveTileAtRight = this.tileFloor.TileLines[j].Tiles[i + 1].IsActive;
                     }
@@ -243,19 +235,19 @@ public class Game : MonoBehaviour
         //Debug.Log("Update method");
     }
 
-    private void CreateTile(TileLine tileLine, string tileType)
+    private void CreateTile(TileLine tileLine, int index, string tileType)
     {
         string name = $"Tile {tileLine.Tiles.Count + 1}";
         GameObject gameObject = new GameObject(name);
 
         var tile = gameObject.AddComponent<Tile>();
 
-        tile.Index = tileLine.Tiles.Count;
+        tile.Index = index;
 
         tile.TileType = tileType;
 
         tile.TileLine = tileLine;
-        tileLine.Tiles.Add(tile);
+        tileLine.Tiles[index] = tile;
 
 
         SpriteRenderer renderer = gameObject.AddComponent<SpriteRenderer>();
@@ -268,7 +260,7 @@ public class Game : MonoBehaviour
         {
             renderer.sprite = loadedSprite;
             
-            renderer.sortingOrder = this.table.NumberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
+            renderer.sortingOrder = this.Table.NumberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
             
             // Set scale
             // Apply the previously calculated scale to the sprite's transform
@@ -280,9 +272,7 @@ public class Game : MonoBehaviour
             // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
             float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
 
-            x += tile.TileLine.TileOffsetLeft * Tile.Width_2D;
-
-            float y = 0f + (Tile.Height_2D * ((float)this.table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
+            float y = 0f + (Tile.Height_2D * ((float)this.Table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
             //Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
             //Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
             //Debug.Log($"y: {y}");

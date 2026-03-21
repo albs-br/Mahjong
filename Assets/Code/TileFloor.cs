@@ -19,6 +19,12 @@ public class TileFloor
         tileLine.Index = this.TileLines.Count;
         tileLine.TileFloor = this;
         
+        for(int i=0; i < this.Game.Table.NumberOfColumns; i++)
+        {
+            tileLine.Tiles.Add(null);
+        }
+
+
         this.TileLines.Add(tileLine);
 
         return tileLine;

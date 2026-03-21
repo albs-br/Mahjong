@@ -113,10 +113,6 @@ public class Table
 
             Debug.Log("Line before: " + this.TempLines[i]);
 
-            // // Counts characters from the start of the string as long as they are '\0'
-            // int n = line.TakeWhile(c => c == '0').Count();            
-            // tileLine.TileOffsetLeft = n;
-
             for(int j=0; j<this.TempLines[i].Length; j++)
             {
                 var newChar = this.TempLines[i][j];
