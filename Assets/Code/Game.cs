@@ -51,17 +51,7 @@ public class Game : MonoBehaviour
         // this.numberOfColumns = 6;
         // this.numberOfLines = 5;
 
-        this.Table = new Table(
-            numberOfColumns: 6, // tile width = 1/6 of screen
-            numberOfLines: 5
-        );
-        // 0 = empty, 1 = tile
-        // Must have an even number of tiles
-        this.Table.Lines.Add("111110");
-        this.Table.Lines.Add("001111");
-        this.Table.Lines.Add("011110");
-        this.Table.Lines.Add("110011");
-        this.Table.Lines.Add("011111");
+        this.Table = Table.LoadTable_SingleFloorTest();
 
 
         var pairs = this.Table.SortTable();
@@ -254,7 +244,7 @@ public class Game : MonoBehaviour
 
     private void CreateTile(TileLine tileLine, int index, string tileType)
     {
-        string name = $"Tile {tileLine.Tiles.Count + 1}";
+        string name = $"Tile {index} of Line {tileLine.Index}";
         GameObject gameObject = new GameObject(name);
 
         var tile = gameObject.AddComponent<Tile>();
@@ -288,6 +278,10 @@ public class Game : MonoBehaviour
 
             // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
             float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
+
+            // floor code:
+            // TODO: debug here
+            if (tileLine.Index == 0) x += Tile.TotalWidth - Tile.Width_2D;
 
             float y = 0f + (Tile.Height_2D * ((float)this.Table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
             //Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");

@@ -6,9 +6,12 @@ using UnityEngine;
 
 public class Table
 {
-    public int NumberOfColumns { get; set; }
+    public int NumberOfFloors { get; set; }
     public int NumberOfLines { get; set; }
+    public int NumberOfColumns { get; set; }
 
+    public IList<IList<string>> Floors { get; set; }
+    //TODO: remove lines and make it work with Floors
     public IList<string> Lines { get; set; }
     
     private IList<string> tempLines;
@@ -69,10 +72,12 @@ public class Table
 
 
 
-    public Table(int numberOfColumns, int numberOfLines)
+    public Table(int numberOfFloors, int numberOfLines, int numberOfColumns)
     {
-        this.NumberOfColumns = numberOfColumns;
+        this.NumberOfFloors = numberOfFloors;
         this.NumberOfLines = numberOfLines;
+        this.NumberOfColumns = numberOfColumns;
+        
         this.Lines = new List<string>();
         this.tempLines = new List<string>();
         this.pairs = new List<Pair>();
@@ -257,6 +262,54 @@ public class Table
          
         
 
+    }
+
+    public static Table LoadTable_SingleFloorTest()
+    {
+        var table = new Table(
+            numberOfFloors: 1,
+            numberOfLines: 5,
+            numberOfColumns: 6 // tile width = 1/6 of screen
+        );
+        // 0 = empty, 1 = tile
+        // Must have an even number of tiles
+        
+        //TODO: remove lines and make it work with Floors
+        table.Lines.Add("111110");
+        table.Lines.Add("001111");
+        table.Lines.Add("011110");
+        table.Lines.Add("110011");
+        table.Lines.Add("011111");
+
+        return table;
+    }
+
+    public static Table LoadTable_DoubleFloorTest()
+    {
+        var table = new Table(
+            numberOfFloors: 2,
+            numberOfLines: 5,
+            numberOfColumns: 6 // tile width = 1/6 of screen
+        );
+        // 0 = empty, 1 = tile
+        // Must have an even number of tiles
+        IList<string> floor_0 = new List<string>();
+        floor_0.Add("011110");
+        floor_0.Add("111111");
+        floor_0.Add("011110");
+        floor_0.Add("111111");
+        floor_0.Add("110011");
+        table.Floors.Add(floor_0);
+
+        IList<string> floor_1 = new List<string>();
+        floor_1.Add("000000");
+        floor_1.Add("001100");
+        floor_1.Add("011110");
+        floor_1.Add("001100");
+        floor_1.Add("000000");
+        table.Floors.Add(floor_1);
+
+        return table;
     }
 }
 

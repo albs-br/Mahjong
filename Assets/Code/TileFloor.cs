@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TileFloor
 {
+    public int Index { get; set; }
+
     public IList<TileLine> TileLines { get; set; }
 
     public Game Game { get; set; }
