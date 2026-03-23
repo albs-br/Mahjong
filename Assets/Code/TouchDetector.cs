@@ -6,6 +6,8 @@ public class TouchDetector : MonoBehaviour
     {
         // This code runs when the sprite is touched or clicked
         Debug.Log("Sprite Touched: " + gameObject.name);
+        Debug.Log("sorting order: " + this.gameObject.GetComponent<Renderer>().sortingOrder);
+        Debug.Log("IsBlocked: " + this.gameObject.GetComponent<Tile>().IsBlocked);
 
         var tile = gameObject.GetComponent<Tile>();
 
@@ -18,6 +20,7 @@ public class TouchDetector : MonoBehaviour
 
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
+        Debug.Log(tile.Index);
         var game = tile.Game; //tile.TileLine.TileFloor.Game;
 
         if(!tile.IsSelected)

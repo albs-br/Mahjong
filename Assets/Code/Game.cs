@@ -17,7 +17,7 @@ public class Game : MonoBehaviour
     //int numberOfColumns, numberOfLines;
     public Table Table;
 
-    TileFloor tileFloor;
+    IList<TileFloor> tileFloors;
 
     public Tile TileSelected;
 
@@ -51,7 +51,8 @@ public class Game : MonoBehaviour
         // this.numberOfColumns = 6;
         // this.numberOfLines = 5;
 
-        this.Table = Table.LoadTable_SingleFloorTest();
+        //this.Table = Table.LoadTable_SingleFloorTest();
+        this.Table = Table.LoadTable_DoubleFloorTest();
 
 
         var pairs = this.Table.SortTable();
@@ -63,43 +64,61 @@ public class Game : MonoBehaviour
 
 
 
-        this.tileFloor = new TileFloor();
-        this.tileFloor.Game = this;
         
-        int floor = 0; // TODO
-        
-        for(int i=0; i<this.Table.Lines.Count; i++)
+        this.tileFloors = new List<TileFloor>();
+        for(int k=0; k < this.Table.Floors.Count; k++)
         {
-            var line = this.Table.Lines[i];
-
-            var tileLine = this.tileFloor.AddTileLine();
+            Debug.Log($"k: {k}");
             
-            for(int j=0; j<line.Length; j++)
+            var lines = this.Table.Floors[k];
+
+            var tileFloor = new TileFloor();
+            tileFloor.Index = k;
+            tileFloor.Game = this;
+            this.tileFloors.Add(tileFloor);
+
+            for(int i=0; i < lines.Count; i++)
             {
-                var chr = line[j];
-                if(chr == '1')
+                var line = lines[i];
+
+                var tileLine = tileFloor.AddTileLine();
+                
+                for(int j=0; j < line.Length; j++)
                 {
-                    // get tile type from Pairs list previously sorted
-                    string tileType = pairs.Where(x => 
-                        (
-                            x.Tile_1.Floor == floor &&
-                            x.Tile_1.Line == i &&
-                            x.Tile_1.Tile == j
-                        ) ||
-                        (
-                            x.Tile_2.Floor == floor &&
-                            x.Tile_2.Line == i &&
-                            x.Tile_2.Tile == j
-                        )
-                    ).First().TileType;
+                    var chr = line[j];
+                    if(chr == '1')
+                    {
+                        // get tile type from Pairs list previously sorted
+                        string tileType = pairs.Where(x => 
+                            (
+                                x.Tile_1.Floor == k &&
+                                x.Tile_1.Line == i &&
+                                x.Tile_1.Tile == j
+                            ) ||
+                            (
+                                x.Tile_2.Floor == k &&
+                                x.Tile_2.Line == i &&
+                                x.Tile_2.Tile == j
+                            )
+                        ).FirstOrDefault().TileType;
 
-                    //Add tile
-                    CreateTile(tileLine, j, tileType);
+                        // if(tileType == null)
+                        // {
+                        //     tileType = "bamboo2"; // debug
+                        // }
+
+                        
+                        // debug
+                        // var tileType = "bamboo2";
+                        // if(k == 1) tileType = "circle5";
+
+                        //Add tile
+                        CreateTile(tileLine, j, tileType);
+                    }
+
                 }
-
             }
         }
-
 
 
 
@@ -191,47 +210,58 @@ public class Game : MonoBehaviour
     public void UpdateTilesStatus()
     {
         // Update IsBlocked of All tiles
-        for(int j=0; j < this.tileFloor.TileLines.Count; j++)
+        for(int k=0; k < this.tileFloors.Count; k++)
         {
-            // var listTilesActive = 
-            //     this.tileFloor.TileLines[j].Tiles
-            //         .Where(x => x.IsActive);
+            var tileFloor = this.tileFloors[k];
 
-            for(int i=0; i < this.tileFloor.TileLines[j].Tiles.Count; i++)
+            for(int j=0; j < tileFloor.TileLines.Count; j++)
             {
-                var currentTile = this.tileFloor.TileLines[j].Tiles[i];
-                if(currentTile != null && currentTile.IsActive)
-                {
-                    bool hasActiveTileAtLeft = false;
-                    if(i > 0 && this.tileFloor.TileLines[j].Tiles[i - 1] != null)
-                    {
-                        hasActiveTileAtLeft = this.tileFloor.TileLines[j].Tiles[i - 1].IsActive;
-                    }
-                    
-                    bool hasActiveTileAtRight = false;
-                    if(i < this.tileFloor.TileLines[j].Tiles.Count - 1 && this.tileFloor.TileLines[j].Tiles[i + 1] != null)
-                    {
-                        hasActiveTileAtRight = this.tileFloor.TileLines[j].Tiles[i + 1].IsActive;
-                    }
+                // var listTilesActive = 
+                //     this.tileFloor.TileLines[j].Tiles
+                //         .Where(x => x.IsActive);
 
-                    if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
+                for(int i=0; i < tileFloor.TileLines[j].Tiles.Count; i++)
+                {
+                    var currentTile = tileFloor.TileLines[j].Tiles[i];
+                    if(currentTile != null && currentTile.IsActive)
                     {
-                        currentTile.IsBlocked = false;
-                    }
-                    else
-                    {
-                        currentTile.IsBlocked = true;
+                        // check if there is an active tile above
+                        bool hasActiveTileAbove = false;
+                        if(((k + 1) <= this.tileFloors.Count - 1) && this.tileFloors[k + 1].TileLines[j].Tiles[i] != null)
+                        {
+                            hasActiveTileAbove = this.tileFloors[k + 1].TileLines[j].Tiles[i].IsActive;
+                        }
+
+                        if(hasActiveTileAbove)
+                        {
+                            currentTile.IsBlocked = true;
+                        }
+                        else
+                        {
+                            // check if there is an active tile at left or right
+                            bool hasActiveTileAtLeft = false;
+                            if(i > 0 && tileFloor.TileLines[j].Tiles[i - 1] != null)
+                            {
+                                hasActiveTileAtLeft = tileFloor.TileLines[j].Tiles[i - 1].IsActive;
+                            }
+                            
+                            bool hasActiveTileAtRight = false;
+                            if(i < tileFloor.TileLines[j].Tiles.Count - 1 && tileFloor.TileLines[j].Tiles[i + 1] != null)
+                            {
+                                hasActiveTileAtRight = tileFloor.TileLines[j].Tiles[i + 1].IsActive;
+                            }
+
+                            if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
+                            {
+                                currentTile.IsBlocked = false;
+                            }
+                            else
+                            {
+                                currentTile.IsBlocked = true;
+                            }
+                        }
                     }
                 }
-
-                // if(i == 0 || i == this.tileFloor.TileLines[j].Tiles.Count - 1)
-                // {
-                //     this.tileFloor.TileLines[j].Tiles[i].IsBlocked = false;
-                // }
-                // else
-                // {
-                //     this.tileFloor.TileLines[j].Tiles[i].IsBlocked = true;
-                // }
             }
         }
     }
@@ -244,7 +274,7 @@ public class Game : MonoBehaviour
 
     private void CreateTile(TileLine tileLine, int index, string tileType)
     {
-        string name = $"Tile {index} of Line {tileLine.Index}";
+        string name = $"Tile {index} of Line {tileLine.Index}, of Floor {tileLine.TileFloor.Index}";
         GameObject gameObject = new GameObject(name);
 
         var tile = gameObject.AddComponent<Tile>();
@@ -267,7 +297,10 @@ public class Game : MonoBehaviour
         {
             renderer.sprite = loadedSprite;
             
-            renderer.sortingOrder = this.Table.NumberOfColumns - tile.Index; // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
+            // sortingOrder = 5 renders on top of other sprites in the same layer with order < 5
+            renderer.sortingOrder = 
+                (tile.TileLine.TileFloor.Index * (this.Table.NumberOfLines * this.Table.NumberOfColumns))        // sortingOrder of the floor 
+                + this.Table.NumberOfColumns - tile.Index;
             
             // Set scale
             // Apply the previously calculated scale to the sprite's transform
@@ -279,17 +312,23 @@ public class Game : MonoBehaviour
             // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
             float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
 
-            // floor code:
-            // TODO: debug here
-            if (tileLine.Index == 0) x += Tile.TotalWidth - Tile.Width_2D;
+            // adjust X based on floor index:
+            x += (Tile.TotalWidth - Tile.Width_2D) * tileLine.TileFloor.Index;
 
             float y = 0f + (Tile.Height_2D * ((float)this.Table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
             //Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
             //Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
             //Debug.Log($"y: {y}");
+            
+            // adjust Y based on floor index:
+            y += (Tile.TotalHeight - Tile.Height_2D) * tileLine.TileFloor.Index;
+
+
+            // lower z is closer to the camera
+            float z = this.Table.NumberOfFloors - tile.TileLine.TileFloor.Index; 
 
             // Set position
-            gameObject.transform.position = new Vector2(x, y);
+            gameObject.transform.position = new Vector3(x, y, z);
 
 
 

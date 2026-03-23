@@ -11,10 +11,9 @@ public class Table
     public int NumberOfColumns { get; set; }
 
     public IList<IList<string>> Floors { get; set; }
-    //TODO: remove lines and make it work with Floors
-    public IList<string> Lines { get; set; }
     
-    private IList<string> tempLines;
+    private IList<IList<string>> tempFloors;
+
     private IList<Pair> pairs;
     private IList<string> tileTypes_Regular_Temp;
 
@@ -78,8 +77,10 @@ public class Table
         this.NumberOfLines = numberOfLines;
         this.NumberOfColumns = numberOfColumns;
         
-        this.Lines = new List<string>();
-        this.tempLines = new List<string>();
+        this.Floors = new List<IList<string>>();
+
+        this.tempFloors = new List<IList<string>>();
+
         this.pairs = new List<Pair>();
     }
 
@@ -92,8 +93,14 @@ public class Table
 
         this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
 
-        this.tempLines.Clear();
-        this.tempLines = this.Lines.ToList();
+        this.tempFloors.Clear();
+        for (int i=0; i < this.Floors.Count; i++)
+        {
+            var newTempFloor = this.Floors[i].ToList();
+            this.tempFloors.Add(newTempFloor);
+            // this.tempFloors[i] = new List<string>();
+            // this.tempFloors[i] = this.Floors[i].ToList();
+        }
 
         do
         {
@@ -109,12 +116,15 @@ public class Table
     private bool IsEmpty()
     {
         bool isEmpty = true;
-        for(int i=0; i < this.tempLines.Count; i++)
+        for(int j=0; j < this.tempFloors.Count; j++) // loop floors
         {
-            if(this.tempLines[i].Contains("1"))
+            for(int i=0; i < this.tempFloors[j].Count; i++) // loop lines
             {
-                isEmpty = false;
-                break;
+                if(this.tempFloors[j][i].Contains("1"))
+                {
+                    isEmpty = false;
+                    break;
+                }
             }
         }
         return isEmpty;
@@ -130,70 +140,73 @@ public class Table
 
         Debug.Log("-----------");
 
-        IList<string> outputLines = new List<string>();
+        IList<IList<string>> outputFloors = new List<IList<string>>();
 
-        for(int i=0; i < this.tempLines.Count; i++)
+        for(int k=0; k < this.tempFloors.Count; k++)
         {
-            var newLine = "";
+            outputFloors.Add(new List<string>());
 
-            Debug.Log("Line before: " + this.tempLines[i]);
-
-            for(int j=0; j<this.tempLines[i].Length; j++)
+            for(int i=0; i < this.tempFloors[k].Count; i++)
             {
-                var newChar = this.tempLines[i][j];
+                var newLine = "";
 
-                if(this.tempLines[i][j] == '1')
+                Debug.Log("Line before: " + this.tempFloors[k][i]);
+
+                for(int j=0; j<this.tempFloors[k][i].Length; j++)
                 {
-                    bool hasActiveTileAtLeft = false;
-                    if(j > 0 && this.tempLines[i][j-1] == '1')
-                    {
-                        hasActiveTileAtLeft = true;
-                    }
-                    
-                    bool hasActiveTileAtRight = false;
-                    if((j < this.tempLines[i].Length - 1) && this.tempLines[i][j+1] == '1')
-                    {
-                        hasActiveTileAtRight = true;
-                    }
+                    var newChar = this.tempFloors[k][i][j];
 
-                    if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
+                    if(this.tempFloors[k][i][j] == '1')
                     {
-                        Debug.Log($"Free tile found at line {i}, cell {j}");
+                        bool hasActiveTileAtLeft = false;
+                        if(j > 0 && this.tempFloors[k][i][j-1] == '1')
+                        {
+                            hasActiveTileAtLeft = true;
+                        }
                         
+                        bool hasActiveTileAtRight = false;
+                        if((j < this.tempFloors[k][i].Length - 1) && this.tempFloors[k][i][j+1] == '1')
+                        {
+                            hasActiveTileAtRight = true;
+                        }
 
-                        // add to free tiles list
-                        freeTiles.Add(
-                            new TilePosition
-                            {
-                                Floor = 0, // TODO
-                                Line = i,
-                                Tile = j
-                            }
-                        );
+                        if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
+                        {
+                            Debug.Log($"Free tile found at line {i}, cell {j}");
+                            
 
-                        // remove tile from list
-                        // char[] chars = this.tempLines[i].ToCharArray();
-                        // chars[j] = '0';
-                        // this.tempLines[i] = new string(chars);
+                            // add to free tiles list
+                            freeTiles.Add(
+                                new TilePosition
+                                {
+                                    Floor = k,
+                                    Line = i,
+                                    Tile = j
+                                }
+                            );
 
-                        newChar = '0';
+                            newChar = '0';
 
-                        //Debug.Log("Line after: " + this.tempLines[i]);
+                            //Debug.Log("Line after: " + this.tempFloors[k][i]);
+                        }
                     }
+
+                    newLine += newChar;
                 }
 
-                newLine += newChar;
+                outputFloors[k].Add(newLine);
+
+                Debug.Log("Line after: " + newLine);
             }
-
-            outputLines.Add(newLine);
-
-            Debug.Log("Line after: " + newLine);
         }
 
-        // copy outputLines to tempLines
-        for(int i=0; i < this.tempLines.Count; i++)
+        // copy outputFloors to tempFloors
+        for(int k=0; k < this.tempFloors.Count; k++)
         {
-            this.tempLines[i] = outputLines[i];
+            for(int i=0; i < this.tempFloors[k].Count; i++)
+            {
+                this.tempFloors[k][i] = outputFloors[k][i];
+            }
         }
 
         // freeTiles.Count must be even (?)
@@ -274,12 +287,13 @@ public class Table
         // 0 = empty, 1 = tile
         // Must have an even number of tiles
         
-        //TODO: remove lines and make it work with Floors
-        table.Lines.Add("111110");
-        table.Lines.Add("001111");
-        table.Lines.Add("011110");
-        table.Lines.Add("110011");
-        table.Lines.Add("011111");
+        IList<string> floor_0 = new List<string>();
+        floor_0.Add("111110");
+        floor_0.Add("001111");
+        floor_0.Add("011110");
+        floor_0.Add("110011");
+        floor_0.Add("011111");
+        table.Floors.Add(floor_0);
 
         return table;
     }
