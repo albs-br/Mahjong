@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+// using TMPro;
 
 public class Game : MonoBehaviour
 {
+    // public TextMeshProUGUI textObj1;
+
     float cameraHeight;
     float cameraWidth;
 
@@ -46,10 +49,15 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log("Start method");
 
-        // this.numberOfColumns = 6;
-        // this.numberOfLines = 5;
+        // //debug
+        // TilesLeftTextScript objTextScript;
+        // objTextScript = gameObject.AddComponent<TilesLeftTextScript>();
+        // objTextScript.UpdateText("ewrfwerfwerfwe");
+
+
+
+        //Debug.Log("Start method");
 
         //this.Table = Table.LoadTable_SingleFloorTest();
         this.Table = Table.LoadTable_DoubleFloorTest();
