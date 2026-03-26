@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
-// using TMPro;
+using TMPro;
 
 public class Game : MonoBehaviour
 {
-    // public TextMeshProUGUI textObj1;
+    private TextMeshProUGUI textObj;
+    //public TMP_Text textObj1;
 
     float cameraHeight;
     float cameraWidth;
@@ -32,8 +33,27 @@ public class Game : MonoBehaviour
     void Awake()
     {
         //Debug.Log("Awake: Code is running at game start (before Start)!");
-        
-        
+        GameObject objFound = GameObject.Find("TilesLeftText");
+        if (objFound != null)
+        {
+            Debug.Log("Object found: " + objFound.name);
+
+            //this.textObj = (TextMeshProUGUI)objFound;
+            this.textObj = objFound.GetComponent<TextMeshProUGUI>();
+
+            this.textObj.text = "Tiles Left: " + "10";
+            //this.textObj.SetText("set via SetText");
+
+            // You can also get a component from the found object
+            // For example, getting a Rigidbody component:
+            // Rigidbody rb = foundObject.GetComponent<Rigidbody>();
+        }
+        else
+        {
+            Debug.Log("Object not found.");
+        }        
+
+
         // Add your initialization code here
 
 
