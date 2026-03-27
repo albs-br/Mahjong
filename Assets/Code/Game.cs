@@ -7,7 +7,11 @@ using TMPro;
 
 public class Game : MonoBehaviour
 {
-    private TextMeshProUGUI textObj;
+    // UI fields
+    private TextMeshProUGUI textTilesLeft;
+    private TextMeshProUGUI textOpenMatches;
+
+
 
     private float cameraHeight;
     private float cameraWidth;
@@ -22,10 +26,12 @@ public class Game : MonoBehaviour
     private Vector3 tileScaleFactor;
 
     private int tilesRemaining;
+    private int openMatches;
+
+
 
 
     public Table Table;
-
     public Tile TileSelected;
 
 
@@ -37,26 +43,30 @@ public class Game : MonoBehaviour
     void Awake()
     {
         //Debug.Log("Awake: Code is running at game start (before Start)!");
-        GameObject objFound = GameObject.Find("TilesLeftText");
-        if (objFound != null)
-        {
-            Debug.Log("Object found: " + objFound.name);
 
-            //this.textObj = (TextMeshProUGUI)objFound;
-            this.textObj = objFound.GetComponent<TextMeshProUGUI>();
+        // UI field initialization        
+        this.textTilesLeft = GameObject.Find("TilesLeftText").GetComponent<TextMeshProUGUI>();
+        this.textOpenMatches = GameObject.Find("OpenMatchesText").GetComponent<TextMeshProUGUI>();
 
+        // GameObject objFound = GameObject.Find("TilesLeftText");
+        // if (objFound != null)
+        // {
+        //     Debug.Log("Object found: " + objFound.name);
 
-            // You can also get a component from the found object
-            // For example, getting a Rigidbody component:
-            // Rigidbody rb = foundObject.GetComponent<Rigidbody>();
-        }
-        else
-        {
-            Debug.Log("Object not found.");
-        }        
+        //     //this.textObj = (TextMeshProUGUI)objFound;
+        //     this.textTilesLeft = objFound.GetComponent<TextMeshProUGUI>();
 
 
-        // Add your initialization code here
+        //     // You can also get a component from the found object
+        //     // For example, getting a Rigidbody component:
+        //     // Rigidbody rb = foundObject.GetComponent<Rigidbody>();
+        // }
+        // else
+        // {
+        //     Debug.Log("Object not found.");
+        // }        
+
+
 
 
         // The EnhancedTouch API is specifically designed for handling multi-touch 
@@ -198,7 +208,8 @@ public class Game : MonoBehaviour
 
     public void UpdateUI()
     {
-        this.textObj.text = "Tiles Left: " + this.tilesRemaining;
+        this.textTilesLeft.text = "Tiles Left: " + this.tilesRemaining;
+        this.textOpenMatches.text = "Open Matches: " + this.openMatches;
         //this.textObj.SetText("set via SetText");
     }
 
@@ -246,6 +257,7 @@ public class Game : MonoBehaviour
     public void UpdateGame()
     {
         this.tilesRemaining = 0;
+        this.openMatches = 0;
 
         // Update IsBlocked of All tiles
         for(int k=0; k < this.tileFloors.Count; k++)
@@ -299,6 +311,11 @@ public class Game : MonoBehaviour
                             {
                                 currentTile.IsBlocked = true;
                             }
+                        }
+
+                        if(!currentTile.IsBlocked)
+                        {
+                            this.openMatches++;
                         }
                     }
                 }
