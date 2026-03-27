@@ -54,6 +54,7 @@ public class Tile : MonoBehaviour
         
         this.IsActive = false;
         
-        this.Game.UpdateTilesStatus();
+        this.Game.UpdateGame();
+        this.Game.UpdateUI();
     }
 }

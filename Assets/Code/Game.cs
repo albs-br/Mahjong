@@ -8,24 +8,28 @@ using TMPro;
 public class Game : MonoBehaviour
 {
     private TextMeshProUGUI textObj;
-    //public TMP_Text textObj1;
 
-    float cameraHeight;
-    float cameraWidth;
+    private float cameraHeight;
+    private float cameraWidth;
 
-    float minX;
-    float maxX;
-    float minY;
-    float maxY;
+    private float minX;
+    private float maxX;
+    private float minY;
+    private float maxY;
 
-    //int numberOfColumns, numberOfLines;
+    private IList<TileFloor> tileFloors;
+
+    private Vector3 tileScaleFactor;
+
+    private int tilesRemaining;
+
+
     public Table Table;
-
-    IList<TileFloor> tileFloors;
 
     public Tile TileSelected;
 
-    Vector3 tileScaleFactor;
+
+
 
     const string TILE_IMGS_BASE_PATH = "fulltiles/";
 
@@ -41,8 +45,6 @@ public class Game : MonoBehaviour
             //this.textObj = (TextMeshProUGUI)objFound;
             this.textObj = objFound.GetComponent<TextMeshProUGUI>();
 
-            this.textObj.text = "Tiles Left: " + "10";
-            //this.textObj.SetText("set via SetText");
 
             // You can also get a component from the found object
             // For example, getting a Rigidbody component:
@@ -189,13 +191,18 @@ public class Game : MonoBehaviour
         // CreateTile(tileLine_4, "pinyin9");
         // //CreateTile(tileLine_4, "pinyin10");
 
-        UpdateTilesStatus();
+        this.UpdateGame();
+        this.UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
+        this.textObj.text = "Tiles Left: " + this.tilesRemaining;
+        //this.textObj.SetText("set via SetText");
     }
 
     private void SetTileScaleFactor(int numberOfColumns)
     {
-        //this.numberOfColumns = numberOfColumns;
-
         string sampleTile = "bamboo1";
         Sprite loadedSprite = Resources.Load<Sprite>(TILE_IMGS_BASE_PATH + sampleTile);
 
@@ -235,8 +242,10 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void UpdateTilesStatus()
+    public void UpdateGame()
     {
+        this.tilesRemaining = 0;
+
         // Update IsBlocked of All tiles
         for(int k=0; k < this.tileFloors.Count; k++)
         {
@@ -253,6 +262,8 @@ public class Game : MonoBehaviour
                     var currentTile = tileFloor.TileLines[j].Tiles[i];
                     if(currentTile != null && currentTile.IsActive)
                     {
+                        this.tilesRemaining++;
+
                         // check if there is an active tile above
                         bool hasActiveTileAbove = false;
                         if(((k + 1) <= this.tileFloors.Count - 1) && this.tileFloors[k + 1].TileLines[j].Tiles[i] != null)
@@ -298,6 +309,13 @@ public class Game : MonoBehaviour
     void Update()
     {
         //Debug.Log("Update method");
+
+
+        // TODO:
+        // put these methods here (??); will lead to waste CPU usage
+        // this.UpdateGame();
+        // this.UpdateUI();
+
     }
 
     private void CreateTile(TileLine tileLine, int index, string tileType)
