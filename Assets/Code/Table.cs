@@ -325,6 +325,46 @@ public class Table
 
         return table;
     }
+
+    public static Table LoadTable_TripleFloorTest()
+    {
+        var table = new Table(
+            numberOfFloors: 3,
+            numberOfLines: 6,
+            numberOfColumns: 8 // tile width = 1/8 of screen
+        );
+        // 0 = empty, 1 = tile
+        // Must have an even number of tiles
+        IList<string> floor_0 = new List<string>();
+        floor_0.Add("00011000");
+        floor_0.Add("00111100");
+        floor_0.Add("01111110");
+        floor_0.Add("11111111");
+        floor_0.Add("11111111");
+        floor_0.Add("01100110");
+        table.Floors.Add(floor_0);
+
+        IList<string> floor_1 = new List<string>();
+        floor_1.Add("00000000");
+        floor_1.Add("00011000");
+        floor_1.Add("00111100");
+        floor_1.Add("00111100");
+        floor_1.Add("00011000");
+        floor_1.Add("00000000");
+        table.Floors.Add(floor_1);
+
+
+        IList<string> floor_2 = new List<string>();
+        floor_2.Add("00000000");
+        floor_2.Add("00000000");
+        floor_2.Add("00011000");
+        floor_2.Add("00011000");
+        floor_2.Add("00000000");
+        floor_2.Add("00000000");
+        table.Floors.Add(floor_2);
+
+        return table;
+    }
 }
 
 public class TilePosition
