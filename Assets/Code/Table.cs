@@ -373,6 +373,54 @@ public class Table
 
         return table;
     }
+
+    public static Table LoadTable_Turtle()
+    {
+        var table = new Table(
+            numberOfFloors: 5,
+            numberOfLines: 9,
+            numberOfColumns: 8 // tile width = 1/8 of screen
+        );
+        // 0 = empty, 1 = tile
+        // Must have an even number of tiles
+        IList<string> floor_0 = new List<string>();
+        floor_0.Add("11111111");
+        floor_0.Add("01111110");
+        floor_0.Add("11111111");
+        floor_0.Add("11111111");
+        floor_0.Add("11111111");
+        floor_0.Add("11111111");
+        floor_0.Add("11111111");
+        floor_0.Add("01111110");
+        floor_0.Add("11111111");
+        table.Floors.Add(floor_0);
+
+        IList<string> floor_1 = new List<string>();
+        floor_1.Add("10011001");
+        floor_1.Add("00111100");
+        floor_1.Add("01111110");
+        floor_1.Add("01111110");
+        floor_1.Add("01111110");
+        floor_1.Add("01111110");
+        floor_1.Add("01111110");
+        floor_1.Add("00111100");
+        floor_1.Add("10011001");
+        table.Floors.Add(floor_1);
+
+        IList<string> floor_2 = new List<string>();
+        floor_2.Add("10000001");
+        floor_2.Add("00000000");
+        floor_2.Add("00011000");
+        floor_2.Add("00111100");
+        floor_2.Add("00111100");
+        floor_2.Add("00111100");
+        floor_2.Add("00011000");
+        floor_2.Add("00000000");
+        floor_2.Add("10000001");
+        table.Floors.Add(floor_2);
+
+        return table;
+    }
 }
 
 public class TilePosition

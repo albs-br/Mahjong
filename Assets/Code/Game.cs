@@ -93,7 +93,8 @@ public class Game : MonoBehaviour
 
         //this.Table = Table.LoadTable_SingleFloorTest();
         //this.Table = Table.LoadTable_DoubleFloorTest();
-        this.Table = Table.LoadTable_TripleFloorTest();
+        //this.Table = Table.LoadTable_TripleFloorTest();
+        this.Table = Table.LoadTable_Turtle();
 
 
         var pairs = this.Table.SortTable();
