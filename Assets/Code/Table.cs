@@ -107,7 +107,7 @@ public class Table
             this.GetFreeTiles();
         } while (!this.IsEmpty());
 
-        Debug.Log($"this.pairs.Count: {this.pairs.Count}");
+        //Debug.Log($"this.pairs.Count: {this.pairs.Count}");
 
         return this.pairs;
     }
@@ -138,7 +138,7 @@ public class Table
         System.Random random = new System.Random();
 
 
-        Debug.Log("-----------");
+        //Debug.Log("-----------");
 
         IList<IList<string>> outputFloors = new List<IList<string>>();
 
@@ -150,7 +150,7 @@ public class Table
             {
                 var newLine = "";
 
-                Debug.Log("Line before: " + this.tempFloors[k][i]);
+                //Debug.Log("Line before: " + this.tempFloors[k][i]);
 
                 for(int j=0; j<this.tempFloors[k][i].Length; j++)
                 {
@@ -172,7 +172,7 @@ public class Table
 
                         if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
                         {
-                            Debug.Log($"Free tile found at line {i}, cell {j}");
+                            //Debug.Log($"Free tile found at line {i}, cell {j}");
                             
 
                             // add to free tiles list
@@ -196,7 +196,7 @@ public class Table
 
                 outputFloors[k].Add(newLine);
 
-                Debug.Log("Line after: " + newLine);
+                //Debug.Log("Line after: " + newLine);
             }
         }
 
@@ -245,9 +245,17 @@ public class Table
 
             // remove tile type from list
             this.tileTypes_Regular_Temp.RemoveAt(tileTypeIndex);
+            Debug.Log($"this.tileTypes_Regular_Temp: {this.tileTypes_Regular_Temp.Count}");
 
+            if(this.tileTypes_Regular_Temp.Count == 0)
+            {
+                Debug.Log("this.tileTypes_Regular_Temp = 0");
 
-            Debug.Log($"{newPair}");
+                // Reload list of tiles
+                this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
+            }
+
+            // Debug.Log($"{newPair}");
             
             // --- remove these 2 free tiles from list
             

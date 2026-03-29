@@ -203,11 +203,29 @@ public class Game : MonoBehaviour
         // //CreateTile(tileLine_4, "pinyin10");
 
         this.UpdateGame();
-        this.UpdateUI();
     }
 
-    public void UpdateUI()
+    private void UpdateUI()
     {
+        // Set Open Matches label color
+        if(this.openMatches <= 3)
+        {
+            this.textOpenMatches.color = Color.red;
+        }
+        else
+        {
+            this.textOpenMatches.color = Color.black;
+        }
+
+        if(this.tilesRemaining == 0)
+        {
+            // You win
+        }
+        else if(this.openMatches == 0)
+        {
+            // Game over
+        }
+
         this.textTilesLeft.text = "Tiles Left: " + this.tilesRemaining;
         this.textOpenMatches.text = "Open Matches: " + this.openMatches;
         //this.textObj.SetText("set via SetText");
@@ -321,6 +339,8 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
+        this.UpdateUI();
     }
 
     // Update is called once per frame
@@ -330,9 +350,9 @@ public class Game : MonoBehaviour
 
 
         // TODO:
-        // put these methods here (??); will lead to waste CPU usage
+        // put this method here (??); will lead to waste CPU usage
+        // may use a counter to trigger only at a tenth of second for example
         // this.UpdateGame();
-        // this.UpdateUI();
 
     }
 
