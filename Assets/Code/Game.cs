@@ -92,9 +92,9 @@ public class Game : MonoBehaviour
         //Debug.Log("Start method");
 
         //this.Table = Table.LoadTable_SingleFloorTest();
-        //this.Table = Table.LoadTable_DoubleFloorTest();
+        this.Table = Table.LoadTable_DoubleFloorTest();
         //this.Table = Table.LoadTable_TripleFloorTest();
-        this.Table = Table.LoadTable_Turtle();
+        //this.Table = Table.LoadTable_Turtle();
 
 
         var pairs = this.Table.SortTable();
@@ -215,7 +215,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            this.textOpenMatches.color = Color.black;
+            this.textOpenMatches.color = Color.white;
         }
 
         if(this.tilesRemaining == 0)

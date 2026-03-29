@@ -120,7 +120,8 @@ public class Table
         {
             for(int i=0; i < this.tempFloors[j].Count; i++) // loop lines
             {
-                if(this.tempFloors[j][i].Contains("1"))
+                var line = this.tempFloors[j][i];
+                if(line.Contains("1") || line.Contains("2"))
                 {
                     isEmpty = false;
                     break;
@@ -142,35 +143,67 @@ public class Table
 
         IList<IList<string>> outputFloors = new List<IList<string>>();
 
-        for(int k=0; k < this.tempFloors.Count; k++)
+        for(int k=0; k < this.tempFloors.Count; k++) // Loop floors
         {
             outputFloors.Add(new List<string>());
 
-            for(int i=0; i < this.tempFloors[k].Count; i++)
+            bool isFirstFloor = (k == 0);
+            bool isLastFloor = (k == this.tempFloors.Count - 1);
+
+            for(int i=0; i < this.tempFloors[k].Count; i++) // Loop lines
             {
                 var newLine = "";
 
+                bool isFirstLineOfFloor = (i == 0);
+                bool isLastLineOfFloor = (i == this.tempFloors[k].Count - 1);
+
                 //Debug.Log("Line before: " + this.tempFloors[k][i]);
 
-                for(int j=0; j<this.tempFloors[k][i].Length; j++)
+                for(int j=0; j < this.tempFloors[k][i].Length; j++) // Loop tiles
                 {
-                    var newChar = this.tempFloors[k][i][j];
+                    var currentChar = this.tempFloors[k][i][j];
+                    var newChar = currentChar;
 
-                    if(this.tempFloors[k][i][j] == '1')
+                    bool isFirstTileOfLine = (j == 0);
+                    bool isLastTileOfLine = (j == this.tempFloors[k][i].Length - 1);
+
+                    if(currentChar == '1')
                     {
+                        // check if there is an active tile above
+                        bool hasActiveTileAbove = false;
+                        //Debug.Log($"k: {k}, j: {j}, i: {i}, isLastFloor: {isLastFloor}");
+                        if(!isLastFloor && this.tempFloors[k + 1][i][j] == '1')
+                        {
+                            hasActiveTileAbove = true;
+                        }
+
                         bool hasActiveTileAtLeft = false;
-                        if(j > 0 && this.tempFloors[k][i][j-1] == '1')
+                        if(!isFirstTileOfLine && 
+                            (
+                                this.tempFloors[k][i][j-1] == '1' ||
+                                this.tempFloors[k][i][j-1] == '2'
+                            )
+                        )
+                        {
+                            hasActiveTileAtLeft = true;
+                        }
+                        if(!isFirstTileOfLine && 
+                           !isFirstLineOfFloor &&
+                            (
+                                this.tempFloors[k][i-1][j-1] == '2'
+                            )
+                        )
                         {
                             hasActiveTileAtLeft = true;
                         }
                         
                         bool hasActiveTileAtRight = false;
-                        if((j < this.tempFloors[k][i].Length - 1) && this.tempFloors[k][i][j+1] == '1')
+                        if(!isLastTileOfLine && this.tempFloors[k][i][j+1] == '1')
                         {
                             hasActiveTileAtRight = true;
                         }
 
-                        if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
+                        if((!hasActiveTileAtLeft || !hasActiveTileAtRight) && !hasActiveTileAbove)
                         {
                             //Debug.Log($"Free tile found at line {i}, cell {j}");
                             
@@ -181,7 +214,8 @@ public class Table
                                 {
                                     Floor = k,
                                     Line = i,
-                                    Tile = j
+                                    Tile = j,
+                                    VerticalOffset = false
                                 }
                             );
 
@@ -190,6 +224,7 @@ public class Table
                             //Debug.Log("Line after: " + this.tempFloors[k][i]);
                         }
                     }
+
 
                     newLine += newChar;
                 }
@@ -296,7 +331,7 @@ public class Table
         // Must have an even number of tiles
         
         IList<string> floor_0 = new List<string>();
-        floor_0.Add("111110");
+        floor_0.Add("111110"); // 211110
         floor_0.Add("001111");
         floor_0.Add("011110");
         floor_0.Add("110011");
@@ -428,10 +463,11 @@ public class TilePosition
     public int Floor { get; set; }
     public int Line { get; set; }
     public int Tile { get; set; }
+    public bool VerticalOffset { get; set; }
 
     public override string ToString()
     {
-        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}";
+        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}, VerticalOffset: {this.VerticalOffset}";
     }
 }
 
