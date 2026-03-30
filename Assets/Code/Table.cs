@@ -94,12 +94,10 @@ public class Table
         this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
 
         this.tempFloors.Clear();
-        for (int i=0; i < this.Floors.Count; i++)
+        for (int floorIndex=0; floorIndex < this.Floors.Count; floorIndex++)
         {
-            var newTempFloor = this.Floors[i].ToList();
+            var newTempFloor = this.Floors[floorIndex].ToList();
             this.tempFloors.Add(newTempFloor);
-            // this.tempFloors[i] = new List<string>();
-            // this.tempFloors[i] = this.Floors[i].ToList();
         }
 
         do
@@ -116,11 +114,11 @@ public class Table
     private bool IsEmpty()
     {
         bool isEmpty = true;
-        for(int j=0; j < this.tempFloors.Count; j++) // loop floors
+        for(int floorIndex=0; floorIndex < this.tempFloors.Count; floorIndex++) // loop floors
         {
-            for(int i=0; i < this.tempFloors[j].Count; i++) // loop lines
+            for(int lineIndex=0; lineIndex < this.tempFloors[floorIndex].Count; lineIndex++) // loop lines
             {
-                var line = this.tempFloors[j][i];
+                var line = this.tempFloors[floorIndex][lineIndex];
                 if(line.Contains("1") || line.Contains("2"))
                 {
                     isEmpty = false;
@@ -143,36 +141,36 @@ public class Table
 
         IList<IList<string>> outputFloors = new List<IList<string>>();
 
-        for(int k=0; k < this.tempFloors.Count; k++) // Loop floors
+        for(int floorIndex=0; floorIndex < this.tempFloors.Count; floorIndex++) // Loop floors
         {
             outputFloors.Add(new List<string>());
 
-            bool isFirstFloor = (k == 0);
-            bool isLastFloor = (k == this.tempFloors.Count - 1);
+            bool isFirstFloor = (floorIndex == 0);
+            bool isLastFloor = (floorIndex == this.tempFloors.Count - 1);
 
-            for(int i=0; i < this.tempFloors[k].Count; i++) // Loop lines
+            for(int i=0; i < this.tempFloors[floorIndex].Count; i++) // Loop lines
             {
                 var newLine = "";
 
                 bool isFirstLineOfFloor = (i == 0);
-                bool isLastLineOfFloor = (i == this.tempFloors[k].Count - 1);
+                bool isLastLineOfFloor = (i == this.tempFloors[floorIndex].Count - 1);
 
-                //Debug.Log("Line before: " + this.tempFloors[k][i]);
+                //Debug.Log("Line before: " + this.tempFloors[floorIndex][i]);
 
-                for(int j=0; j < this.tempFloors[k][i].Length; j++) // Loop tiles
+                for(int j=0; j < this.tempFloors[floorIndex][i].Length; j++) // Loop tiles
                 {
-                    var currentChar = this.tempFloors[k][i][j];
+                    var currentChar = this.tempFloors[floorIndex][i][j];
                     var newChar = currentChar;
 
                     bool isFirstTileOfLine = (j == 0);
-                    bool isLastTileOfLine = (j == this.tempFloors[k][i].Length - 1);
+                    bool isLastTileOfLine = (j == this.tempFloors[floorIndex][i].Length - 1);
 
                     if(currentChar == '1')
                     {
                         // check if there is an active tile above
                         bool hasActiveTileAbove = false;
-                        //Debug.Log($"k: {k}, j: {j}, i: {i}, isLastFloor: {isLastFloor}");
-                        if(!isLastFloor && this.tempFloors[k + 1][i][j] == '1')
+                        //Debug.Log($"floorIndex: {floorIndex}, j: {j}, i: {i}, isLastFloor: {isLastFloor}");
+                        if(!isLastFloor && this.tempFloors[floorIndex + 1][i][j] == '1')
                         {
                             hasActiveTileAbove = true;
                         }
@@ -180,8 +178,8 @@ public class Table
                         bool hasActiveTileAtLeft = false;
                         if(!isFirstTileOfLine && 
                             (
-                                this.tempFloors[k][i][j-1] == '1' ||
-                                this.tempFloors[k][i][j-1] == '2'
+                                this.tempFloors[floorIndex][i][j-1] == '1' ||
+                                this.tempFloors[floorIndex][i][j-1] == '2'
                             )
                         )
                         {
@@ -190,7 +188,7 @@ public class Table
                         if(!isFirstTileOfLine && 
                            !isFirstLineOfFloor &&
                             (
-                                this.tempFloors[k][i-1][j-1] == '2'
+                                this.tempFloors[floorIndex][i-1][j-1] == '2'
                             )
                         )
                         {
@@ -198,7 +196,7 @@ public class Table
                         }
                         
                         bool hasActiveTileAtRight = false;
-                        if(!isLastTileOfLine && this.tempFloors[k][i][j+1] == '1')
+                        if(!isLastTileOfLine && this.tempFloors[floorIndex][i][j+1] == '1')
                         {
                             hasActiveTileAtRight = true;
                         }
@@ -212,7 +210,7 @@ public class Table
                             freeTiles.Add(
                                 new TilePosition
                                 {
-                                    Floor = k,
+                                    Floor = floorIndex,
                                     Line = i,
                                     Tile = j,
                                     VerticalOffset = false
@@ -221,7 +219,7 @@ public class Table
 
                             newChar = '0';
 
-                            //Debug.Log("Line after: " + this.tempFloors[k][i]);
+                            //Debug.Log("Line after: " + this.tempFloors[floorIndex][i]);
                         }
                     }
 
@@ -229,18 +227,18 @@ public class Table
                     newLine += newChar;
                 }
 
-                outputFloors[k].Add(newLine);
+                outputFloors[floorIndex].Add(newLine);
 
                 //Debug.Log("Line after: " + newLine);
             }
         }
 
         // copy outputFloors to tempFloors
-        for(int k=0; k < this.tempFloors.Count; k++)
+        for(int floorIndex=0; floorIndex < this.tempFloors.Count; floorIndex++)
         {
-            for(int i=0; i < this.tempFloors[k].Count; i++)
+            for(int i=0; i < this.tempFloors[floorIndex].Count; i++)
             {
-                this.tempFloors[k][i] = outputFloors[k][i];
+                this.tempFloors[floorIndex][i] = outputFloors[floorIndex][i];
             }
         }
 
