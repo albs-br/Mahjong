@@ -148,29 +148,29 @@ public class Table
             bool isFirstFloor = (floorIndex == 0);
             bool isLastFloor = (floorIndex == this.tempFloors.Count - 1);
 
-            for(int i=0; i < this.tempFloors[floorIndex].Count; i++) // Loop lines
+            for(int lineIndex=0; lineIndex < this.tempFloors[floorIndex].Count; lineIndex++) // Loop lines
             {
                 var newLine = "";
 
-                bool isFirstLineOfFloor = (i == 0);
-                bool isLastLineOfFloor = (i == this.tempFloors[floorIndex].Count - 1);
+                bool isFirstLineOfFloor = (lineIndex == 0);
+                bool isLastLineOfFloor = (lineIndex == this.tempFloors[floorIndex].Count - 1);
 
                 //Debug.Log("Line before: " + this.tempFloors[floorIndex][i]);
 
-                for(int j=0; j < this.tempFloors[floorIndex][i].Length; j++) // Loop tiles
+                for(int tileIndex=0; tileIndex < this.tempFloors[floorIndex][lineIndex].Length; tileIndex++) // Loop tiles
                 {
-                    var currentChar = this.tempFloors[floorIndex][i][j];
+                    var currentChar = this.tempFloors[floorIndex][lineIndex][tileIndex];
                     var newChar = currentChar;
 
-                    bool isFirstTileOfLine = (j == 0);
-                    bool isLastTileOfLine = (j == this.tempFloors[floorIndex][i].Length - 1);
+                    bool isFirstTileOfLine = (tileIndex == 0);
+                    bool isLastTileOfLine = (tileIndex == this.tempFloors[floorIndex][lineIndex].Length - 1);
 
                     if(currentChar == '1')
                     {
                         // check if there is an active tile above
                         bool hasActiveTileAbove = false;
                         //Debug.Log($"floorIndex: {floorIndex}, j: {j}, i: {i}, isLastFloor: {isLastFloor}");
-                        if(!isLastFloor && this.tempFloors[floorIndex + 1][i][j] == '1')
+                        if(!isLastFloor && this.tempFloors[floorIndex + 1][lineIndex][tileIndex] == '1')
                         {
                             hasActiveTileAbove = true;
                         }
@@ -178,8 +178,8 @@ public class Table
                         bool hasActiveTileAtLeft = false;
                         if(!isFirstTileOfLine && 
                             (
-                                this.tempFloors[floorIndex][i][j-1] == '1' ||
-                                this.tempFloors[floorIndex][i][j-1] == '2'
+                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
+                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2'
                             )
                         )
                         {
@@ -188,7 +188,7 @@ public class Table
                         if(!isFirstTileOfLine && 
                            !isFirstLineOfFloor &&
                             (
-                                this.tempFloors[floorIndex][i-1][j-1] == '2'
+                                this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2'
                             )
                         )
                         {
@@ -196,7 +196,7 @@ public class Table
                         }
                         
                         bool hasActiveTileAtRight = false;
-                        if(!isLastTileOfLine && this.tempFloors[floorIndex][i][j+1] == '1')
+                        if(!isLastTileOfLine && this.tempFloors[floorIndex][lineIndex][tileIndex+1] == '1')
                         {
                             hasActiveTileAtRight = true;
                         }
@@ -211,8 +211,8 @@ public class Table
                                 new TilePosition
                                 {
                                     Floor = floorIndex,
-                                    Line = i,
-                                    Tile = j,
+                                    Line = lineIndex,
+                                    Tile = tileIndex,
                                     VerticalOffset = false
                                 }
                             );
@@ -236,9 +236,9 @@ public class Table
         // copy outputFloors to tempFloors
         for(int floorIndex=0; floorIndex < this.tempFloors.Count; floorIndex++)
         {
-            for(int i=0; i < this.tempFloors[floorIndex].Count; i++)
+            for(int lineIndex=0; lineIndex < this.tempFloors[floorIndex].Count; lineIndex++)
             {
-                this.tempFloors[floorIndex][i] = outputFloors[floorIndex][i];
+                this.tempFloors[floorIndex][lineIndex] = outputFloors[floorIndex][lineIndex];
             }
         }
 
@@ -297,18 +297,18 @@ public class Table
             freeTiles[freeTile_2] = null;
 
             // loop all list removing nulls
-            int k=0;
+            int i=0;
             do
             {
-                if(freeTiles[k] == null)
+                if(freeTiles[i] == null)
                 {
-                    freeTiles.RemoveAt(k);
+                    freeTiles.RemoveAt(i);
                 }
                 else
                 {
-                    k++;
+                    i++;
                 }
-            } while (k <= freeTiles.Count - 1);
+            } while (i <= freeTiles.Count - 1);
 
             // Debug.Log($"freeTiles.Count: {freeTiles.Count}");
 
@@ -328,12 +328,14 @@ public class Table
         // 0 = empty, 1 = tile
         // Must have an even number of tiles
         
-        IList<string> floor_0 = new List<string>();
-        floor_0.Add("111110"); // 211110
-        floor_0.Add("001111");
-        floor_0.Add("011110");
-        floor_0.Add("110011");
-        floor_0.Add("011111");
+        IList<string> floor_0 = new List<string>
+        {
+            "111110", // 211110
+            "001111",
+            "011110",
+            "110011",
+            "011111"
+        };
         table.Floors.Add(floor_0);
 
         return table;
@@ -348,20 +350,24 @@ public class Table
         );
         // 0 = empty, 1 = tile
         // Must have an even number of tiles
-        IList<string> floor_0 = new List<string>();
-        floor_0.Add("011110");
-        floor_0.Add("111111");
-        floor_0.Add("011110");
-        floor_0.Add("111111");
-        floor_0.Add("110011");
+        IList<string> floor_0 = new List<string>
+        {
+            "011110",
+            "111111",
+            "011110",
+            "111111",
+            "110011"
+        };
         table.Floors.Add(floor_0);
 
-        IList<string> floor_1 = new List<string>();
-        floor_1.Add("000000");
-        floor_1.Add("001100");
-        floor_1.Add("011110");
-        floor_1.Add("001100");
-        floor_1.Add("000000");
+        IList<string> floor_1 = new List<string>
+        {
+            "000000",
+            "001100",
+            "011110",
+            "001100",
+            "000000"
+        };
         table.Floors.Add(floor_1);
 
         return table;
@@ -376,32 +382,38 @@ public class Table
         );
         // 0 = empty, 1 = tile
         // Must have an even number of tiles
-        IList<string> floor_0 = new List<string>();
-        floor_0.Add("00011000");
-        floor_0.Add("00111100");
-        floor_0.Add("01111110");
-        floor_0.Add("11111111");
-        floor_0.Add("11111111");
-        floor_0.Add("01100110");
+        IList<string> floor_0 = new List<string>
+        {
+            "00011000",
+            "00111100",
+            "01111110",
+            "11111111",
+            "11111111",
+            "01100110"
+        };
         table.Floors.Add(floor_0);
 
-        IList<string> floor_1 = new List<string>();
-        floor_1.Add("00000000");
-        floor_1.Add("00011000");
-        floor_1.Add("00111100");
-        floor_1.Add("00111100");
-        floor_1.Add("00011000");
-        floor_1.Add("00000000");
+        IList<string> floor_1 = new List<string>
+        {
+            "00000000",
+            "00011000",
+            "00111100",
+            "00111100",
+            "00011000",
+            "00000000"
+        };
         table.Floors.Add(floor_1);
 
 
-        IList<string> floor_2 = new List<string>();
-        floor_2.Add("00000000");
-        floor_2.Add("00000000");
-        floor_2.Add("00011000");
-        floor_2.Add("00011000");
-        floor_2.Add("00000000");
-        floor_2.Add("00000000");
+        IList<string> floor_2 = new List<string>
+        {
+            "00000000",
+            "00000000",
+            "00011000",
+            "00011000",
+            "00000000",
+            "00000000"
+        };
         table.Floors.Add(floor_2);
 
         return table;
@@ -416,40 +428,46 @@ public class Table
         );
         // 0 = empty, 1 = tile
         // Must have an even number of tiles
-        IList<string> floor_0 = new List<string>();
-        floor_0.Add("11111111");
-        floor_0.Add("01111110");
-        floor_0.Add("11111111");
-        floor_0.Add("11111111");
-        floor_0.Add("11111111");
-        floor_0.Add("11111111");
-        floor_0.Add("11111111");
-        floor_0.Add("01111110");
-        floor_0.Add("11111111");
+        IList<string> floor_0 = new List<string>
+        {
+            "11111111",
+            "01111110",
+            "11111111",
+            "11111111",
+            "11111111",
+            "11111111",
+            "11111111",
+            "01111110",
+            "11111111"
+        };
         table.Floors.Add(floor_0);
 
-        IList<string> floor_1 = new List<string>();
-        floor_1.Add("10011001");
-        floor_1.Add("00111100");
-        floor_1.Add("01111110");
-        floor_1.Add("01111110");
-        floor_1.Add("01111110");
-        floor_1.Add("01111110");
-        floor_1.Add("01111110");
-        floor_1.Add("00111100");
-        floor_1.Add("10011001");
+        IList<string> floor_1 = new List<string>
+        {
+            "10011001",
+            "00111100",
+            "01111110",
+            "01111110",
+            "01111110",
+            "01111110",
+            "01111110",
+            "00111100",
+            "10011001"
+        };
         table.Floors.Add(floor_1);
 
-        IList<string> floor_2 = new List<string>();
-        floor_2.Add("10000001");
-        floor_2.Add("00000000");
-        floor_2.Add("00011000");
-        floor_2.Add("00111100");
-        floor_2.Add("00111100");
-        floor_2.Add("00111100");
-        floor_2.Add("00011000");
-        floor_2.Add("00000000");
-        floor_2.Add("10000001");
+        IList<string> floor_2 = new List<string>
+        {
+            "10000001",
+            "00000000",
+            "00011000",
+            "00111100",
+            "00111100",
+            "00111100",
+            "00011000",
+            "00000000",
+            "10000001"
+        };
         table.Floors.Add(floor_2);
 
         return table;

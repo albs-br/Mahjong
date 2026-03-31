@@ -108,39 +108,39 @@ public class Game : MonoBehaviour
 
         
         this.tileFloors = new List<TileFloor>();
-        for(int k=0; k < this.Table.Floors.Count; k++)
+        for(int floorIndex=0; floorIndex < this.Table.Floors.Count; floorIndex++)
         {
-            Debug.Log($"k: {k}");
+            Debug.Log($"k: {floorIndex}");
             
-            var lines = this.Table.Floors[k];
+            var lines = this.Table.Floors[floorIndex];
 
             var tileFloor = new TileFloor();
-            tileFloor.Index = k;
+            tileFloor.Index = floorIndex;
             tileFloor.Game = this;
             this.tileFloors.Add(tileFloor);
 
-            for(int i=0; i < lines.Count; i++)
+            for(int lineIndex=0; lineIndex < lines.Count; lineIndex++)
             {
-                var line = lines[i];
+                var line = lines[lineIndex];
 
                 var tileLine = tileFloor.AddTileLine();
                 
-                for(int j=0; j < line.Length; j++)
+                for(int tileIndex=0; tileIndex < line.Length; tileIndex++)
                 {
-                    var chr = line[j];
+                    var chr = line[tileIndex];
                     if(chr == '1')
                     {
                         // get tile type from Pairs list previously sorted
                         string tileType = pairs.Where(x => 
                             (
-                                x.Tile_1.Floor == k &&
-                                x.Tile_1.Line == i &&
-                                x.Tile_1.Tile == j
+                                x.Tile_1.Floor == floorIndex &&
+                                x.Tile_1.Line == lineIndex &&
+                                x.Tile_1.Tile == tileIndex
                             ) ||
                             (
-                                x.Tile_2.Floor == k &&
-                                x.Tile_2.Line == i &&
-                                x.Tile_2.Tile == j
+                                x.Tile_2.Floor == floorIndex &&
+                                x.Tile_2.Line == lineIndex &&
+                                x.Tile_2.Tile == tileIndex
                             )
                         ).FirstOrDefault().TileType;
 
@@ -155,7 +155,7 @@ public class Game : MonoBehaviour
                         // if(k == 1) tileType = "circle5";
 
                         //Add tile
-                        CreateTile(tileLine, j, tileType);
+                        CreateTile(tileLine, tileIndex, tileType);
                     }
 
                 }
@@ -279,28 +279,28 @@ public class Game : MonoBehaviour
         this.openMatches = 0;
 
         // Update IsBlocked of All tiles
-        for(int k=0; k < this.tileFloors.Count; k++)
+        for(int floorIndex=0; floorIndex < this.tileFloors.Count; floorIndex++)
         {
-            var tileFloor = this.tileFloors[k];
+            var tileFloor = this.tileFloors[floorIndex];
 
-            for(int j=0; j < tileFloor.TileLines.Count; j++)
+            for(int lineIndex=0; lineIndex < tileFloor.TileLines.Count; lineIndex++)
             {
                 // var listTilesActive = 
                 //     this.tileFloor.TileLines[j].Tiles
                 //         .Where(x => x.IsActive);
 
-                for(int i=0; i < tileFloor.TileLines[j].Tiles.Count; i++)
+                for(int tileIndex=0; tileIndex < tileFloor.TileLines[lineIndex].Tiles.Count; tileIndex++)
                 {
-                    var currentTile = tileFloor.TileLines[j].Tiles[i];
+                    var currentTile = tileFloor.TileLines[lineIndex].Tiles[tileIndex];
                     if(currentTile != null && currentTile.IsActive)
                     {
                         this.tilesRemaining++;
 
                         // check if there is an active tile above
                         bool hasActiveTileAbove = false;
-                        if(((k + 1) <= this.tileFloors.Count - 1) && this.tileFloors[k + 1].TileLines[j].Tiles[i] != null)
+                        if(((floorIndex + 1) <= this.tileFloors.Count - 1) && this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex] != null)
                         {
-                            hasActiveTileAbove = this.tileFloors[k + 1].TileLines[j].Tiles[i].IsActive;
+                            hasActiveTileAbove = this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex].IsActive;
                         }
 
                         if(hasActiveTileAbove)
@@ -311,15 +311,15 @@ public class Game : MonoBehaviour
                         {
                             // check if there is an active tile at left or right
                             bool hasActiveTileAtLeft = false;
-                            if(i > 0 && tileFloor.TileLines[j].Tiles[i - 1] != null)
+                            if(tileIndex > 0 && tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1] != null)
                             {
-                                hasActiveTileAtLeft = tileFloor.TileLines[j].Tiles[i - 1].IsActive;
+                                hasActiveTileAtLeft = tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1].IsActive;
                             }
                             
                             bool hasActiveTileAtRight = false;
-                            if(i < tileFloor.TileLines[j].Tiles.Count - 1 && tileFloor.TileLines[j].Tiles[i + 1] != null)
+                            if(tileIndex < tileFloor.TileLines[lineIndex].Tiles.Count - 1 && tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1] != null)
                             {
-                                hasActiveTileAtRight = tileFloor.TileLines[j].Tiles[i + 1].IsActive;
+                                hasActiveTileAtRight = tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1].IsActive;
                             }
 
                             if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
