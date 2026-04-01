@@ -48,6 +48,8 @@ public class Game : MonoBehaviour
         this.textTilesLeft = GameObject.Find("TilesLeftText").GetComponent<TextMeshProUGUI>();
         this.textOpenMatches = GameObject.Find("OpenMatchesText").GetComponent<TextMeshProUGUI>();
 
+        //UIManager.Instance.OpenCanvas("Canvas");
+
         // GameObject objFound = GameObject.Find("TilesLeftText");
         // if (objFound != null)
         // {
@@ -81,18 +83,10 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        // //debug
-        // TilesLeftTextScript objTextScript;
-        // objTextScript = gameObject.AddComponent<TilesLeftTextScript>();
-        // objTextScript.UpdateText("ewrfwerfwerfwe");
-
-
-
         //Debug.Log("Start method");
 
-        //this.Table = Table.LoadTable_SingleFloorTest();
-        this.Table = Table.LoadTable_DoubleFloorTest();
+        this.Table = Table.LoadTable_SingleFloorTest();
+        //this.Table = Table.LoadTable_DoubleFloorTest();
         //this.Table = Table.LoadTable_TripleFloorTest();
         //this.Table = Table.LoadTable_Turtle();
 
@@ -131,7 +125,7 @@ public class Game : MonoBehaviour
                     if(chr == '1')
                     {
                         // get tile type from Pairs list previously sorted
-                        string tileType = pairs.Where(x => 
+                        string tileType = pairs.FirstOrDefault(x => 
                             (
                                 x.Tile_1.Floor == floorIndex &&
                                 x.Tile_1.Line == lineIndex &&
@@ -142,7 +136,7 @@ public class Game : MonoBehaviour
                                 x.Tile_2.Line == lineIndex &&
                                 x.Tile_2.Tile == tileIndex
                             )
-                        ).FirstOrDefault().TileType;
+                        ).TileType;
 
                         // if(tileType == null)
                         // {
@@ -155,7 +149,7 @@ public class Game : MonoBehaviour
                         // if(k == 1) tileType = "circle5";
 
                         //Add tile
-                        CreateTile(tileLine, tileIndex, tileType);
+                        CreateTile(tileLine, tileIndex, tileType, (chr == '2'));
                     }
 
                 }
@@ -357,7 +351,7 @@ public class Game : MonoBehaviour
 
     }
 
-    private void CreateTile(TileLine tileLine, int index, string tileType)
+    private void CreateTile(TileLine tileLine, int index, string tileType, bool isHalfLineBelow)
     {
         string name = $"Tile {index} of Line {tileLine.Index}, of Floor {tileLine.TileFloor.Index}";
         GameObject gameObject = new GameObject(name);
@@ -367,6 +361,8 @@ public class Game : MonoBehaviour
         tile.Index = index;
 
         tile.TileType = tileType;
+
+        tile.IsHalfLineBelow = isHalfLineBelow;
 
         tile.TileLine = tileLine;
         tileLine.Tiles[index] = tile;
@@ -407,6 +403,11 @@ public class Game : MonoBehaviour
             
             // adjust Y based on floor index:
             y += (Tile.TotalHeight - Tile.Height_2D) * tileLine.TileFloor.Index;
+
+            if(tile.IsHalfLineBelow)
+            {
+                y += Tile.Height_2D / 2.0f;
+            }
 
 
             // lower z is closer to the camera

@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
     public int Index { get; set; }
     public string TileType { get; set; }
+    public bool IsHalfLineBelow { get; set; }
 
     public bool IsActive  { get; set; }
     
@@ -45,6 +46,7 @@ public class Tile : MonoBehaviour
     {
         IsActive = true;
         IsSelected = false;
+        IsHalfLineBelow = false;
     }
 
     public void Remove()

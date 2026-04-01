@@ -213,7 +213,7 @@ public class Table
                                     Floor = floorIndex,
                                     Line = lineIndex,
                                     Tile = tileIndex,
-                                    VerticalOffset = false
+                                    IsHalfLineBelow = false
                                 }
                             );
 
@@ -325,7 +325,7 @@ public class Table
             numberOfLines: 5,
             numberOfColumns: 6 // tile width = 1/6 of screen
         );
-        // 0 = empty, 1 = tile
+        // 0 = empty, 1 = tile, 2 = tile half line below
         // Must have an even number of tiles
         
         IList<string> floor_0 = new List<string>
@@ -479,11 +479,11 @@ public class TilePosition
     public int Floor { get; set; }
     public int Line { get; set; }
     public int Tile { get; set; }
-    public bool VerticalOffset { get; set; }
+    public bool IsHalfLineBelow { get; set; }
 
     public override string ToString()
     {
-        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}, VerticalOffset: {this.VerticalOffset}";
+        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}, IsHalfLineBelow: {this.IsHalfLineBelow}";
     }
 }
 
