@@ -85,10 +85,10 @@ public class Game : MonoBehaviour
     {
         //Debug.Log("Start method");
 
-        this.Table = Table.LoadTable_SingleFloorTest();
+        //this.Table = Table.LoadTable_SingleFloorTest();
         //this.Table = Table.LoadTable_DoubleFloorTest();
         //this.Table = Table.LoadTable_TripleFloorTest();
-        //this.Table = Table.LoadTable_Turtle();
+        this.Table = Table.LoadTable_Turtle();
 
 
         this.Table.ValidateTable();
@@ -273,7 +273,7 @@ public class Game : MonoBehaviour
                                 {
                                     var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex - 1].Tiles[tileIndex];
 
-                                    if(tileToBeChecked.IsActive && tileToBeChecked.IsHalfLineBelow)
+                                    if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfLineBelow)
                                     {
                                         hasActiveTileAbove = true;
                                     }
@@ -286,7 +286,7 @@ public class Game : MonoBehaviour
                                 {
                                     var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex + 1].Tiles[tileIndex];
                                     
-                                    if(tileToBeChecked.IsActive && !tileToBeChecked.IsHalfLineBelow)
+                                    if(tileToBeChecked != null && tileToBeChecked.IsActive && !tileToBeChecked.IsHalfLineBelow)
                                     {
                                         hasActiveTileAbove = true;
                                     }

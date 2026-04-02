@@ -235,7 +235,7 @@ public class Table
                             {
                                 hasActiveTileAtRight = true;
                             }
-                            else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
+                            else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex+1] == '2')
                             {
                                 hasActiveTileAtLeft = true;
                             }
@@ -494,8 +494,8 @@ public class Table
             "10011001",
             "00111100",
             "01111110",
-            "01111110",
-            "01111110",
+            "21111112",
+            "21111112",
             "01111110",
             "01111110",
             "00111100",
@@ -516,6 +516,34 @@ public class Table
             "10000001"
         };
         table.Floors.Add(floor_2);
+
+        IList<string> floor_3 = new List<string>
+        {
+            "00000000",
+            "00000000",
+            "00000000",
+            "00022000",
+            "00022001",
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000"
+        };
+        table.Floors.Add(floor_3);
+
+        IList<string> floor_4 = new List<string>
+        {
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000",
+            "00010000",
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000"
+        };
+        table.Floors.Add(floor_4);
 
         return table;
     }

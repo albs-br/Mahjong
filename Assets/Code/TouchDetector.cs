@@ -5,9 +5,10 @@ public class TouchDetector : MonoBehaviour
     void OnMouseDown()
     {
         // This code runs when the sprite is touched or clicked
-        Debug.Log("Sprite Touched: " + gameObject.name);
-        Debug.Log("sorting order: " + this.gameObject.GetComponent<Renderer>().sortingOrder);
-        Debug.Log("IsBlocked: " + this.gameObject.GetComponent<Tile>().IsBlocked);
+        
+        // Debug.Log("Sprite Touched: " + gameObject.name);
+        // Debug.Log("sorting order: " + this.gameObject.GetComponent<Renderer>().sortingOrder);
+        // Debug.Log("IsBlocked: " + this.gameObject.GetComponent<Tile>().IsBlocked);
 
         var tile = gameObject.GetComponent<Tile>();
 
@@ -20,7 +21,7 @@ public class TouchDetector : MonoBehaviour
 
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
-        Debug.Log(tile.Index);
+        // Debug.Log($"tile.Index: {tile.Index}");
         var game = tile.Game; //tile.TileLine.TileFloor.Game;
 
         if(!tile.IsSelected)
@@ -37,8 +38,9 @@ public class TouchDetector : MonoBehaviour
                 if(game.TileSelected.TileType == tile.TileType)
                 {
                     // Remove both tiles
-                    Debug.Log("Remove both tiles");
-                    //game.TileSelected
+                    
+                    // Debug.Log("Remove both tiles");
+                    
                     // // Call this method to hide/deactivate the GameObject
                     // this.gameObject.SetActive(false);
 
