@@ -84,6 +84,11 @@ public class Table
         this.pairs = new List<Pair>();
     }
 
+    //TODO:
+    public void ValidateTable()
+    {
+    }
+
     /// Sort tiles for this table
     public IList<Pair> SortTable()
     {
@@ -165,41 +170,72 @@ public class Table
                     bool isFirstTileOfLine = (tileIndex == 0);
                     bool isLastTileOfLine = (tileIndex == this.tempFloors[floorIndex][lineIndex].Length - 1);
 
-                    if(currentChar == '1')
+                    if(currentChar == '1' || currentChar == '2')
                     {
-                        // check if there is an active tile above
+                        bool isHalfLineBelow = (currentChar == '2');
+
+                        
                         bool hasActiveTileAbove = false;
                         //Debug.Log($"floorIndex: {floorIndex}, j: {j}, i: {i}, isLastFloor: {isLastFloor}");
-                        if(!isLastFloor && this.tempFloors[floorIndex + 1][lineIndex][tileIndex] == '1')
+                        if(!isLastFloor)
                         {
-                            hasActiveTileAbove = true;
+                            // check if there is an active tile above (both with and without halfTileBelow flag)
+                            if(this.tempFloors[floorIndex + 1][lineIndex][tileIndex] == '1' || this.tempFloors[floorIndex + 1][lineIndex][tileIndex] == '2')
+                            {
+                                hasActiveTileAbove = true;
+                            }
+                            else if(!isHalfLineBelow)
+                            {
+                                // check if there is an active tile above (previous line with halfTileBelow flag)
+                                if(!isFirstLineOfFloor && this.tempFloors[floorIndex + 1][lineIndex - 1][tileIndex] == '2')
+                                {
+                                    hasActiveTileAbove = true;
+                                }
+                            }
+                            else
+                            {
+                                // check if there is an active tile above (next line without halfTileBelow flag)
+                                if(!isLastLineOfFloor && this.tempFloors[floorIndex + 1][lineIndex + 1][tileIndex] == '1')
+                                {
+                                    hasActiveTileAbove = true;
+                                }
+                            }
                         }
 
                         bool hasActiveTileAtLeft = false;
-                        if(!isFirstTileOfLine && 
-                            (
-                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
-                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2'
-                            )
-                        )
+                        if(!isFirstTileOfLine)
                         {
-                            hasActiveTileAtLeft = true;
+                            if(this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
+                               this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2')
+                            {
+                                hasActiveTileAtLeft = true;
+                            }
+                            else if(!isFirstLineOfFloor && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
+                            {
+                                hasActiveTileAtLeft = true;
+                            }
                         }
-                        if(!isFirstTileOfLine && 
-                           !isFirstLineOfFloor &&
-                            (
-                                this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2'
-                            )
-                        )
-                        {
-                            hasActiveTileAtLeft = true;
-                        }
-                        
+
+
+
                         bool hasActiveTileAtRight = false;
-                        if(!isLastTileOfLine && this.tempFloors[floorIndex][lineIndex][tileIndex+1] == '1')
+                        if(!isLastTileOfLine) 
                         {
-                            hasActiveTileAtRight = true;
+                            if(this.tempFloors[floorIndex][lineIndex][tileIndex+1] == '1' ||
+                               this.tempFloors[floorIndex][lineIndex][tileIndex+1] == '2')
+                            {
+                                hasActiveTileAtRight = true;
+                            }
+                            else if(!isFirstLineOfFloor && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
+                            {
+                                hasActiveTileAtLeft = true;
+                            }
                         }
+
+
+
+
+
 
                         if((!hasActiveTileAtLeft || !hasActiveTileAtRight) && !hasActiveTileAbove)
                         {
@@ -213,7 +249,7 @@ public class Table
                                     Floor = floorIndex,
                                     Line = lineIndex,
                                     Tile = tileIndex,
-                                    IsHalfLineBelow = false
+                                    IsHalfLineBelow = isHalfLineBelow
                                 }
                             );
 
@@ -330,7 +366,7 @@ public class Table
         
         IList<string> floor_0 = new List<string>
         {
-            "111110", // 211110
+            "211110", // 211110
             "001111",
             "011110",
             "110011",

@@ -91,6 +91,7 @@ public class Game : MonoBehaviour
         //this.Table = Table.LoadTable_Turtle();
 
 
+        this.Table.ValidateTable();
         var pairs = this.Table.SortTable();
 
 
@@ -122,7 +123,7 @@ public class Game : MonoBehaviour
                 for(int tileIndex=0; tileIndex < line.Length; tileIndex++)
                 {
                     var chr = line[tileIndex];
-                    if(chr == '1')
+                    if(chr == '1' || chr == '2')
                     {
                         // get tile type from Pairs list previously sorted
                         string tileType = pairs.FirstOrDefault(x => 
@@ -155,47 +156,6 @@ public class Game : MonoBehaviour
                 }
             }
         }
-
-
-
-        // this.tileFloor = new TileFloor();
-        // this.tileFloor.Game = this;
-
-        // var tileLine_0 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_0, "bamboo1");
-        // CreateTile(tileLine_0, "bamboo2");
-        // CreateTile(tileLine_0, "bamboo3");
-        // CreateTile(tileLine_0, "bamboo4");
-        // CreateTile(tileLine_0, "bamboo5");
-        // CreateTile(tileLine_0, "bamboo6");
-
-        // var tileLine_1 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_1, "circle1");
-        // CreateTile(tileLine_1, "pinyin1");
-        // CreateTile(tileLine_1, "circle3");
-        // CreateTile(tileLine_1, "circle4");
-
-        // var tileLine_2 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_2, "pinyin1");
-        // CreateTile(tileLine_2, "pinyin2");
-        // CreateTile(tileLine_2, "pinyin3");
-        // CreateTile(tileLine_2, "pinyin4");
-
-        // var tileLine_3 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_3, "bamboo6");
-        // CreateTile(tileLine_3, "bamboo5");
-        // CreateTile(tileLine_3, "bamboo4");
-        // CreateTile(tileLine_3, "pinyin6");
-        // CreateTile(tileLine_3, "pinyin7");
-        // CreateTile(tileLine_3, "bamboo1");
-
-        // var tileLine_4 = this.tileFloor.AddTileLine();
-        // CreateTile(tileLine_4, "pinyin5");
-        // CreateTile(tileLine_4, "pinyin6");
-        // CreateTile(tileLine_4, "pinyin7");
-        // CreateTile(tileLine_4, "pinyin8");
-        // CreateTile(tileLine_4, "pinyin9");
-        // //CreateTile(tileLine_4, "pinyin10");
 
         this.UpdateGame();
     }
@@ -272,7 +232,7 @@ public class Game : MonoBehaviour
         this.tilesRemaining = 0;
         this.openMatches = 0;
 
-        // Update IsBlocked of All tiles
+        // Update properties of All tiles
         for(int floorIndex=0; floorIndex < this.tileFloors.Count; floorIndex++)
         {
             var tileFloor = this.tileFloors[floorIndex];
@@ -406,7 +366,7 @@ public class Game : MonoBehaviour
 
             if(tile.IsHalfLineBelow)
             {
-                y += Tile.Height_2D / 2.0f;
+                y -= Tile.Height_2D / 2.0f;
             }
 
 
