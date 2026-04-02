@@ -105,6 +105,7 @@ public class Table
             this.tempFloors.Add(newTempFloor);
         }
 
+        this.freeTiles = new List<TilePosition>();
         do
         {
             this.GetFreeTiles();
@@ -134,10 +135,12 @@ public class Table
         return isEmpty;
     }
 
+    private IList<TilePosition> freeTiles; // debug
+
+
     // get free tiles for one iteration
     private void GetFreeTiles()
     {
-        IList<TilePosition> freeTiles = new List<TilePosition>();
         
         System.Random random = new System.Random();
 
@@ -279,9 +282,11 @@ public class Table
         }
 
         // freeTiles.Count must be even (?)
+        Debug.Log($"freeTiles.Count: {freeTiles.Count}");
         if(freeTiles.Count % 2 != 0)
         {
-            throw new Exception($"Free tiles not even.");
+            Debug.Log("Free tiles not even.");
+            //throw new Exception($"Free tiles not even.");
         }
         
 
@@ -314,11 +319,11 @@ public class Table
 
             // remove tile type from list
             this.tileTypes_Regular_Temp.RemoveAt(tileTypeIndex);
-            Debug.Log($"this.tileTypes_Regular_Temp: {this.tileTypes_Regular_Temp.Count}");
+            // Debug.Log($"this.tileTypes_Regular_Temp: {this.tileTypes_Regular_Temp.Count}");
 
             if(this.tileTypes_Regular_Temp.Count == 0)
             {
-                Debug.Log("this.tileTypes_Regular_Temp = 0");
+                // Debug.Log("this.tileTypes_Regular_Temp = 0");
 
                 // Reload list of tiles
                 this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
@@ -348,9 +353,9 @@ public class Table
 
             // Debug.Log($"freeTiles.Count: {freeTiles.Count}");
 
-        } while (freeTiles.Count > 0);
+        } while (freeTiles.Count > 1);
          
-        
+        Debug.Log($"END OF METHOD freeTiles.Count: {freeTiles.Count}");
 
     }
 
@@ -366,11 +371,11 @@ public class Table
         
         IList<string> floor_0 = new List<string>
         {
-            "211110", // 211110
+            "211110",
             "001111",
             "011110",
-            "110011",
-            "011111"
+            "210011",
+            "021112"
         };
         table.Floors.Add(floor_0);
 
@@ -384,7 +389,7 @@ public class Table
             numberOfLines: 5,
             numberOfColumns: 6 // tile width = 1/6 of screen
         );
-        // 0 = empty, 1 = tile
+        // 0 = empty, 1 = tile, 2 = tile half line below
         // Must have an even number of tiles
         IList<string> floor_0 = new List<string>
         {
@@ -416,7 +421,7 @@ public class Table
             numberOfLines: 6,
             numberOfColumns: 8 // tile width = 1/8 of screen
         );
-        // 0 = empty, 1 = tile
+        // 0 = empty, 1 = tile, 2 = tile half line below
         // Must have an even number of tiles
         IList<string> floor_0 = new List<string>
         {
@@ -462,7 +467,7 @@ public class Table
             numberOfLines: 9,
             numberOfColumns: 8 // tile width = 1/8 of screen
         );
-        // 0 = empty, 1 = tile
+        // 0 = empty, 1 = tile, 2 = tile half line below
         // Must have an even number of tiles
         IList<string> floor_0 = new List<string>
         {
