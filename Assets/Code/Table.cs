@@ -208,12 +208,17 @@ public class Table
                         bool hasActiveTileAtLeft = false;
                         if(!isFirstTileOfLine)
                         {
+                            // check if there is tile in the same line at left
+                            // it doesn't matter the HalfLineBellow of neither of them
                             if(this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2')
                             {
                                 hasActiveTileAtLeft = true;
                             }
-                            else if(!isFirstLineOfFloor && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
+
+                            // check if there is tile in the line above at left
+                            // only if the above is HalfLineBellow and the current is not
+                            else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
                             {
                                 hasActiveTileAtLeft = true;
                             }
@@ -224,12 +229,13 @@ public class Table
                         bool hasActiveTileAtRight = false;
                         if(!isLastTileOfLine) 
                         {
+                            // similar logic of left tile (check previous comment)
                             if(this.tempFloors[floorIndex][lineIndex][tileIndex+1] == '1' ||
                                this.tempFloors[floorIndex][lineIndex][tileIndex+1] == '2')
                             {
                                 hasActiveTileAtRight = true;
                             }
-                            else if(!isFirstLineOfFloor && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
+                            else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
                             {
                                 hasActiveTileAtLeft = true;
                             }

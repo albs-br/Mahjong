@@ -309,7 +309,7 @@ public class Game : MonoBehaviour
                                     hasActiveTileAtLeft = tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1].IsActive;
                                 }
 
-                                if(!isFirstLineOfFloor)
+                                if(!isFirstLineOfFloor && !currentTile.IsHalfLineBelow)
                                 {
                                     var tileToBeChecked = tileFloor.TileLines[lineIndex - 1].Tiles[tileIndex - 1];
 
@@ -328,7 +328,7 @@ public class Game : MonoBehaviour
                                     hasActiveTileAtRight = tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1].IsActive;
                                 }
                                 
-                                if(!isFirstLineOfFloor)
+                                if(!isFirstLineOfFloor && !currentTile.IsHalfLineBelow)
                                 {
                                     var tileToBeChecked = tileFloor.TileLines[lineIndex - 1].Tiles[tileIndex + 1];
 
