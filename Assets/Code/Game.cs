@@ -233,28 +233,65 @@ public class Game : MonoBehaviour
         this.openMatches = 0;
 
         // Update properties of All tiles
-        for(int floorIndex=0; floorIndex < this.tileFloors.Count; floorIndex++)
+        for(int floorIndex=0; floorIndex < this.tileFloors.Count; floorIndex++) // Loop floors
         {
             var tileFloor = this.tileFloors[floorIndex];
 
-            for(int lineIndex=0; lineIndex < tileFloor.TileLines.Count; lineIndex++)
-            {
-                // var listTilesActive = 
-                //     this.tileFloor.TileLines[j].Tiles
-                //         .Where(x => x.IsActive);
+            bool isFirstFloor = (floorIndex == 0);
+            bool isLastFloor = (floorIndex == this.tileFloors.Count - 1);
 
-                for(int tileIndex=0; tileIndex < tileFloor.TileLines[lineIndex].Tiles.Count; tileIndex++)
+            for(int lineIndex=0; lineIndex < tileFloor.TileLines.Count; lineIndex++) // Loop lines
+            {
+
+                bool isFirstLineOfFloor = (lineIndex == 0);
+                bool isLastLineOfFloor = (lineIndex == tileFloor.TileLines.Count - 1);
+
+                for(int tileIndex=0; tileIndex < tileFloor.TileLines[lineIndex].Tiles.Count; tileIndex++) // Loop tiles
                 {
                     var currentTile = tileFloor.TileLines[lineIndex].Tiles[tileIndex];
+
+                    bool isFirstTileOfLine = (tileIndex == 0);
+                    bool isLastTileOfLine = (tileIndex == tileFloor.TileLines[lineIndex].Tiles.Count - 1);
+
                     if(currentTile != null && currentTile.IsActive)
                     {
                         this.tilesRemaining++;
 
                         // check if there is an active tile above
                         bool hasActiveTileAbove = false;
-                        if(((floorIndex + 1) <= this.tileFloors.Count - 1) && this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex] != null)
+                        if(!isLastFloor)
                         {
-                            hasActiveTileAbove = this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex].IsActive;
+                            if(this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex] != null)
+                            {
+                                hasActiveTileAbove = this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex].IsActive;
+                            }
+                            
+                            if(!currentTile.IsHalfLineBelow)
+                            {
+                                // check if there is an active tile above (previous line with halfTileBelow flag)
+                                if(!isFirstLineOfFloor)
+                                {
+                                    var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex - 1].Tiles[tileIndex];
+
+                                    if(tileToBeChecked.IsActive && tileToBeChecked.IsHalfLineBelow)
+                                    {
+                                        hasActiveTileAbove = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // check if there is an active tile above (next line without halfTileBelow flag)
+                                if(!isLastLineOfFloor)
+                                {
+                                    var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex + 1].Tiles[tileIndex];
+                                    
+                                    if(tileToBeChecked.IsActive && !tileToBeChecked.IsHalfLineBelow)
+                                    {
+                                        hasActiveTileAbove = true;
+                                    }
+                                }
+                            }
                         }
 
                         if(hasActiveTileAbove)
@@ -265,17 +302,45 @@ public class Game : MonoBehaviour
                         {
                             // check if there is an active tile at left or right
                             bool hasActiveTileAtLeft = false;
-                            if(tileIndex > 0 && tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1] != null)
+                            if(!isFirstTileOfLine)
                             {
-                                hasActiveTileAtLeft = tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1].IsActive;
+                                if(tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1] != null)
+                                {
+                                    hasActiveTileAtLeft = tileFloor.TileLines[lineIndex].Tiles[tileIndex - 1].IsActive;
+                                }
+
+                                if(!isFirstLineOfFloor)
+                                {
+                                    var tileToBeChecked = tileFloor.TileLines[lineIndex - 1].Tiles[tileIndex - 1];
+
+                                    if(tileToBeChecked != null && tileToBeChecked.IsHalfLineBelow)
+                                    {
+                                        hasActiveTileAtLeft = tileToBeChecked.IsActive;
+                                    }
+                                }
                             }
                             
                             bool hasActiveTileAtRight = false;
-                            if(tileIndex < tileFloor.TileLines[lineIndex].Tiles.Count - 1 && tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1] != null)
+                            if(!isLastTileOfLine)
                             {
-                                hasActiveTileAtRight = tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1].IsActive;
+                                if(tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1] != null)
+                                {
+                                    hasActiveTileAtRight = tileFloor.TileLines[lineIndex].Tiles[tileIndex + 1].IsActive;
+                                }
+                                
+                                if(!isFirstLineOfFloor)
+                                {
+                                    var tileToBeChecked = tileFloor.TileLines[lineIndex - 1].Tiles[tileIndex + 1];
+
+                                    if(tileToBeChecked != null && tileToBeChecked.IsHalfLineBelow)
+                                    {
+                                        hasActiveTileAtRight = tileToBeChecked.IsActive;
+                                    }
+                                }
                             }
 
+                            
+                            
                             if(!hasActiveTileAtLeft || !hasActiveTileAtRight)
                             {
                                 currentTile.IsBlocked = false;
