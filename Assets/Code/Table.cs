@@ -173,7 +173,7 @@ public class Table
                     bool isFirstTileOfLine = (tileIndex == 0);
                     bool isLastTileOfLine = (tileIndex == this.tempFloors[floorIndex][lineIndex].Length - 1);
 
-                    if(currentChar == '1' || currentChar == '2')
+                    if(currentChar != '0')
                     {
                         bool isHalfLineBelow = (currentChar == '2');
 
@@ -183,7 +183,8 @@ public class Table
                         if(!isLastFloor)
                         {
                             // check if there is an active tile above (both with and without halfTileBelow flag)
-                            if(this.tempFloors[floorIndex + 1][lineIndex][tileIndex] == '1' || this.tempFloors[floorIndex + 1][lineIndex][tileIndex] == '2')
+                            var tileAbove = this.tempFloors[floorIndex + 1][lineIndex][tileIndex];
+                            if(tileAbove == '1' || tileAbove == '2')
                             {
                                 hasActiveTileAbove = true;
                             }

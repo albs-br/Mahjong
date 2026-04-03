@@ -123,7 +123,7 @@ public class Game : MonoBehaviour
                 for(int tileIndex=0; tileIndex < line.Length; tileIndex++)
                 {
                     var chr = line[tileIndex];
-                    if(chr == '1' || chr == '2')
+                    if(chr != '0')
                     {
                         // get tile type from Pairs list previously sorted
                         string tileType = pairs.FirstOrDefault(x => 
