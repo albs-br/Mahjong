@@ -7,6 +7,25 @@ public static class LoadTable
     // 4 = tile half line below and half column to the right
     // Must have an even number of tiles
 
+    public static Table LoadTable_Test_01()
+    {
+        var table = new Table(
+            numberOfFloors: 1,
+            numberOfLines: 3,
+            numberOfColumns: 6 // tile width = 1/6 of screen
+        );
+        
+        IList<string> floor_0 = new List<string>
+        {
+            "222222",
+            "222222",
+            "000000",
+        };
+        table.Floors.Add(floor_0);
+
+        return table;
+    }
+
     public static Table LoadTable_SingleFloorTest()
     {
         var table = new Table(
@@ -143,7 +162,7 @@ public static class LoadTable
             "00000000",
             "00011000",
             "00111100",
-            "00111100",
+            "00111101",
             "00111100",
             "00011000",
             "00000000",
@@ -157,7 +176,7 @@ public static class LoadTable
             "00000000",
             "00000000",
             "00022000",
-            "00022001",
+            "00022000",
             "00000000",
             "00000000",
             "00000000",
@@ -171,7 +190,7 @@ public static class LoadTable
             "00000000",
             "00000000",
             "00000000",
-            "00010000",
+            "00030000",
             "00000000",
             "00000000",
             "00000000",

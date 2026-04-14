@@ -222,27 +222,22 @@ public class Table
                         bool hasActiveTileAtLeft = false;
                         if(!isFirstTileOfLine)
                         {
-                            if(currentChar == '1' || currentChar == '2')
-                            {
+                            // if(currentChar == '1' || currentChar == '2')
+                            // {
                                 // check if there is tile in the same line at left
                                 // it doesn't matter the HalfLineBellow of neither of them
                                 if(this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
-                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2')
+                                   this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2')
                                 {
                                     hasActiveTileAtLeft = true;
                                 }
-
-                                //TODO: bug here
-                                // "22222"
-                                // "22222"
-
                                 // check if there is tile in the line above at left
                                 // only if the above is HalfLineBellow and the current is not
                                 else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
                                 {
                                     hasActiveTileAtLeft = true;
                                 }
-                            }
+                            // }
                         }
 
 
@@ -279,7 +274,8 @@ public class Table
                                     Floor = floorIndex,
                                     Line = lineIndex,
                                     Tile = tileIndex,
-                                    IsHalfLineBelow = isHalfLineBelow
+                                    IsHalfLineBelow = isHalfLineBelow,
+                                    IsHalfColumnRight = isHalfColumnRight
                                 }
                             );
 
@@ -393,10 +389,11 @@ public class TilePosition
     public int Line { get; set; }
     public int Tile { get; set; }
     public bool IsHalfLineBelow { get; set; }
+    public bool IsHalfColumnRight { get; set; }
 
     public override string ToString()
     {
-        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}, IsHalfLineBelow: {this.IsHalfLineBelow}";
+        return $"TilePosition, Floor: {this.Floor}, Line: {this.Line}, Tile: {this.Tile}, IsHalfLineBelow: {this.IsHalfLineBelow}, IsHalfColumnRight: {this.IsHalfColumnRight}";
     }
 }
 

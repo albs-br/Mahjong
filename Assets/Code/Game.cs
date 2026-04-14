@@ -85,6 +85,7 @@ public class Game : MonoBehaviour
     {
         //Debug.Log("Start method");
 
+        //this.Table = LoadTable.LoadTable_Test_01();
         //this.Table = LoadTable.LoadTable_SingleFloorTest();
         //this.Table = LoadTable.LoadTable_DoubleFloorTest();
         //this.Table = LoadTable.LoadTable_TripleFloorTest();
@@ -150,7 +151,13 @@ public class Game : MonoBehaviour
                         // if(k == 1) tileType = "circle5";
 
                         //Add tile
-                        CreateTile(tileLine, tileIndex, tileType, (chr == '2'));
+                        CreateTile(
+                            tileLine, 
+                            tileIndex, 
+                            tileType, 
+                            (chr == '2' || chr == '4'), 
+                            (chr == '3' || chr == '4')
+                        );
                     }
 
                 }
@@ -277,6 +284,17 @@ public class Game : MonoBehaviour
                                     {
                                         hasActiveTileAbove = true;
                                     }
+
+                                    // // check if there is an active tile above (previous line, column at left with halfTileColumnRight flag)
+                                    // if(!isFirstTileOfLine)
+                                    // {
+                                    //     tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex - 1].Tiles[tileIndex - 1];
+                                        
+                                    //     if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfColumnRight)
+                                    //     {
+                                    //         hasActiveTileAbove = true;
+                                    //     }
+                                    // }
                                 }
                             }
                             else
@@ -291,6 +309,29 @@ public class Game : MonoBehaviour
                                         hasActiveTileAbove = true;
                                     }
                                 }
+                                
+                                // check if there is an active tile above (same line, column at left with halfTileColumnRight flag)
+                                if(!isFirstTileOfLine)
+                                {
+                                    var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex - 1];
+                                    
+                                    if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfColumnRight)
+                                    {
+                                        hasActiveTileAbove = true;
+                                    }
+                                }
+
+                                // check if there is an active tile above (next line, same column with halfTileColumnRight flag)
+                                if(!isLastLineOfFloor && !isFirstTileOfLine)
+                                {
+                                    var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex + 1].Tiles[tileIndex - 1];
+                                    
+                                    if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfColumnRight)
+                                    {
+                                        hasActiveTileAbove = true;
+                                    }
+                                }
+
                             }
                         }
 
@@ -376,7 +417,7 @@ public class Game : MonoBehaviour
 
     }
 
-    private void CreateTile(TileLine tileLine, int index, string tileType, bool isHalfLineBelow)
+    private void CreateTile(TileLine tileLine, int index, string tileType, bool isHalfLineBelow, bool isHalfColumnRight)
     {
         string name = $"Tile {index} of Line {tileLine.Index}, of Floor {tileLine.TileFloor.Index}";
         GameObject gameObject = new GameObject(name);
@@ -388,6 +429,7 @@ public class Game : MonoBehaviour
         tile.TileType = tileType;
 
         tile.IsHalfLineBelow = isHalfLineBelow;
+        tile.IsHalfColumnRight = isHalfColumnRight;
 
         tile.TileLine = tileLine;
         tileLine.Tiles[index] = tile;
@@ -415,11 +457,17 @@ public class Game : MonoBehaviour
 
 
 
+
             // float x = this.minX + (renderer.bounds.size.x/2) + ((tile.TileLine.Tiles.Count - 1) * renderer.bounds.size.x);
             float x = this.minX + (Tile.TotalWidth/2) + (tile.Index * Tile.Width_2D);
 
             // adjust X based on floor index:
             x += (Tile.TotalWidth - Tile.Width_2D) * tileLine.TileFloor.Index;
+
+            if(tile.IsHalfColumnRight)
+            {
+                x += Tile.Width_2D / 2.0f;
+            }
 
             float y = 0f + (Tile.Height_2D * ((float)this.Table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
             //Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
