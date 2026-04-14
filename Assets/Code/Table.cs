@@ -176,7 +176,12 @@ public class Table
                     if(currentChar != '0')
                     {
                         bool isHalfLineBelow = (currentChar == '2');
+                        bool isHalfColumnRight = (currentChar == '3');
 
+                        if(isLastTileOfLine && isHalfColumnRight)
+                        {
+                            throw new Exception("Tile invalid: half column right on last column");
+                        }
                         
                         bool hasActiveTileAbove = false;
                         //Debug.Log($"floorIndex: {floorIndex}, j: {j}, i: {i}, isLastFloor: {isLastFloor}");
@@ -184,14 +189,18 @@ public class Table
                         {
                             // check if there is an active tile above (both with and without halfTileBelow flag)
                             var tileAbove = this.tempFloors[floorIndex + 1][lineIndex][tileIndex];
-                            if(tileAbove == '1' || tileAbove == '2')
+                            if(tileAbove != '0')
                             {
                                 hasActiveTileAbove = true;
                             }
                             else if(!isHalfLineBelow)
                             {
                                 // check if there is an active tile above (previous line with halfTileBelow flag)
-                                if(!isFirstLineOfFloor && this.tempFloors[floorIndex + 1][lineIndex - 1][tileIndex] == '2')
+                                if(!isFirstLineOfFloor && (
+                                    this.tempFloors[floorIndex + 1][lineIndex - 1][tileIndex] == '2' ||
+                                    this.tempFloors[floorIndex + 1][lineIndex - 1][tileIndex] == '4'
+                                    )
+                                )
                                 {
                                     hasActiveTileAbove = true;
                                 }
@@ -199,7 +208,11 @@ public class Table
                             else
                             {
                                 // check if there is an active tile above (next line without halfTileBelow flag)
-                                if(!isLastLineOfFloor && this.tempFloors[floorIndex + 1][lineIndex + 1][tileIndex] == '1')
+                                if(!isLastLineOfFloor && (
+                                    this.tempFloors[floorIndex + 1][lineIndex + 1][tileIndex] == '1' ||
+                                    this.tempFloors[floorIndex + 1][lineIndex + 1][tileIndex] == '3'
+                                    )
+                                )
                                 {
                                     hasActiveTileAbove = true;
                                 }
@@ -209,19 +222,26 @@ public class Table
                         bool hasActiveTileAtLeft = false;
                         if(!isFirstTileOfLine)
                         {
-                            // check if there is tile in the same line at left
-                            // it doesn't matter the HalfLineBellow of neither of them
-                            if(this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
-                               this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2')
+                            if(currentChar == '1' || currentChar == '2')
                             {
-                                hasActiveTileAtLeft = true;
-                            }
+                                // check if there is tile in the same line at left
+                                // it doesn't matter the HalfLineBellow of neither of them
+                                if(this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '1' ||
+                                this.tempFloors[floorIndex][lineIndex][tileIndex-1] == '2')
+                                {
+                                    hasActiveTileAtLeft = true;
+                                }
 
-                            // check if there is tile in the line above at left
-                            // only if the above is HalfLineBellow and the current is not
-                            else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
-                            {
-                                hasActiveTileAtLeft = true;
+                                //TODO: bug here
+                                // "22222"
+                                // "22222"
+
+                                // check if there is tile in the line above at left
+                                // only if the above is HalfLineBellow and the current is not
+                                else if(!isFirstLineOfFloor && !isHalfLineBelow && this.tempFloors[floorIndex][lineIndex-1][tileIndex-1] == '2')
+                                {
+                                    hasActiveTileAtLeft = true;
+                                }
                             }
                         }
 
@@ -364,189 +384,6 @@ public class Table
          
         Debug.Log($"END OF METHOD freeTiles.Count: {freeTiles.Count}");
 
-    }
-
-    public static Table LoadTable_SingleFloorTest()
-    {
-        var table = new Table(
-            numberOfFloors: 1,
-            numberOfLines: 5,
-            numberOfColumns: 6 // tile width = 1/6 of screen
-        );
-        // 0 = empty, 1 = tile, 2 = tile half line below
-        // Must have an even number of tiles
-        
-        IList<string> floor_0 = new List<string>
-        {
-            "211110",
-            "001111",
-            "011110",
-            "210011",
-            "021112"
-        };
-        table.Floors.Add(floor_0);
-
-        return table;
-    }
-
-    public static Table LoadTable_DoubleFloorTest()
-    {
-        var table = new Table(
-            numberOfFloors: 2,
-            numberOfLines: 5,
-            numberOfColumns: 6 // tile width = 1/6 of screen
-        );
-        // 0 = empty, 1 = tile, 2 = tile half line below
-        // Must have an even number of tiles
-        IList<string> floor_0 = new List<string>
-        {
-            "011110",
-            "111111",
-            "011110",
-            "111111",
-            "110011"
-        };
-        table.Floors.Add(floor_0);
-
-        IList<string> floor_1 = new List<string>
-        {
-            "000000",
-            "001100",
-            "011110",
-            "001100",
-            "000000"
-        };
-        table.Floors.Add(floor_1);
-
-        return table;
-    }
-
-    public static Table LoadTable_TripleFloorTest()
-    {
-        var table = new Table(
-            numberOfFloors: 3,
-            numberOfLines: 6,
-            numberOfColumns: 8 // tile width = 1/8 of screen
-        );
-        // 0 = empty, 1 = tile, 2 = tile half line below
-        // Must have an even number of tiles
-        IList<string> floor_0 = new List<string>
-        {
-            "00011000",
-            "00111100",
-            "01111110",
-            "11111111",
-            "11111111",
-            "01100110"
-        };
-        table.Floors.Add(floor_0);
-
-        IList<string> floor_1 = new List<string>
-        {
-            "00000000",
-            "00011000",
-            "00111100",
-            "00111100",
-            "00011000",
-            "00000000"
-        };
-        table.Floors.Add(floor_1);
-
-
-        IList<string> floor_2 = new List<string>
-        {
-            "00000000",
-            "00000000",
-            "00011000",
-            "00011000",
-            "00000000",
-            "00000000"
-        };
-        table.Floors.Add(floor_2);
-
-        return table;
-    }
-
-    public static Table LoadTable_Turtle()
-    {
-        var table = new Table(
-            numberOfFloors: 5,
-            numberOfLines: 9,
-            numberOfColumns: 8 // tile width = 1/8 of screen
-        );
-        // 0 = empty, 1 = tile, 2 = tile half line below
-        // Must have an even number of tiles
-        IList<string> floor_0 = new List<string>
-        {
-            "11111111",
-            "01111110",
-            "11111111",
-            "11111111",
-            "11111111",
-            "11111111",
-            "11111111",
-            "01111110",
-            "11111111"
-        };
-        table.Floors.Add(floor_0);
-
-        IList<string> floor_1 = new List<string>
-        {
-            "10011001",
-            "00111100",
-            "01111110",
-            "21111112",
-            "21111112",
-            "01111110",
-            "01111110",
-            "00111100",
-            "10011001"
-        };
-        table.Floors.Add(floor_1);
-
-        IList<string> floor_2 = new List<string>
-        {
-            "10000001",
-            "00000000",
-            "00011000",
-            "00111100",
-            "00111100",
-            "00111100",
-            "00011000",
-            "00000000",
-            "10000001"
-        };
-        table.Floors.Add(floor_2);
-
-        IList<string> floor_3 = new List<string>
-        {
-            "00000000",
-            "00000000",
-            "00000000",
-            "00022000",
-            "00022001",
-            "00000000",
-            "00000000",
-            "00000000",
-            "00000000"
-        };
-        table.Floors.Add(floor_3);
-
-        IList<string> floor_4 = new List<string>
-        {
-            "00000000",
-            "00000000",
-            "00000000",
-            "00000000",
-            "00010000",
-            "00000000",
-            "00000000",
-            "00000000",
-            "00000000"
-        };
-        table.Floors.Add(floor_4);
-
-        return table;
     }
 }
 

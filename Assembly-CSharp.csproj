@@ -71,6 +71,7 @@
     <Compile Include="Assets\Code\UIManager.cs" />
     <Compile Include="Assets\Code\TileFloor.cs" />
     <Compile Include="Assets\Code\TouchDetector.cs" />
+    <Compile Include="Assets\Code\LoadTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

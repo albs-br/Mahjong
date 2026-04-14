@@ -85,10 +85,10 @@ public class Game : MonoBehaviour
     {
         //Debug.Log("Start method");
 
-        //this.Table = Table.LoadTable_SingleFloorTest();
-        //this.Table = Table.LoadTable_DoubleFloorTest();
-        //this.Table = Table.LoadTable_TripleFloorTest();
-        this.Table = Table.LoadTable_Turtle();
+        //this.Table = LoadTable.LoadTable_SingleFloorTest();
+        //this.Table = LoadTable.LoadTable_DoubleFloorTest();
+        //this.Table = LoadTable.LoadTable_TripleFloorTest();
+        this.Table = LoadTable.LoadTable_Turtle();
 
 
         this.Table.ValidateTable();
