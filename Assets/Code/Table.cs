@@ -84,9 +84,29 @@ public class Table
         this.pairs = new List<Pair>();
     }
 
-    //TODO:
     public void ValidateTable()
     {
+        int counter = 0;
+        for(int floorIndex=0; floorIndex < this.Floors.Count; floorIndex++) // loop floors
+        {
+            for(int lineIndex=0; lineIndex < this.Floors[floorIndex].Count; lineIndex++) // loop lines
+            {
+                var line = this.Floors[floorIndex][lineIndex];
+                
+                for(int tileIndex=0; tileIndex < line.Length; tileIndex++) // loop tiles
+                {
+                    if(line[tileIndex] != '0')
+                    {
+                        counter++;
+                    }
+                }
+            }
+        }
+        // Debug.Log($"counter: {counter}");
+        if(counter % 2 != 0)
+        {
+            throw new Exception("Number of tiles must be even.");
+        }
     }
 
     /// Sort tiles for this table
@@ -222,6 +242,9 @@ public class Table
                         bool hasActiveTileAtLeft = false;
                         if(!isFirstTileOfLine)
                         {
+                            //TODO:
+                            // fix bug when line = "44444" or "33333"
+
                             // if(currentChar == '1' || currentChar == '2')
                             // {
                                 // check if there is tile in the same line at left
@@ -305,7 +328,7 @@ public class Table
         }
 
         // freeTiles.Count must be even (?)
-        Debug.Log($"freeTiles.Count: {freeTiles.Count}");
+        //Debug.Log($"freeTiles.Count: {freeTiles.Count}");
         if(freeTiles.Count % 2 != 0)
         {
             Debug.Log("Free tiles not even.");
@@ -378,7 +401,7 @@ public class Table
 
         } while (freeTiles.Count > 1);
          
-        Debug.Log($"END OF METHOD freeTiles.Count: {freeTiles.Count}");
+        //Debug.Log($"END OF METHOD freeTiles.Count: {freeTiles.Count}");
 
     }
 }

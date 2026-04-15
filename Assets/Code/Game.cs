@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using TMPro;
+using System;
 
 public class Game : MonoBehaviour
 {
@@ -85,14 +86,23 @@ public class Game : MonoBehaviour
     {
         //Debug.Log("Start method");
 
-        //this.Table = LoadTable.LoadTable_Test_01();
+        //this.Table = LoadTable.LoadTable_Test_03();
         //this.Table = LoadTable.LoadTable_SingleFloorTest();
         //this.Table = LoadTable.LoadTable_DoubleFloorTest();
         //this.Table = LoadTable.LoadTable_TripleFloorTest();
         this.Table = LoadTable.LoadTable_Turtle();
 
 
-        this.Table.ValidateTable();
+        try
+        {
+            this.Table.ValidateTable();
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError(ex.Message);
+            return;
+        }
+
         var pairs = this.Table.SortTable();
 
 
@@ -106,8 +116,6 @@ public class Game : MonoBehaviour
         this.tileFloors = new List<TileFloor>();
         for(int floorIndex=0; floorIndex < this.Table.Floors.Count; floorIndex++)
         {
-            Debug.Log($"k: {floorIndex}");
-            
             var lines = this.Table.Floors[floorIndex];
 
             var tileFloor = new TileFloor();
@@ -284,17 +292,28 @@ public class Game : MonoBehaviour
                                     {
                                         hasActiveTileAbove = true;
                                     }
+                                }
 
-                                    // // check if there is an active tile above (previous line, column at left with halfTileColumnRight flag)
-                                    // if(!isFirstTileOfLine)
-                                    // {
-                                    //     tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex - 1].Tiles[tileIndex - 1];
-                                        
-                                    //     if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfColumnRight)
-                                    //     {
-                                    //         hasActiveTileAbove = true;
-                                    //     }
-                                    // }
+                                // check if there is an active tile above (same line, column at left with halfTileColumnRight and halfTileBelow flags)
+                                if(!isFirstTileOfLine)
+                                {
+                                    var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex].Tiles[tileIndex - 1];
+                                    
+                                    if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfColumnRight && tileToBeChecked.IsHalfLineBelow)
+                                    {
+                                        hasActiveTileAbove = true;
+                                    }
+                                }
+
+                                // check if there is an active tile above (previous line, column at left with halfTileColumnRight and halfTileBelow flags)
+                                if(!isFirstTileOfLine && !isFirstLineOfFloor)
+                                {
+                                    var tileToBeChecked = this.tileFloors[floorIndex + 1].TileLines[lineIndex - 1].Tiles[tileIndex - 1];
+                                    
+                                    if(tileToBeChecked != null && tileToBeChecked.IsActive && tileToBeChecked.IsHalfColumnRight && tileToBeChecked.IsHalfLineBelow)
+                                    {
+                                        hasActiveTileAbove = true;
+                                    }
                                 }
                             }
                             else

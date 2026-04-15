@@ -26,6 +26,62 @@ public static class LoadTable
         return table;
     }
 
+    public static Table LoadTable_Test_02()
+    {
+        var table = new Table(
+            numberOfFloors: 2,
+            numberOfLines: 4,
+            numberOfColumns: 2
+        );
+        
+        IList<string> floor_0 = new List<string>
+        {
+            "22",
+            "22",
+            "00",
+            "10",
+        };
+        table.Floors.Add(floor_0);
+
+        IList<string> floor_1 = new List<string>
+        {
+            "00",
+            "30",
+            "00",
+            "00",
+        };
+        table.Floors.Add(floor_1);
+
+        return table;
+    }
+
+    public static Table LoadTable_Test_03()
+    {
+        var table = new Table(
+            numberOfFloors: 2,
+            numberOfLines: 3,
+            numberOfColumns: 2
+        );
+        
+        IList<string> floor_0 = new List<string>
+        {
+            "11",
+            "11",
+            "20",
+        };
+        table.Floors.Add(floor_0);
+
+        IList<string> floor_1 = new List<string>
+        {
+            "40",
+            "00",
+            "00",
+        };
+        table.Floors.Add(floor_1);
+
+        return table;
+    }
+
     public static Table LoadTable_SingleFloorTest()
     {
         var table = new Table(
