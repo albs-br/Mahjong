@@ -1,27 +1,74 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 public class TouchDetector : MonoBehaviour
 {
-    public void OnTouch(InputAction.CallbackContext context)
+    private PlayerInputActions inputActions;
+
+    private void Awake()
     {
-        if (context.performed)
+        inputActions = new PlayerInputActions();
+    }
+
+    private void OnEnable()
+    {
+        inputActions.Enable();
+        // Subscribe to the press action
+        inputActions.Player.Press.performed += OnTouchPressed;
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Player.Press.performed -= OnTouchPressed;
+        inputActions.Disable();
+    }
+
+    private void OnTouchPressed(InputAction.CallbackContext context)
+    {
+        // Get the current touch position from the Position action
+        Vector2 touchPosition = inputActions.Player.Position.ReadValue<Vector2>();
+        
+        // Convert screen position to a Ray
+        Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+        RaycastHit hit;
+
+        // Perform the Raycast (for 3D objects)
+        if (Physics.Raycast(ray, out hit))
         {
-            // Access touch position
-            Vector2 touchPos = context.ReadValue<TouchState>().position;
-            Debug.Log($"Touch Detected at: {touchPos}");
+            if (hit.collider != null)
+            {
+                Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+                // Perform your logic here
+            }
         }
     }
-
-    public void OnTouchAction(InputAction.CallbackContext context)
-    {
-        // Read screen position from the touch
-        Vector2 touchPos = context.ReadValue<Vector2>(); 
-        Debug.Log($"Screen Position: {touchPos}");
-    }
-
 }
+
+
+// using UnityEngine;
+// using UnityEngine.InputSystem;
+// using UnityEngine.InputSystem.LowLevel;
+
+// public class TouchDetector : MonoBehaviour
+// {
+//     public void OnTouch(InputAction.CallbackContext context)
+//     {
+//         if (context.performed)
+//         {
+//             // Access touch position
+//             Vector2 touchPos = context.ReadValue<TouchState>().position;
+//             Debug.Log($"Touch Detected at: {touchPos}");
+//         }
+//     }
+
+//     public void OnTouchAction(InputAction.CallbackContext context)
+//     {
+//         // Read screen position from the touch
+//         Vector2 touchPos = context.ReadValue<Vector2>(); 
+//         Debug.Log($"Screen Position: {touchPos}");
+//     }
+
+// }
 
 
 // using UnityEngine;

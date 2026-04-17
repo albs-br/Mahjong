@@ -1,19 +1,28 @@
 {
     "version": 1,
-    "name": "New Actions",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "Player",
             "id": "0f41c19b-adab-4058-ae19-2061b3b63488",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Press",
                     "type": "Button",
                     "id": "b396d434-6c92-4500-abf1-89c5d6d1d34a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "ca724b9f-1bf0-47a9-9b0e-3011443c5e04",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -24,7 +33,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b3b4e06-1028-4d2b-bc94-935bb8231daa",
+                    "path": "<Touchscreen>/touch0/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

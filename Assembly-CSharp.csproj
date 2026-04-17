@@ -52,6 +52,7 @@
     <Compile Include="Assets\Code\Table.cs" />
     <Compile Include="Assets\Code\Tile.cs" />
     <Compile Include="Assets\Code\TileLine.cs" />
+    <Compile Include="Assets\PlayerInputActions.cs" />
     <Compile Include="Assets\Code\Game.cs" />
     <Compile Include="Assets\Code\UIManager.cs" />
     <Compile Include="Assets\Code\TileFloor.cs" />

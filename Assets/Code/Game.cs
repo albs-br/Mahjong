@@ -76,6 +76,8 @@ public class Game : MonoBehaviour
         // scenarios and is a clean way to manage touches.
         EnhancedTouchSupport.Enable();        
 
+        // Use mouse to simulate touch in the screen
+        UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Enable();
 
 
         GetScreenBoundaries();
@@ -524,8 +526,8 @@ public class Game : MonoBehaviour
 
 
 
-            // Add Touch Handler Script
-            gameObject.AddComponent<TouchDetector>();
+            // // Add Touch Handler Script
+            // gameObject.AddComponent<TouchDetector>();
         }
         else
         {
