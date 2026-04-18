@@ -88,11 +88,11 @@ public class Game : MonoBehaviour
     {
         //Debug.Log("Start method");
 
-        //this.Table = LoadTable.LoadTable_Test_03();
+        this.Table = LoadTable.LoadTable_Test_03();
         //this.Table = LoadTable.LoadTable_SingleFloorTest();
         //this.Table = LoadTable.LoadTable_DoubleFloorTest();
         //this.Table = LoadTable.LoadTable_TripleFloorTest();
-        this.Table = LoadTable.LoadTable_Turtle();
+        //this.Table = LoadTable.LoadTable_Turtle();
 
 
         try
@@ -524,7 +524,7 @@ public class Game : MonoBehaviour
 
 
 
-
+            gameObject.name += $" x: {x}, y: {y}";
 
             // // Add Touch Handler Script
             // gameObject.AddComponent<TouchDetector>();

@@ -28,6 +28,8 @@ public class TouchDetector : MonoBehaviour
     {
         //inputActions.Player.Position.Enable();
 
+//Touchscreen.current.primaryTouch.position.ReadValue()
+
         // Get the current touch position from the Position action
         Vector2 touchPosition = inputActions.Player.Position.ReadValue<Vector2>();
 
@@ -35,24 +37,46 @@ public class TouchDetector : MonoBehaviour
 
 
         
-        Debug.Log($"touchPosition: {touchPosition}");
+        // Debug.Log($"touchPosition: {touchPosition}");
 
-        // Convert screen position to a Ray
-        Ray ray = Camera.main.ScreenPointToRay(touchPosition);
-        RaycastHit hit;
 
-        // Perform the Raycast (for 3D objects)
-        if (Physics.Raycast(ray, out hit))
-        {
+        // convert screen coordinate system to world coordinate system
+        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane));
 
-            Debug.Log($"hit.collider: {hit.collider}");
+        // Debug.Log($"worldPoint: {worldPoint}");
 
-            if (hit.collider != null)
-            {
-                Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
-                // Perform your logic here
-            }
+        // // Convert screen position to a Ray
+        // Ray ray = Camera.main.ScreenPointToRay(worldPoint);
+        // RaycastHit hit;
+
+        Vector2 touchPosWorld2D = new Vector2(worldPoint.x, worldPoint.y);
+
+        // Raycast at the touch position
+        RaycastHit2D hit = Physics2D.Raycast(touchPosWorld2D, Vector2.zero);
+
+
+        // Vector2 origin;
+        // Vector2 direction;
+
+        // RaycastHit2D hit = Physics2D.Raycast(origin, direction); //, distance, layerMask);
+
+        if (hit.collider != null) {
+            // Access hit data, e.g., hit.point, hit.normal, hit.collider.name
+            Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
         }
+
+        // // Perform the Raycast (for 3D objects)
+        // if (Physics.Raycast(ray, out hit))
+        // {
+
+        //     Debug.Log($"hit.collider: {hit.collider}");
+
+        //     if (hit.collider != null)
+        //     {
+        //         Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+        //         // Perform your logic here
+        //     }
+        // }
     }
 }
 
