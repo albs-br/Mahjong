@@ -13,6 +13,7 @@ public class TouchDetector : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Enable();
+
         // Subscribe to the press action
         inputActions.Player.Press.performed += OnTouchPressed;
     }
@@ -25,9 +26,17 @@ public class TouchDetector : MonoBehaviour
 
     private void OnTouchPressed(InputAction.CallbackContext context)
     {
+        //inputActions.Player.Position.Enable();
+
         // Get the current touch position from the Position action
         Vector2 touchPosition = inputActions.Player.Position.ReadValue<Vector2>();
+
+        //Vector2 touchPosition = playerInput.actions["Point"].ReadValue<Vector2>();
+
+
         
+        Debug.Log($"touchPosition: {touchPosition}");
+
         // Convert screen position to a Ray
         Ray ray = Camera.main.ScreenPointToRay(touchPosition);
         RaycastHit hit;
@@ -35,6 +44,9 @@ public class TouchDetector : MonoBehaviour
         // Perform the Raycast (for 3D objects)
         if (Physics.Raycast(ray, out hit))
         {
+
+            Debug.Log($"hit.collider: {hit.collider}");
+
             if (hit.collider != null)
             {
                 Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);

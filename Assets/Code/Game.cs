@@ -77,8 +77,8 @@ public class Game : MonoBehaviour
         EnhancedTouchSupport.Enable();        
 
         // Use mouse to simulate touch in the screen
-        UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Enable();
-
+        //UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Enable();
+        UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Disable();
 
         GetScreenBoundaries();
     }
@@ -532,7 +532,7 @@ public class Game : MonoBehaviour
         else
         {
             Debug.LogError("Sprite not found");
-        }        
+        }
     }
 
     private void GetScreenBoundaries()
