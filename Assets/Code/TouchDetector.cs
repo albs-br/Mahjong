@@ -1,84 +1,132 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+
+// Alias EnhancedTouch.Touch to "Touch" for less typing.
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 public class TouchDetector : MonoBehaviour
 {
-    private PlayerInputActions inputActions;
 
-    private void Awake()
+    void Awake()
     {
-        inputActions = new PlayerInputActions();
+        // Note that enhanced touch support needs to be explicitly enabled.
+        EnhancedTouchSupport.Enable();
     }
 
-    private void OnEnable()
+    void Update()
     {
-        inputActions.Enable();
+        // Illustrates how to examine all active touches once per frame and show their last recorded position
+        // in the associated screen-space.
+        foreach (var touch in Touch.activeTouches)
+        {
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    // Debug.Log($"Frame {Time.frameCount}: Touch {touch} started this frame at ({touch.screenPosition.x}, {touch.screenPosition.y})");
 
-        // Subscribe to the press action
-        inputActions.Player.Press.performed += OnTouchPressed;
-    }
+                    // convert screen coordinate system to world coordinate system
+                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(touch.screenPosition.x, touch.screenPosition.y, Camera.main.nearClipPlane));
+                    // Debug.Log($"worldPoint: {worldPoint}");
 
-    private void OnDisable()
-    {
-        inputActions.Player.Press.performed -= OnTouchPressed;
-        inputActions.Disable();
-    }
-
-    private void OnTouchPressed(InputAction.CallbackContext context)
-    {
-        //inputActions.Player.Position.Enable();
-
-//Touchscreen.current.primaryTouch.position.ReadValue()
-
-        // Get the current touch position from the Position action
-        Vector2 touchPosition = inputActions.Player.Position.ReadValue<Vector2>();
-
-        //Vector2 touchPosition = playerInput.actions["Point"].ReadValue<Vector2>();
+                    Vector2 touchPosWorld2D = new Vector2(worldPoint.x, worldPoint.y);
 
 
-        
-        // Debug.Log($"touchPosition: {touchPosition}");
+                    // Raycast at the touch position
+                    RaycastHit2D hit = Physics2D.Raycast(touchPosWorld2D, Vector2.zero);
 
 
-        // convert screen coordinate system to world coordinate system
-        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane));
-
-        // Debug.Log($"worldPoint: {worldPoint}");
-
-        // // Convert screen position to a Ray
-        // Ray ray = Camera.main.ScreenPointToRay(worldPoint);
-        // RaycastHit hit;
-
-        Vector2 touchPosWorld2D = new Vector2(worldPoint.x, worldPoint.y);
-
-        // Raycast at the touch position
-        RaycastHit2D hit = Physics2D.Raycast(touchPosWorld2D, Vector2.zero);
+                    if (hit.collider != null) {
+                        // Access hit data, e.g., hit.point, hit.normal, hit.collider.name
+                        Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+                    }
 
 
-        // Vector2 origin;
-        // Vector2 direction;
-
-        // RaycastHit2D hit = Physics2D.Raycast(origin, direction); //, distance, layerMask);
-
-        if (hit.collider != null) {
-            // Access hit data, e.g., hit.point, hit.normal, hit.collider.name
-            Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+                    break;
+                case TouchPhase.Ended:
+                    // Debug.Log($"Frame {Time.frameCount}:Touch {touch} ended this frame at ({touch.screenPosition.x}, {touch.screenPosition.y})");
+                    break;
+                case TouchPhase.Moved:
+                    // Debug.Log($"Frame {Time.frameCount}: Touch {touch} moved this frame to ({touch.screenPosition.x}, {touch.screenPosition.y})");
+                    break;
+                case TouchPhase.Canceled:
+                    // Debug.Log($"Frame {Time.frameCount}: Touch {touch} was canceled this frame");
+                    break;
+                case TouchPhase.Stationary:
+                    // Debug.Log($"Frame {Time.frameCount}: ouch {touch} was not updated this frame");
+                    break;
+            }
         }
-
-        // // Perform the Raycast (for 3D objects)
-        // if (Physics.Raycast(ray, out hit))
-        // {
-
-        //     Debug.Log($"hit.collider: {hit.collider}");
-
-        //     if (hit.collider != null)
-        //     {
-        //         Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
-        //         // Perform your logic here
-        //     }
-        // }
     }
+
+// -------------------------------
+
+//     private PlayerInputActions inputActions;
+
+//     private void Awake()
+//     {
+//         Debug.Log("TouchDetector.Awake");
+
+//         EnhancedTouchSupport.Enable();
+
+//         inputActions = new PlayerInputActions();
+
+//     }
+
+//     private void OnEnable()
+//     {
+//         Debug.Log("TouchDetector.OnEnable");
+
+//         inputActions.Enable();
+
+//         // Subscribe to the press action
+//         //inputActions.Player.Press.performed += OnTouchPressed;
+
+//         inputActions.Player.Press.started += OnTouchPressed;
+//     }
+
+//     private void OnDisable()
+//     {
+//         Debug.Log("TouchDetector.OnDisable");
+
+//         //inputActions.Player.Press.performed -= OnTouchPressed;
+        
+//         inputActions.Player.Press.started -= OnTouchPressed;
+        
+//         inputActions.Disable();
+//     }
+
+//     private void OnTouchPressed(InputAction.CallbackContext context)
+//     {
+//         // Get the current touch position from the Position action
+//         Vector2 touchPosition = inputActions.Player.Position.ReadValue<Vector2>();
+//         //Vector2 touchPosition = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches[0].screenPosition;
+//         // Debug.Log($"touchPosition: {touchPosition}");
+
+
+//         // convert screen coordinate system to world coordinate system
+//         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane));
+//         // Debug.Log($"worldPoint: {worldPoint}");
+
+
+//         Vector2 touchPosWorld2D = new Vector2(worldPoint.x, worldPoint.y);
+
+
+//         // Raycast at the touch position
+//         RaycastHit2D hit = Physics2D.Raycast(touchPosWorld2D, Vector2.zero);
+
+
+//         if (hit.collider != null) {
+//             // Access hit data, e.g., hit.point, hit.normal, hit.collider.name
+//             Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+//         }
+//     }
+
 }
+
+
+// ------------------
 
 
 // using UnityEngine;

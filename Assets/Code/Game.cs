@@ -74,11 +74,11 @@ public class Game : MonoBehaviour
 
         // The EnhancedTouch API is specifically designed for handling multi-touch 
         // scenarios and is a clean way to manage touches.
-        EnhancedTouchSupport.Enable();        
+        //EnhancedTouchSupport.Enable();        
 
         // Use mouse to simulate touch in the screen
         //UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Enable();
-        UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Disable();
+        //UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Disable();
 
         GetScreenBoundaries();
     }
