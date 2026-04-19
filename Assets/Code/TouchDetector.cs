@@ -38,8 +38,59 @@ public class TouchDetector : MonoBehaviour
 
 
                     if (hit.collider != null) {
-                        // Access hit data, e.g., hit.point, hit.normal, hit.collider.name
-                        Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+                        //Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
+
+                        var tile = hit.collider.gameObject.GetComponent<Tile>();
+
+                        if(tile.IsBlocked)
+                        {
+                            Debug.Log("IsBlocked");
+                            return;
+                        }
+
+
+                        SpriteRenderer renderer = hit.collider.gameObject.GetComponent<SpriteRenderer>();
+
+                        // Debug.Log($"tile.Index: {tile.Index}");
+                        var game = tile.Game; //tile.TileLine.TileFloor.Game;
+
+                        if(!tile.IsSelected)
+                        {
+                            if(game.TileSelected == null)
+                            {
+                                // Set sprite gray (selected)
+                                renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+                                tile.IsSelected = true;
+                                game.TileSelected = tile;
+                            }
+                            else
+                            {
+                                if(game.TileSelected.TileType == tile.TileType)
+                                {
+                                    // Remove both tiles
+                                    
+                                    // Debug.Log("Remove both tiles");
+                                    
+                                    // // Call this method to hide/deactivate the GameObject
+                                    // this.gameObject.SetActive(false);
+
+                                    //Debug.Log("Removing tile " + this.gameObject.GetComponent<Tile>().Index);
+                                    // this.gameObject.GetComponent<Tile>().Remove();
+                                    tile.Remove();
+
+                                    game.TileSelected.Remove();
+                                    game.TileSelected = null;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Remove gray (unselected)
+                            renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                            tile.IsSelected = false;
+                            game.TileSelected = null;
+                        }
+
                     }
 
 
@@ -59,162 +110,3 @@ public class TouchDetector : MonoBehaviour
             }
         }
     }
-
-// -------------------------------
-
-//     private PlayerInputActions inputActions;
-
-//     private void Awake()
-//     {
-//         Debug.Log("TouchDetector.Awake");
-
-//         EnhancedTouchSupport.Enable();
-
-//         inputActions = new PlayerInputActions();
-
-//     }
-
-//     private void OnEnable()
-//     {
-//         Debug.Log("TouchDetector.OnEnable");
-
-//         inputActions.Enable();
-
-//         // Subscribe to the press action
-//         //inputActions.Player.Press.performed += OnTouchPressed;
-
-//         inputActions.Player.Press.started += OnTouchPressed;
-//     }
-
-//     private void OnDisable()
-//     {
-//         Debug.Log("TouchDetector.OnDisable");
-
-//         //inputActions.Player.Press.performed -= OnTouchPressed;
-        
-//         inputActions.Player.Press.started -= OnTouchPressed;
-        
-//         inputActions.Disable();
-//     }
-
-//     private void OnTouchPressed(InputAction.CallbackContext context)
-//     {
-//         // Get the current touch position from the Position action
-//         Vector2 touchPosition = inputActions.Player.Position.ReadValue<Vector2>();
-//         //Vector2 touchPosition = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches[0].screenPosition;
-//         // Debug.Log($"touchPosition: {touchPosition}");
-
-
-//         // convert screen coordinate system to world coordinate system
-//         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane));
-//         // Debug.Log($"worldPoint: {worldPoint}");
-
-
-//         Vector2 touchPosWorld2D = new Vector2(worldPoint.x, worldPoint.y);
-
-
-//         // Raycast at the touch position
-//         RaycastHit2D hit = Physics2D.Raycast(touchPosWorld2D, Vector2.zero);
-
-
-//         if (hit.collider != null) {
-//             // Access hit data, e.g., hit.point, hit.normal, hit.collider.name
-//             Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
-//         }
-//     }
-
-}
-
-
-// ------------------
-
-
-// using UnityEngine;
-// using UnityEngine.InputSystem;
-// using UnityEngine.InputSystem.LowLevel;
-
-// public class TouchDetector : MonoBehaviour
-// {
-//     public void OnTouch(InputAction.CallbackContext context)
-//     {
-//         if (context.performed)
-//         {
-//             // Access touch position
-//             Vector2 touchPos = context.ReadValue<TouchState>().position;
-//             Debug.Log($"Touch Detected at: {touchPos}");
-//         }
-//     }
-
-//     public void OnTouchAction(InputAction.CallbackContext context)
-//     {
-//         // Read screen position from the touch
-//         Vector2 touchPos = context.ReadValue<Vector2>(); 
-//         Debug.Log($"Screen Position: {touchPos}");
-//     }
-
-// }
-
-
-// using UnityEngine;
-
-// public class TouchDetector : MonoBehaviour
-// {
-//     void OnMouseDown()
-//     {
-//         // This code runs when the sprite is touched or clicked
-        
-//         // Debug.Log("Sprite Touched: " + gameObject.name);
-//         // Debug.Log("sorting order: " + this.gameObject.GetComponent<Renderer>().sortingOrder);
-//         // Debug.Log("IsBlocked: " + this.gameObject.GetComponent<Tile>().IsBlocked);
-
-//         var tile = gameObject.GetComponent<Tile>();
-
-//         if(tile.IsBlocked)
-//         {
-//             Debug.Log("IsBlocked");
-//             return;
-//         }
-
-
-//         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-
-//         // Debug.Log($"tile.Index: {tile.Index}");
-//         var game = tile.Game; //tile.TileLine.TileFloor.Game;
-
-//         if(!tile.IsSelected)
-//         {
-//             if(game.TileSelected == null)
-//             {
-//                 // Set sprite gray (selected)
-//                 renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
-//                 tile.IsSelected = true;
-//                 game.TileSelected = tile;
-//             }
-//             else
-//             {
-//                 if(game.TileSelected.TileType == tile.TileType)
-//                 {
-//                     // Remove both tiles
-                    
-//                     // Debug.Log("Remove both tiles");
-                    
-//                     // // Call this method to hide/deactivate the GameObject
-//                     // this.gameObject.SetActive(false);
-
-//                     //Debug.Log("Removing tile " + this.gameObject.GetComponent<Tile>().Index);
-//                     this.gameObject.GetComponent<Tile>().Remove();
-
-//                     game.TileSelected.Remove();
-//                     game.TileSelected = null;
-//                 }
-//             }
-//         }
-//         else
-//         {
-//             // Remove gray (unselected)
-//             renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-//             tile.IsSelected = false;
-//             game.TileSelected = null;
-//         }
-//     }
-// }
