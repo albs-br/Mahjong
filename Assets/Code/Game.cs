@@ -11,6 +11,7 @@ public class Game : MonoBehaviour
     // UI fields
     private TextMeshProUGUI textTilesLeft;
     private TextMeshProUGUI textOpenMatches;
+    private TextMeshProUGUI textTime;
 
 
 
@@ -29,7 +30,7 @@ public class Game : MonoBehaviour
     private int tilesRemaining;
     private int openMatches;
 
-
+    private DateTime gameStartTime;
 
 
     public Table Table;
@@ -48,6 +49,7 @@ public class Game : MonoBehaviour
         // UI field initialization        
         this.textTilesLeft = GameObject.Find("TilesLeftText").GetComponent<TextMeshProUGUI>();
         this.textOpenMatches = GameObject.Find("OpenMatchesText").GetComponent<TextMeshProUGUI>();
+        this.textTime = GameObject.Find("TimeText").GetComponent<TextMeshProUGUI>();
 
         //UIManager.Instance.OpenCanvas("Canvas");
 
@@ -174,7 +176,21 @@ public class Game : MonoBehaviour
             }
         }
 
+        this.gameStartTime = DateTime.Now;
+        
         this.UpdateGame();
+
+        StartCoroutine(ExecuteEverySecond());
+    }
+
+    IEnumerator ExecuteEverySecond() {
+        while (true) {
+            // Execute logic here
+            // this.UpdateGame();
+            this.UpdateUI();
+
+            yield return new WaitForSeconds(1.0f);
+        }
     }
 
     private void UpdateUI()
@@ -198,8 +214,11 @@ public class Game : MonoBehaviour
             // Game over
         }
 
+        TimeSpan timeElapsed = (DateTime.Now - this.gameStartTime);
+
         this.textTilesLeft.text = "Tiles Left: " + this.tilesRemaining;
         this.textOpenMatches.text = "Open Matches: " + this.openMatches;
+        this.textTime.text = $"{timeElapsed.Minutes,2}:{timeElapsed.Seconds:D2}";
         //this.textObj.SetText("set via SetText");
     }
 
