@@ -28,8 +28,10 @@ public class Game : MonoBehaviour
     private Vector3 tileScaleFactor;
 
     private int tilesRemaining;
+    
+    private IList<Tile> openTilesList;
     private int openMatches;
-
+    
     private DateTime gameStartTime;
 
 
@@ -266,7 +268,7 @@ public class Game : MonoBehaviour
     public void UpdateGame()
     {
         this.tilesRemaining = 0;
-        this.openMatches = 0;
+        this.openTilesList = new List<Tile>();
 
         // Update properties of All tiles
         for(int floorIndex=0; floorIndex < this.tileFloors.Count; floorIndex++) // Loop floors
@@ -434,12 +436,37 @@ public class Game : MonoBehaviour
 
                         if(!currentTile.IsBlocked)
                         {
-                            this.openMatches++;
+                            this.openTilesList.Add(currentTile);
                         }
                     }
                 }
             }
         }
+
+        this.openMatches = 0;
+        int exitCounter = this.openTilesList.Count;
+        while(this.openTilesList.Count > 0 && exitCounter > 0)
+        {
+            exitCounter--;
+
+            var tile = this.openTilesList[0];
+
+            int j = 1; // start from 1 to skip the tile itself
+            while(j < this.openTilesList.Count)
+            {
+                if(tile.TileType == this.openTilesList[j].TileType)
+                {
+                    this.openMatches++;
+                    this.openTilesList.RemoveAt(j); // remove the matched tile from the list
+                }
+                else
+                {
+                    j++;
+                }
+            }
+            this.openTilesList.RemoveAt(0); // remove the tile itself from the list
+        }
+
 
         this.UpdateUI();
     }
