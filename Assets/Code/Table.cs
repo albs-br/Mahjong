@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Table
 {
+    private System.Random random = new System.Random();
+
     public int NumberOfFloors { get; set; }
     public int NumberOfLines { get; set; }
     public int NumberOfColumns { get; set; }
@@ -162,7 +164,6 @@ public class Table
     private void GetFreeTiles()
     {
         
-        System.Random random = new System.Random();
 
 
         //Debug.Log("-----------");
@@ -331,7 +332,7 @@ public class Table
         //Debug.Log($"freeTiles.Count: {freeTiles.Count}");
         if(freeTiles.Count % 2 != 0)
         {
-            Debug.Log("Free tiles not even.");
+            //Debug.Log("Free tiles not even.");
             //throw new Exception($"Free tiles not even.");
         }
         

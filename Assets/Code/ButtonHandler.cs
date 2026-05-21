@@ -4,6 +4,9 @@ public class ButtonHandler : MonoBehaviour
 {
     public void ButtonNewGame_Click()
     {
-        Debug.Log("Button was clicked!");
+        Game gameScript = GetComponent<Game>();
+        gameScript.StartNewGame();
+        
+        //Debug.Log("Button was clicked!");
     }
 }

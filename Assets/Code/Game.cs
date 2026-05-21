@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem.EnhancedTouch;
 using TMPro;
 using System;
@@ -15,6 +16,7 @@ public class Game : MonoBehaviour
 
 
 
+    // Screen boundaries fields
     private float cameraHeight;
     private float cameraWidth;
 
@@ -22,6 +24,8 @@ public class Game : MonoBehaviour
     private float maxX;
     private float minY;
     private float maxY;
+
+
 
     private IList<TileFloor> tileFloors;
 
@@ -84,13 +88,42 @@ public class Game : MonoBehaviour
         //UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Enable();
         //UnityEngine.InputSystem.EnhancedTouch.TouchSimulation.Disable();
 
-        GetScreenBoundaries();
+        this.GetScreenBoundaries();
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log("Start method");
+        this.StartNewGame();
+    }
+
+    public void StartNewGame()
+    {
+        Scene activeScene = SceneManager.GetActiveScene();
+        GameObject[] rootObjects = activeScene.GetRootGameObjects();
+        foreach (GameObject obj in rootObjects)
+        {
+            if(obj.name.StartsWith("Tile"))
+            {
+                Destroy(obj);
+            }
+        }
+
+
+        // Reset fields
+        this.tileFloors = new List<TileFloor>();
+
+        this.tileScaleFactor = Vector3.one;
+
+        this.tilesRemaining = 0;
+    
+        this.openTilesList = new List<Tile>();
+        this.openMatches = 0;
+    
+        this.Table = null;
+        this.TileSelected = null;
+
+
 
         //this.Table = LoadTable.LoadTable_Test_03();
         //this.Table = LoadTable.LoadTable_SingleFloorTest();
@@ -165,7 +198,7 @@ public class Game : MonoBehaviour
                         // if(k == 1) tileType = "circle5";
 
                         //Add tile
-                        CreateTile(
+                        this.CreateTile(
                             tileLine, 
                             tileIndex, 
                             tileType, 
@@ -586,16 +619,16 @@ public class Game : MonoBehaviour
         Camera cam = Camera.main;
         
         // orthographicSize is half the vertical size (height) of the camera's view.
-        cameraHeight = cam.orthographicSize * 2;
+        this.cameraHeight = cam.orthographicSize * 2;
         
         // Calculate half the horizontal size (width) based on the aspect ratio.
-        cameraWidth = cameraHeight * cam.aspect;
+        this.cameraWidth = this.cameraHeight * cam.aspect;
 
         // Calculate min and max bounds in world space
-        minX = cam.transform.position.x - (cameraWidth/2);
-        maxX = cam.transform.position.x + (cameraWidth/2);
-        minY = cam.transform.position.y - (cameraHeight/2);
-        maxY = cam.transform.position.y + (cameraHeight/2);
+        this.minX = cam.transform.position.x - (this.cameraWidth/2);
+        this.maxX = cam.transform.position.x + (this.cameraWidth/2);
+        this.minY = cam.transform.position.y - (this.cameraHeight/2);
+        this.maxY = cam.transform.position.y + (this.cameraHeight/2);
         
         //Debug.Log("Bounds: Left=" + minX + ", Right=" + maxX + ", Bottom=" + minY + ", Top=" + maxY);
         //Debug.Log($"Camera width: {cameraWidth}, Camera height: {cameraHeight}");
