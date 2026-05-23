@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
     public int Index { get; set; }
     public string TileType { get; set; }
+    //public TileTypeClass TileTypeClass { get; set; }
     public bool IsHalfLineBelow { get; set; }
     public bool IsHalfColumnRight { get; set; }
 

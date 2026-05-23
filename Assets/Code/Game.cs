@@ -174,28 +174,30 @@ public class Game : MonoBehaviour
                     if(chr != '0')
                     {
                         // get tile type from Pairs list previously sorted
-                        string tileType = pairs.FirstOrDefault(x => 
+                        string tileType;
+
+                        var temp = pairs.FirstOrDefault(x => 
                             (
                                 x.Tile_1.Floor == floorIndex &&
                                 x.Tile_1.Line == lineIndex &&
                                 x.Tile_1.Tile == tileIndex
-                            ) ||
-                            (
-                                x.Tile_2.Floor == floorIndex &&
-                                x.Tile_2.Line == lineIndex &&
-                                x.Tile_2.Tile == tileIndex
                             )
-                        ).TileType;
+                        );
 
-                        // if(tileType == null)
-                        // {
-                        //     tileType = "bamboo2"; // debug
-                        // }
-
-                        
-                        // debug
-                        // var tileType = "bamboo2";
-                        // if(k == 1) tileType = "circle5";
+                        if(temp == null)
+                        {
+                            tileType = pairs.FirstOrDefault(x => 
+                                    (
+                                        x.Tile_2.Floor == floorIndex &&
+                                        x.Tile_2.Line == lineIndex &&
+                                        x.Tile_2.Tile == tileIndex
+                                    )
+                                ).TileType_2;
+                        }
+                        else
+                        {
+                            tileType = temp.TileType_1;
+                        }
 
                         //Add tile
                         this.CreateTile(

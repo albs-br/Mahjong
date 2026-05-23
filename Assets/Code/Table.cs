@@ -17,11 +17,12 @@ public class Table
     private IList<IList<string>> tempFloors;
 
     private IList<Pair> pairs;
-    private IList<string> tileTypes_Regular_Temp;
+    private IList<string> tileTypes_Temp;
 
 
+    private TileTypeClass currentTileTypeClass = TileTypeClass.Regular;
 
-    string[] tileTypes_Regular = {
+    private string[] tileTypes_Regular = {
         "bamboo1",
         "bamboo2",
         "bamboo3",
@@ -57,14 +58,14 @@ public class Table
         "pinyin9",
     };
 
-    string[] tileTypes_Flowers = {
+    private string[] tileTypes_Flowers = {
         "lotus",
         "orchid",
         "peony",
         "chrysanthemum",
     };
 
-    string[] tileTypes_Seasons = {
+    private string[] tileTypes_Seasons = {
         "spring",
         "summer",
         "winter",
@@ -118,7 +119,7 @@ public class Table
 
         // step 2: loop through pairs, creating the Game object classes with TileFloors, TileLines and Tiles
 
-        this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
+        this.tileTypes_Temp = this.tileTypes_Regular.ToList();
 
         this.tempFloors.Clear();
         for (int floorIndex=0; floorIndex < this.Floors.Count; floorIndex++)
@@ -157,7 +158,7 @@ public class Table
         return isEmpty;
     }
 
-    private IList<TilePosition> freeTiles; // debug
+    private IList<TilePosition> freeTiles;
 
 
     // get free tiles for one iteration
@@ -343,6 +344,12 @@ public class Table
         // do while here until Free tiles list is empty
         do
         {
+            if(freeTiles.Count == 1)
+            {
+                Debug.Log("Only one free tile left.");
+                //throw new Exception("Only one free tile left.");
+            }
+
             // sort 2 free tiles
             int freeTile_1, freeTile_2;
             do
@@ -351,29 +358,71 @@ public class Table
                 freeTile_2 = random.Next(freeTiles.Count);
             } while (freeTile_1 == freeTile_2);
             
-            // sort tile type
-            int tileTypeIndex = random.Next(this.tileTypes_Regular_Temp.Count);
-
-            
-            var newPair = new Pair
+            if(this.currentTileTypeClass == TileTypeClass.Regular)
             {
-                Tile_1 = freeTiles[freeTile_1],
-                Tile_2 = freeTiles[freeTile_2],
-                TileType = this.tileTypes_Regular_Temp[tileTypeIndex]
-            };
-            this.pairs.Add(newPair);
+                // sort tile type
+                int tileTypeIndex = random.Next(this.tileTypes_Temp.Count);
+
+                var newPair = new Pair
+                {
+                    Tile_1 = freeTiles[freeTile_1],
+                    Tile_2 = freeTiles[freeTile_2],
+                    TileType_1 = this.tileTypes_Temp[tileTypeIndex],
+                    TileType_2 = this.tileTypes_Temp[tileTypeIndex]
+                };
+                this.pairs.Add(newPair);
+
+                // remove tile type from list
+                this.tileTypes_Temp.RemoveAt(tileTypeIndex);
+            }
+            else
+            {
+                // sort two tile types
+                int tileTypeIndex_1, tileTypeIndex_2;
+                do
+                {
+                    tileTypeIndex_1 = random.Next(this.tileTypes_Temp.Count);
+                    tileTypeIndex_2 = random.Next(this.tileTypes_Temp.Count);
+                } while (tileTypeIndex_1 == tileTypeIndex_2);
+
+                var newPair = new Pair
+                {
+                    Tile_1 = freeTiles[freeTile_1],
+                    Tile_2 = freeTiles[freeTile_2],
+                    TileType_1 = this.tileTypes_Temp[tileTypeIndex_1],
+                    TileType_2 = this.tileTypes_Temp[tileTypeIndex_2]
+                };
+                this.pairs.Add(newPair);
+
+                // remove the two tile types from list
+                var indexesToRemove = new List<int> { tileTypeIndex_1, tileTypeIndex_2 };
+                foreach (var index in indexesToRemove.OrderByDescending(i => i))
+                {
+                    this.tileTypes_Temp.RemoveAt(index);
+                }                
+            }
 
 
-            // remove tile type from list
-            this.tileTypes_Regular_Temp.RemoveAt(tileTypeIndex);
             // Debug.Log($"this.tileTypes_Regular_Temp: {this.tileTypes_Regular_Temp.Count}");
 
-            if(this.tileTypes_Regular_Temp.Count == 0)
+            if(this.tileTypes_Temp.Count == 0)
             {
-                // Debug.Log("this.tileTypes_Regular_Temp = 0");
-
+                // Debug.Log("this.tileTypes_Temp = 0");
+                
                 // Reload list of tiles
-                this.tileTypes_Regular_Temp = this.tileTypes_Regular.ToList();
+                if(this.currentTileTypeClass == TileTypeClass.Regular)
+                {
+                    Debug.Log("Reloading this.tileTypes_Temp with flowers");
+                    this.currentTileTypeClass = TileTypeClass.Flower;
+                    this.tileTypes_Temp = this.tileTypes_Flowers.ToList();
+                }
+                else
+                {
+                    Debug.Log("Reloading this.tileTypes_Temp with regulars");
+                    this.currentTileTypeClass = TileTypeClass.Regular;
+                    this.tileTypes_Temp = this.tileTypes_Regular.ToList();
+                }
+
             }
 
             // Debug.Log($"{newPair}");
@@ -425,10 +474,19 @@ public class Pair
 {
     public TilePosition Tile_1 { get; set; }
     public TilePosition Tile_2 { get; set; }
-    public string TileType { get; set; }
+    
+    public string TileType_1 { get; set; }
+    public string TileType_2 { get; set; }
 
     public override string ToString()
     {
-        return $"Pair, Tile_1: {this.Tile_1}, Tile_2: {this.Tile_2}, TileType: {this.TileType}";
+        return $"Pair, Tile_1: {this.Tile_1}, TileType: {this.TileType_1}; Tile_2: {this.Tile_2}, TileType: {this.TileType_2}";
     }
+}
+
+public enum TileTypeClass
+{
+    Regular,
+    Flower,
+    Season
 }
