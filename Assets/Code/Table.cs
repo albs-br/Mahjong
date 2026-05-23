@@ -20,58 +20,7 @@ public class Table
     private IList<string> tileTypes_Temp;
 
 
-    private TileTypeClass currentTileTypeClass = TileTypeClass.Regular;
-
-    // TODO: Create static class for tile types
-    public string[] tileTypes_Regular = {
-        "bamboo1",
-        "bamboo2",
-        "bamboo3",
-        "bamboo4",
-        "bamboo5",
-        "bamboo6",
-        "bamboo7",
-        "bamboo8",
-        "bamboo9",
-        "circle1",
-        "circle2",
-        "circle3",
-        "circle4",
-        "circle5",
-        "circle6",
-        "circle7",
-        "circle8",
-        "circle9",
-        "pinyin1",
-        "pinyin10",
-        "pinyin11",
-        "pinyin12",
-        "pinyin13",
-        "pinyin14",
-        "pinyin15",
-        "pinyin2",
-        "pinyin3",
-        "pinyin4",
-        "pinyin5",
-        "pinyin6",
-        "pinyin7",
-        "pinyin8",
-        "pinyin9",
-    };
-
-    public string[] tileTypes_Flowers = {
-        "lotus",
-        "orchid",
-        "peony",
-        "chrysanthemum",
-    };
-
-    public string[] tileTypes_Seasons = {
-        "spring",
-        "summer",
-        "winter",
-        "fall",
-    };
+    private TileTypeClass_Enum currentTileTypeClass = TileTypeClass_Enum.Regular;
 
 
 
@@ -120,7 +69,7 @@ public class Table
 
         // step 2: loop through pairs, creating the Game object classes with TileFloors, TileLines and Tiles
 
-        this.tileTypes_Temp = this.tileTypes_Regular.ToList();
+        this.tileTypes_Temp = TileTypes.TileTypes_Regular.ToList();
 
         this.tempFloors.Clear();
         for (int floorIndex=0; floorIndex < this.Floors.Count; floorIndex++)
@@ -359,7 +308,7 @@ public class Table
                 freeTile_2 = random.Next(freeTiles.Count);
             } while (freeTile_1 == freeTile_2);
             
-            if(this.currentTileTypeClass == TileTypeClass.Regular)
+            if(this.currentTileTypeClass == TileTypeClass_Enum.Regular)
             {
                 // sort tile type
                 int tileTypeIndex = random.Next(this.tileTypes_Temp.Count);
@@ -411,23 +360,23 @@ public class Table
                 // Debug.Log("this.tileTypes_Temp = 0");
                 
                 // Reload list of tiles
-                if(this.currentTileTypeClass == TileTypeClass.Regular)
+                if(this.currentTileTypeClass == TileTypeClass_Enum.Regular)
                 {
                     Debug.Log("Reloading this.tileTypes_Temp with flowers");
-                    this.currentTileTypeClass = TileTypeClass.Flower;
-                    this.tileTypes_Temp = this.tileTypes_Flowers.ToList();
+                    this.currentTileTypeClass = TileTypeClass_Enum.Flower;
+                    this.tileTypes_Temp = TileTypes.TileTypes_Flowers.ToList();
                 }
-                else if(this.currentTileTypeClass == TileTypeClass.Flower)
+                else if(this.currentTileTypeClass == TileTypeClass_Enum.Flower)
                 {
                     Debug.Log("Reloading this.tileTypes_Temp with seasons");
-                    this.currentTileTypeClass = TileTypeClass.Season;
-                    this.tileTypes_Temp = this.tileTypes_Seasons.ToList();
+                    this.currentTileTypeClass = TileTypeClass_Enum.Season;
+                    this.tileTypes_Temp = TileTypes.TileTypes_Seasons.ToList();
                 }
                 else
                 {
                     Debug.Log("Reloading this.tileTypes_Temp with regulars");
-                    this.currentTileTypeClass = TileTypeClass.Regular;
-                    this.tileTypes_Temp = this.tileTypes_Regular.ToList();
+                    this.currentTileTypeClass = TileTypeClass_Enum.Regular;
+                    this.tileTypes_Temp = TileTypes.TileTypes_Regular.ToList();
                 }
 
             }
@@ -491,9 +440,3 @@ public class Pair
     }
 }
 
-public enum TileTypeClass
-{
-    Regular,
-    Flower,
-    Season
-}

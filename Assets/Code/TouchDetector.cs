@@ -70,8 +70,8 @@ public class TouchDetector : MonoBehaviour
                                 // or if both tiles are flowers (or both are seasons), remove them
                                 if(
                                     (game.TileSelected.TileType == tile.TileType) ||
-                                    (game.Table.tileTypes_Flowers.Contains(game.TileSelected.TileType) && game.Table.tileTypes_Flowers.Contains(tile.TileType)) ||
-                                    (game.Table.tileTypes_Seasons.Contains(game.TileSelected.TileType) && game.Table.tileTypes_Seasons.Contains(tile.TileType))
+                                    (TileTypes.TileTypes_Flowers.Contains(game.TileSelected.TileType) && TileTypes.TileTypes_Flowers.Contains(tile.TileType)) ||
+                                    (TileTypes.TileTypes_Seasons.Contains(game.TileSelected.TileType) && TileTypes.TileTypes_Seasons.Contains(tile.TileType))
                                 )
                                 {
                                     // Remove both tiles
