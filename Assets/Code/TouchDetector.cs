@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -68,8 +69,9 @@ public class TouchDetector : MonoBehaviour
                                 // if both tiles are the same type, remove them
                                 // or if both tiles are flowers (or both are seasons), remove them
                                 if(
-                                    (game.TileSelected.TileType == tile.TileType)  // || 
-                                    //( ... ) //TODO
+                                    (game.TileSelected.TileType == tile.TileType) ||
+                                    (game.Table.tileTypes_Flowers.Contains(game.TileSelected.TileType) && game.Table.tileTypes_Flowers.Contains(tile.TileType)) ||
+                                    (game.Table.tileTypes_Seasons.Contains(game.TileSelected.TileType) && game.Table.tileTypes_Seasons.Contains(tile.TileType))
                                 )
                                 {
                                     // Remove both tiles

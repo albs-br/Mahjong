@@ -22,7 +22,8 @@ public class Table
 
     private TileTypeClass currentTileTypeClass = TileTypeClass.Regular;
 
-    private string[] tileTypes_Regular = {
+    // TODO: Create static class for tile types
+    public string[] tileTypes_Regular = {
         "bamboo1",
         "bamboo2",
         "bamboo3",
@@ -58,14 +59,14 @@ public class Table
         "pinyin9",
     };
 
-    private string[] tileTypes_Flowers = {
+    public string[] tileTypes_Flowers = {
         "lotus",
         "orchid",
         "peony",
         "chrysanthemum",
     };
 
-    private string[] tileTypes_Seasons = {
+    public string[] tileTypes_Seasons = {
         "spring",
         "summer",
         "winter",
@@ -415,6 +416,12 @@ public class Table
                     Debug.Log("Reloading this.tileTypes_Temp with flowers");
                     this.currentTileTypeClass = TileTypeClass.Flower;
                     this.tileTypes_Temp = this.tileTypes_Flowers.ToList();
+                }
+                else if(this.currentTileTypeClass == TileTypeClass.Flower)
+                {
+                    Debug.Log("Reloading this.tileTypes_Temp with seasons");
+                    this.currentTileTypeClass = TileTypeClass.Season;
+                    this.tileTypes_Temp = this.tileTypes_Seasons.ToList();
                 }
                 else
                 {
