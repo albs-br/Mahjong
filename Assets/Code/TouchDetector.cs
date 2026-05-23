@@ -59,7 +59,7 @@ public class TouchDetector : MonoBehaviour
                             if(game.TileSelected == null)
                             {
                                 // Set sprite gray (selected)
-                                renderer.color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+                                renderer.color = Color.gray;
                                 tile.IsSelected = true;
                                 game.TileSelected = tile;
                             }
@@ -86,12 +86,24 @@ public class TouchDetector : MonoBehaviour
                                     game.TileSelected.Remove();
                                     game.TileSelected = null;
                                 }
+                                else
+                                {
+                                    // unselect previously selected tile
+                                    SpriteRenderer renderer_prev = game.TileSelected.GetComponent<SpriteRenderer>();
+                                    renderer_prev.color = Color.white;
+                                    game.TileSelected.IsSelected = false;
+
+                                    // Set new sprite gray (selected)
+                                    renderer.color = Color.gray;
+                                    tile.IsSelected = true;
+                                    game.TileSelected = tile;
+                                }
                             }
                         }
                         else
                         {
                             // Remove gray (unselected)
-                            renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                            renderer.color = Color.white;
                             tile.IsSelected = false;
                             game.TileSelected = null;
                         }
