@@ -87,6 +87,14 @@ public class TouchDetector : MonoBehaviour
 
                                     game.TileSelected.Remove();
                                     game.TileSelected = null;
+
+                                    // TODO:
+                                    // // Start animation
+                                    // game.CurrentTilesAnimation = new TilesAnimation() 
+                                    // { 
+                                    //     Tile_1 = tile, 
+                                    //     Tile_2 = game.TileSelected 
+                                    // };
                                 }
                                 else
                                 {

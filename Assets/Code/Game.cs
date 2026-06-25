@@ -42,6 +42,7 @@ public class Game : MonoBehaviour
     public Table Table;
     public Tile TileSelected;
 
+    public TilesAnimation CurrentTilesAnimation;
 
 
 
@@ -122,6 +123,8 @@ public class Game : MonoBehaviour
     
         this.Table = null;
         this.TileSelected = null;
+
+        this.CurrentTilesAnimation = null;
 
 
 
@@ -218,6 +221,7 @@ public class Game : MonoBehaviour
         this.UpdateGame();
 
         StartCoroutine(ExecuteEverySecond());
+        StartCoroutine(Execute60TimesPerSecond());
     }
 
     IEnumerator ExecuteEverySecond() {
@@ -227,6 +231,24 @@ public class Game : MonoBehaviour
             this.UpdateUI();
 
             yield return new WaitForSeconds(1.0f);
+        }
+    }
+
+    IEnumerator Execute60TimesPerSecond() {
+        while (true) {
+            // Execute logic here
+            this.DoAnimation();
+            //this.textTilesLeft.text = "Tiles Left: " + System.Environment.TickCount; // just for testing
+
+            yield return new WaitForSeconds(1.0f/60.0f);
+        }
+    }
+
+    private void DoAnimation()
+    {
+        if(this.CurrentTilesAnimation != null)
+        {
+            // Animate the tiles
         }
     }
 
