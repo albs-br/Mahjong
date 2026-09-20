@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 
@@ -18,10 +19,20 @@ public class TouchDetector : MonoBehaviour
 
     void Update()
     {
+        // Ensure the EventSystem exists in the scene
+        if (EventSystem.current == null) return;
+
         // Illustrates how to examine all active touches once per frame and show their last recorded position
         // in the associated screen-space.
         foreach (var touch in Touch.activeTouches)
         {
+            // Check if the specific pointer/finger ID is over a UI Panel
+            if (EventSystem.current.IsPointerOverGameObject(touch.touchId))
+            {
+                // The touch is hitting the UI panel; block it from reaching 2D objects
+                continue; 
+            }
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
