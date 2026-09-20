@@ -83,18 +83,13 @@ public class TouchDetector : MonoBehaviour
 
                                     //Debug.Log("Removing tile " + this.gameObject.GetComponent<Tile>().Index);
                                     // this.gameObject.GetComponent<Tile>().Remove();
+                                    
                                     tile.Remove();
-
                                     game.TileSelected.Remove();
                                     game.TileSelected = null;
 
-                                    // TODO:
-                                    // // Start animation
-                                    // game.CurrentTilesAnimation = new TilesAnimation() 
-                                    // { 
-                                    //     Tile_1 = tile, 
-                                    //     Tile_2 = game.TileSelected 
-                                    // };
+                                    // Start animation
+                                    //game.CurrentTilesAnimation = new TilesAnimation(tile, game.TileSelected);
                                 }
                                 else
                                 {

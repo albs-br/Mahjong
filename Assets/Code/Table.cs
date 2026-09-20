@@ -362,19 +362,19 @@ public class Table
                 // Reload list of tiles
                 if(this.currentTileTypeClass == TileTypeClass_Enum.Regular)
                 {
-                    Debug.Log("Reloading this.tileTypes_Temp with flowers");
+                    // Debug.Log("Reloading this.tileTypes_Temp with flowers");
                     this.currentTileTypeClass = TileTypeClass_Enum.Flower;
                     this.tileTypes_Temp = TileTypes.TileTypes_Flowers.ToList();
                 }
                 else if(this.currentTileTypeClass == TileTypeClass_Enum.Flower)
                 {
-                    Debug.Log("Reloading this.tileTypes_Temp with seasons");
+                    // Debug.Log("Reloading this.tileTypes_Temp with seasons");
                     this.currentTileTypeClass = TileTypeClass_Enum.Season;
                     this.tileTypes_Temp = TileTypes.TileTypes_Seasons.ToList();
                 }
                 else
                 {
-                    Debug.Log("Reloading this.tileTypes_Temp with regulars");
+                    // Debug.Log("Reloading this.tileTypes_Temp with regulars");
                     this.currentTileTypeClass = TileTypeClass_Enum.Regular;
                     this.tileTypes_Temp = TileTypes.TileTypes_Regular.ToList();
                 }

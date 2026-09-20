@@ -249,6 +249,22 @@ public class Game : MonoBehaviour
         if(this.CurrentTilesAnimation != null)
         {
             // Animate the tiles
+            this.CurrentTilesAnimation.Counter++;
+            if(this.CurrentTilesAnimation.Counter >= 60)
+            {
+                this.CurrentTilesAnimation.Tile_1.Remove();
+                //this.CurrentTilesAnimation.Tile_2.Remove();
+                this.TileSelected.Remove();
+                this.TileSelected = null;
+
+                this.CurrentTilesAnimation = null;
+            }
+
+            Vector3 newPosition = transform.position;
+
+            newPosition.y += 0.1f;
+
+            this.CurrentTilesAnimation.Tile_1.GetComponent<SpriteRenderer>().transform.position = newPosition;
         }
     }
 
