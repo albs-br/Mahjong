@@ -283,10 +283,38 @@ public class Game : MonoBehaviour
         if(this.tilesRemaining == 0)
         {
             // You win
+            ConfirmationDialog.Instance.Show(
+                "Congratulations! You won the game. Do you want to start a new game?", 
+                () => { 
+                    // What happens if they click YES
+                    //Debug.Log("Starting new game...");
+                    Game gameScript = GetComponent<Game>();
+                    gameScript.StartNewGame();
+                    //Application.Quit(); 
+                },
+                () => { 
+                    // What happens if they click NO
+                    //Debug.Log("Cancelled new game."); 
+                }
+        );
+
         }
         else if(this.openMatches == 0)
         {
             // Game over
+            ConfirmationDialog.Instance.Show(
+                "Game Over. Do you want to start a new game?", 
+                () => { 
+                    // What happens if they click YES
+                    //Debug.Log("Starting new game...");
+                    Game gameScript = GetComponent<Game>();
+                    gameScript.StartNewGame();
+                    //Application.Quit(); 
+                },
+                () => { 
+                    // What happens if they click NO
+                    //Debug.Log("Cancelled new game."); 
+                }
         }
 
         TimeSpan timeElapsed = (DateTime.Now - this.gameStartTime);
@@ -611,9 +639,12 @@ public class Game : MonoBehaviour
 
             float y = 0f + (Tile.Height_2D * ((float)this.Table.NumberOfLines/2.0f)) - (tileLine.Index * Tile.Height_2D);
             //Debug.Log($"Tile.TotalHeight: {Tile.TotalHeight}");
-            //Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
-            //Debug.Log($"y: {y}");
-            
+            // Debug.Log($"tileLine.Index: {tileLine.Index}");
+            // Debug.Log($"Tile.Height_2D: {Tile.Height_2D}");
+            // Debug.Log($"y: {y}");
+
+            y -= Tile.Height_2D/2.0f; // adjust table a bit lower
+
             // adjust Y based on floor index:
             y += (Tile.TotalHeight - Tile.Height_2D) * tileLine.TileFloor.Index;
 
