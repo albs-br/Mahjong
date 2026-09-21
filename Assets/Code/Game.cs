@@ -296,8 +296,7 @@ public class Game : MonoBehaviour
                     // What happens if they click NO
                     //Debug.Log("Cancelled new game."); 
                 }
-        );
-
+            );
         }
         else if(this.openMatches == 0)
         {
@@ -315,6 +314,7 @@ public class Game : MonoBehaviour
                     // What happens if they click NO
                     //Debug.Log("Cancelled new game."); 
                 }
+            );
         }
 
         TimeSpan timeElapsed = (DateTime.Now - this.gameStartTime);
