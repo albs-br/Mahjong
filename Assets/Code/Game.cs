@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem.EnhancedTouch;
 using TMPro;
 using System;
 
@@ -35,8 +34,10 @@ public class Game : MonoBehaviour
     
     private IList<Tile> openTilesList;
     private int openMatches;
-    
+
+    private const int TIME_LIMIT_MINUTES = 10;
     private DateTime gameStartTime;
+    public bool IsGameOver;
 
 
     public Table Table;
@@ -46,7 +47,7 @@ public class Game : MonoBehaviour
 
 
 
-    const string TILE_IMGS_BASE_PATH = "fulltiles/";
+    private const string TILE_IMGS_BASE_PATH = "fulltiles/";
 
     // Awake is called when the script instance is being loaded
     void Awake()
@@ -217,6 +218,7 @@ public class Game : MonoBehaviour
         }
 
         this.gameStartTime = DateTime.Now;
+        this.IsGameOver = false;
         
         this.UpdateGame();
 
@@ -280,48 +282,66 @@ public class Game : MonoBehaviour
             this.textOpenMatches.color = Color.white;
         }
 
-        if(this.tilesRemaining == 0)
+        TimeSpan timeElapsed = DateTime.Now - this.gameStartTime;
+        if(!this.IsGameOver)
         {
-            // You win
-            ConfirmationDialog.Instance.Show(
-                "Congratulations! You won the game. Do you want to start a new game?", 
-                () => { 
-                    // What happens if they click YES
-                    //Debug.Log("Starting new game...");
-                    Game gameScript = GetComponent<Game>();
-                    gameScript.StartNewGame();
-                    //Application.Quit(); 
-                },
-                () => { 
-                    // What happens if they click NO
-                    //Debug.Log("Cancelled new game."); 
-                }
-            );
-        }
-        else if(this.openMatches == 0)
-        {
-            // Game over
-            ConfirmationDialog.Instance.Show(
-                "Game Over. Do you want to start a new game?", 
-                () => { 
-                    // What happens if they click YES
-                    //Debug.Log("Starting new game...");
-                    Game gameScript = GetComponent<Game>();
-                    gameScript.StartNewGame();
-                    //Application.Quit(); 
-                },
-                () => { 
-                    // What happens if they click NO
-                    //Debug.Log("Cancelled new game."); 
-                }
-            );
+            this.textTime.text = $"{timeElapsed.Minutes,2}:{timeElapsed.Seconds:D2}";
         }
 
-        TimeSpan timeElapsed = (DateTime.Now - this.gameStartTime);
+        // Set Time label color
+        if(timeElapsed.Minutes >= Game.TIME_LIMIT_MINUTES - 1)
+        {
+            this.textTime.color = Color.red;
+        }
+        else
+        {
+            this.textTime.color = Color.white;
+        }
+
+        if(!this.IsGameOver)
+        {
+            if(this.tilesRemaining == 0)
+            {
+                // You win
+                this.IsGameOver = true;
+                ConfirmationDialog.Instance.Show(
+                    "Congratulations! You won the game. Do you want to start a new game?", 
+                    () => { 
+                        // What happens if they click YES
+                        //Debug.Log("Starting new game...");
+                        Game gameScript = GetComponent<Game>();
+                        gameScript.StartNewGame();
+                        //Application.Quit(); 
+                    },
+                    () => { 
+                        // What happens if they click NO
+                        //Debug.Log("Cancelled new game."); 
+                    }
+                );
+            }
+            else if(this.openMatches == 0 || timeElapsed.Minutes >= Game.TIME_LIMIT_MINUTES)
+            {
+                // Game over
+                this.IsGameOver = true;
+                ConfirmationDialog.Instance.Show(
+                    "Game Over. Do you want to start a new game?", 
+                    () => { 
+                        // What happens if they click YES
+                        //Debug.Log("Starting new game...");
+                        Game gameScript = GetComponent<Game>();
+                        gameScript.StartNewGame();
+                        //Application.Quit(); 
+                    },
+                    () => { 
+                        // What happens if they click NO
+                        //Debug.Log("Cancelled new game."); 
+                    }
+                );
+            }
+        }
 
         this.textTilesLeft.text = "Tiles Left: " + this.tilesRemaining;
         this.textOpenMatches.text = "Open Matches: " + this.openMatches;
-        this.textTime.text = $"{timeElapsed.Minutes,2}:{timeElapsed.Seconds:D2}";
         //this.textObj.SetText("set via SetText");
     }
 

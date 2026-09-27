@@ -49,22 +49,28 @@ public class TouchDetector : MonoBehaviour
                     RaycastHit2D hit = Physics2D.Raycast(touchPosWorld2D, Vector2.zero);
 
 
-                    if (hit.collider != null) {
+                    if (hit.collider != null) 
+                    {
                         //Debug.Log("Touched GameObject: " + hit.collider.gameObject.name);
 
                         var tile = hit.collider.gameObject.GetComponent<Tile>();
 
                         if(tile.IsBlocked)
                         {
-                            Debug.Log("IsBlocked");
+                            //Debug.Log("IsBlocked");
                             return;
                         }
 
+                        // Debug.Log($"tile.Index: {tile.Index}");
+                        var game = tile.Game;
+
+                        if(game.IsGameOver)
+                        {
+                            return;
+                        }
 
                         SpriteRenderer renderer = hit.collider.gameObject.GetComponent<SpriteRenderer>();
 
-                        // Debug.Log($"tile.Index: {tile.Index}");
-                        var game = tile.Game; //tile.TileLine.TileFloor.Game;
 
                         if(!tile.IsSelected)
                         {
