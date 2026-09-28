@@ -11,9 +11,11 @@ public class ConfirmationDialog : MonoBehaviour
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private Button yesButton;
     [SerializeField] private Button noButton;
+    [SerializeField] private Button okButton;
 
     private Action onYesCallback;
     private Action onNoCallback;
+    private Action onOkCallback;
 
     private void Awake()
     {
@@ -27,16 +29,32 @@ public class ConfirmationDialog : MonoBehaviour
         // Assign button click listeners
         yesButton.onClick.AddListener(OnYesPressed);
         noButton.onClick.AddListener(OnNoPressed);
+        okButton.onClick.AddListener(OnOkPressed);
 
         gameObject.SetActive(false); // Hide the dialog
     }
 
-    // Call this method from any script to open the dialog window
-    public void Show(string message, Action yesAction, Action noAction = null)
+    public void ShowYesNo(string message, Action yesAction, Action noAction = null)
     {
+        yesButton.gameObject.SetActive(true);
+        noButton.gameObject.SetActive(true);
+        okButton.gameObject.SetActive(false);
+
         messageText.text = message;
         onYesCallback = yesAction;
         onNoCallback = noAction;
+
+        gameObject.SetActive(true); // Reveal the dialog
+    }
+
+    public void ShowOK(string message, Action okAction = null)
+    {
+        yesButton.gameObject.SetActive(false);
+        noButton.gameObject.SetActive(false);
+        okButton.gameObject.SetActive(true);
+
+        messageText.text = message;
+        onOkCallback = okAction;
 
         gameObject.SetActive(true); // Reveal the dialog
     }
@@ -51,5 +69,11 @@ public class ConfirmationDialog : MonoBehaviour
     {
         gameObject.SetActive(false); // Hide the dialog
         onNoCallback?.Invoke();      // Execute "No" action (if one was given)
+    }
+
+    private void OnOkPressed()
+    {
+        gameObject.SetActive(false); // Hide the dialog
+        onOkCallback?.Invoke();      // Execute "OK" action (if one was given)
     }
 }

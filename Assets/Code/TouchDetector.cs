@@ -104,6 +104,7 @@ public class TouchDetector : MonoBehaviour
                                     tile.Remove();
                                     game.TileSelected.Remove();
                                     game.TileSelected = null;
+                                    game.UpdateGame();
 
                                     // Start animation
                                     //game.CurrentTilesAnimation = new TilesAnimation(tile, game.TileSelected);

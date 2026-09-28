@@ -223,7 +223,7 @@ public class Game : MonoBehaviour
         this.UpdateGame();
 
         StartCoroutine(ExecuteEverySecond());
-        StartCoroutine(Execute60TimesPerSecond());
+        // StartCoroutine(Execute60TimesPerSecond());
     }
 
     IEnumerator ExecuteEverySecond() {
@@ -236,39 +236,39 @@ public class Game : MonoBehaviour
         }
     }
 
-    IEnumerator Execute60TimesPerSecond() {
-        while (true) {
-            // Execute logic here
-            this.DoAnimation();
-            //this.textTilesLeft.text = "Tiles Left: " + System.Environment.TickCount; // just for testing
+    // IEnumerator Execute60TimesPerSecond() {
+    //     while (true) {
+    //         // Execute logic here
+    //         this.DoAnimation();
+    //         //this.textTilesLeft.text = "Tiles Left: " + System.Environment.TickCount; // just for testing
 
-            yield return new WaitForSeconds(1.0f/60.0f);
-        }
-    }
+    //         yield return new WaitForSeconds(1.0f/60.0f);
+    //     }
+    // }
 
-    private void DoAnimation()
-    {
-        if(this.CurrentTilesAnimation != null)
-        {
-            // Animate the tiles
-            this.CurrentTilesAnimation.Counter++;
-            if(this.CurrentTilesAnimation.Counter >= 60)
-            {
-                this.CurrentTilesAnimation.Tile_1.Remove();
-                //this.CurrentTilesAnimation.Tile_2.Remove();
-                this.TileSelected.Remove();
-                this.TileSelected = null;
+    // private void DoAnimation()
+    // {
+    //     if(this.CurrentTilesAnimation != null)
+    //     {
+    //         // Animate the tiles
+    //         this.CurrentTilesAnimation.Counter++;
+    //         if(this.CurrentTilesAnimation.Counter >= 60)
+    //         {
+    //             this.CurrentTilesAnimation.Tile_1.Remove();
+    //             //this.CurrentTilesAnimation.Tile_2.Remove();
+    //             this.TileSelected.Remove();
+    //             this.TileSelected = null;
 
-                this.CurrentTilesAnimation = null;
-            }
+    //             this.CurrentTilesAnimation = null;
+    //         }
 
-            Vector3 newPosition = transform.position;
+    //         Vector3 newPosition = transform.position;
 
-            newPosition.y += 0.1f;
+    //         newPosition.y += 0.1f;
 
-            this.CurrentTilesAnimation.Tile_1.GetComponent<SpriteRenderer>().transform.position = newPosition;
-        }
-    }
+    //         this.CurrentTilesAnimation.Tile_1.GetComponent<SpriteRenderer>().transform.position = newPosition;
+    //     }
+    // }
 
     private void UpdateUI()
     {
@@ -300,11 +300,12 @@ public class Game : MonoBehaviour
 
         if(!this.IsGameOver)
         {
+            // Debug.Log($"tilesRemaining: {this.tilesRemaining}, openMatches: {this.openMatches}, timeElapsed: {timeElapsed.Minutes}:{timeElapsed.Seconds:D2}");
             if(this.tilesRemaining == 0)
             {
                 // You win
                 this.IsGameOver = true;
-                ConfirmationDialog.Instance.Show(
+                ConfirmationDialog.Instance.ShowYesNo(
                     "Congratulations! You won the game. Do you want to start a new game?", 
                     () => { 
                         // What happens if they click YES
@@ -323,7 +324,7 @@ public class Game : MonoBehaviour
             {
                 // Game over
                 this.IsGameOver = true;
-                ConfirmationDialog.Instance.Show(
+                ConfirmationDialog.Instance.ShowYesNo(
                     "Game Over. Do you want to start a new game?", 
                     () => { 
                         // What happens if they click YES

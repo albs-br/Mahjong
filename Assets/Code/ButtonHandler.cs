@@ -6,7 +6,7 @@ public class ButtonHandler : MonoBehaviour
     {
         //Debug.Log("Button was clicked!");
 
-        ConfirmationDialog.Instance.Show(
+        ConfirmationDialog.Instance.ShowYesNo(
             "Are you sure you want to start a new game?", 
             () => { 
                 // What happens if they click YES
@@ -18,6 +18,22 @@ public class ButtonHandler : MonoBehaviour
             () => { 
                 // What happens if they click NO
                 //Debug.Log("Cancelled new game."); 
+            }
+        );
+    }
+
+    public void ButtonAbout_Click()
+    {
+        string gameVersion = Application.version;
+
+        ConfirmationDialog.Instance.ShowOK(
+            "Simple Mahjong Game\n\n" +
+            "Created by: André Baptista\n" + 
+            "Version: " + gameVersion + "\n\n" + 
+            "www.andrebaptista.com.br\n" + 
+            "https://github.com/albs-br", 
+            () => { 
+                // What happens if they click OK
             }
         );
     }
