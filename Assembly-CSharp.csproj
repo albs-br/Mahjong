@@ -55,7 +55,6 @@
     <Compile Include="Assets\Code\Table.cs" />
     <Compile Include="Assets\Code\TileLine.cs" />
     <Compile Include="Assets\Code\ButtonHandler.cs" />
-    <Compile Include="Assets\Code\UIManager.cs" />
     <Compile Include="Assets\Code\TilesAnimation.cs" />
     <Compile Include="Assets\Code\TouchDetector.cs" />
     <Compile Include="Assets\Code\LoadTable.cs" />

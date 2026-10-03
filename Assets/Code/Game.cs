@@ -24,29 +24,27 @@ public class Game : MonoBehaviour
     private float minY;
     private float maxY;
 
+    private Vector3 tileScaleFactor;
+
+
+
 
 
     private IList<TileFloor> tileFloors;
-
-    private Vector3 tileScaleFactor;
-
     private int tilesRemaining;
-    
-    private IList<Tile> openTilesList;
     private int openMatches;
+    private TimeSpan timeElapsed;
+    public bool IsGameOver { get; set; }
+    public Table Table { get; set; }
+    public Tile TileSelected { get; set; }
+
+
+
+    public TilesAnimation CurrentTilesAnimation { get; set; }
+
+
 
     private const int TIME_LIMIT_MINUTES = 10;
-    private DateTime gameStartTime;
-    public bool IsGameOver;
-
-
-    public Table Table;
-    public Tile TileSelected;
-
-    public TilesAnimation CurrentTilesAnimation;
-
-
-
     private const string TILE_IMGS_BASE_PATH = "fulltiles/";
 
     // Awake is called when the script instance is being loaded
@@ -119,7 +117,7 @@ public class Game : MonoBehaviour
 
         this.tilesRemaining = 0;
     
-        this.openTilesList = new List<Tile>();
+        //this.openTilesList = new List<Tile>();
         this.openMatches = 0;
     
         this.Table = null;
@@ -217,7 +215,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        this.gameStartTime = DateTime.Now;
+        this.timeElapsed = new TimeSpan(0, TIME_LIMIT_MINUTES, 0);
         this.IsGameOver = false;
         
         this.UpdateGame();
@@ -282,14 +280,14 @@ public class Game : MonoBehaviour
             this.textOpenMatches.color = Color.white;
         }
 
-        TimeSpan timeElapsed = DateTime.Now - this.gameStartTime;
+        this.timeElapsed = this.timeElapsed.Subtract(new TimeSpan(0, 0, 1));
         if(!this.IsGameOver)
         {
-            this.textTime.text = $"{timeElapsed.Minutes,2}:{timeElapsed.Seconds:D2}";
+            this.textTime.text = $"{this.timeElapsed.Minutes,2}:{this.timeElapsed.Seconds:D2}";
         }
 
         // Set Time label color
-        if(timeElapsed.Minutes >= Game.TIME_LIMIT_MINUTES - 1)
+        if(this.timeElapsed < new TimeSpan(0, 1, 0))
         {
             this.textTime.color = Color.red;
         }
@@ -390,7 +388,8 @@ public class Game : MonoBehaviour
     public void UpdateGame()
     {
         this.tilesRemaining = 0;
-        this.openTilesList = new List<Tile>();
+        //this.openTilesList = new List<Tile>();
+        IList<Tile> openTilesList = new List<Tile>();
 
         // Update properties of All tiles
         for(int floorIndex=0; floorIndex < this.tileFloors.Count; floorIndex++) // Loop floors
@@ -558,7 +557,7 @@ public class Game : MonoBehaviour
 
                         if(!currentTile.IsBlocked)
                         {
-                            this.openTilesList.Add(currentTile);
+                            openTilesList.Add(currentTile);
                         }
                     }
                 }
@@ -566,27 +565,27 @@ public class Game : MonoBehaviour
         }
 
         this.openMatches = 0;
-        int exitCounter = this.openTilesList.Count;
-        while(this.openTilesList.Count > 0 && exitCounter > 0)
+        int exitCounter = openTilesList.Count;
+        while(openTilesList.Count > 0 && exitCounter > 0)
         {
             exitCounter--;
 
-            var tile = this.openTilesList[0];
+            var tile = openTilesList[0];
 
             int j = 1; // start from 1 to skip the tile itself
-            while(j < this.openTilesList.Count)
+            while(j < openTilesList.Count)
             {
-                if(tile.TileType == this.openTilesList[j].TileType)
+                if(tile.TileType == openTilesList[j].TileType)
                 {
                     this.openMatches++;
-                    this.openTilesList.RemoveAt(j); // remove the matched tile from the list
+                    openTilesList.RemoveAt(j); // remove the matched tile from the list
                 }
                 else
                 {
                     j++;
                 }
             }
-            this.openTilesList.RemoveAt(0); // remove the tile itself from the list
+            openTilesList.RemoveAt(0); // remove the tile itself from the list
         }
 
 
