@@ -575,7 +575,7 @@ public class Game : MonoBehaviour
             int j = 1; // start from 1 to skip the tile itself
             while(j < openTilesList.Count)
             {
-                if(tile.TileType == openTilesList[j].TileType)
+                if(TileTypes.TileTypesAreSame(tile, openTilesList[j]))
                 {
                     this.openMatches++;
                     openTilesList.RemoveAt(j); // remove the matched tile from the list
