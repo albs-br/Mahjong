@@ -59,6 +59,7 @@
     <Compile Include="Assets\Code\TouchDetector.cs" />
     <Compile Include="Assets\Code\LoadTable.cs" />
     <Compile Include="Assets\Code\Tile.cs" />
+    <Compile Include="Assets\Code\PlaySoundEffect.cs" />
     <Compile Include="Assets\PlayerInputActions.cs" />
     <Compile Include="Assets\Code\Game.cs" />
     <Compile Include="Assets\Code\TileFloor.cs" />

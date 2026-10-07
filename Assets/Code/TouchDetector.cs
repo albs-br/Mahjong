@@ -69,6 +69,12 @@ public class TouchDetector : MonoBehaviour
                             return;
                         }
 
+                        var playSoundEffect = game.GetComponent<PlaySoundEffect>();
+                        if(playSoundEffect != null)
+                        {
+                            playSoundEffect.PlaySFX();
+                        }
+
                         SpriteRenderer renderer = hit.collider.gameObject.GetComponent<SpriteRenderer>();
 
 
